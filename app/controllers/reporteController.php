@@ -139,7 +139,8 @@
 								inner join general_tabla_catalogo F ON F.catalogo_valor = T.transaccion_formapagoid 
 								inner join general_sede S on S.sede_id = alumno_sedeid
 							where transaccion_estado <> 'E'
-								and transaccion_fecharegistro between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'";
+								and transaccion_fecharegistro between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
+								ORDER BY FECHA_PAGO DESC";
 
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
@@ -572,6 +573,7 @@
 								FROM(
 									SELECT sede_nombre SEDE,
 									pago_fecharegistro FECHA_REG_SISTEMA, 
+									pago_fecha,
 									F.catalogo_descripcion FORMA_PAGO,
 									count(*) PAGOS, 
 									SUM(((P.pago_saldo + P.pago_valor) - (IFNULL(PT.transaccion_valorcalculado, P.pago_saldo))))VALOR_PAGADO
