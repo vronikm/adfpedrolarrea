@@ -546,7 +546,8 @@
 					
 				</div>
 				<div class="card-footer">						
-					<button type="submit" class="btn btn-success btn-sm">Actualizar</button>														
+					<button type="submit" class="btn btn-success btn-sm">Actualizar</button>	
+					<a class="btn btn-dark btn-sm" href="#" onclick="cerrarVentana(); return false;">Regresar</a>													
 				</div>	
 				</form>
 			</section>
@@ -739,6 +740,11 @@
 			myDropzone.removeAllFiles(true)
 		}
 		// DropzoneJS Demo Code End
+	</script>
+	<script>
+		function cerrarVentana() {
+			window.close();
+		}
 	</script>
   </body>
 </html>

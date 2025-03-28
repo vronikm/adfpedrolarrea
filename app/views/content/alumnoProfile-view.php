@@ -378,7 +378,7 @@
 									</div>  <!--./row line 874--> 
 									<!-- Fin segunda sección foto-->			
 								</div>
-
+								<a class="btn btn-dark btn-back btn-sm" href="#" onclick="cerrarVentana(); return false;">Regresar</a>
 								<!-- Tab información contacto de emergencia -->
 								<div class="tab-pane" id="representante">
 									<div class="row">
@@ -786,6 +786,11 @@
 			myDropzone.removeAllFiles(true)
 		}
 		// DropzoneJS Demo Code End
+	</script>
+	<script>
+		function cerrarVentana() {
+			window.close();
+		}
 	</script>
   </body>
 </html>

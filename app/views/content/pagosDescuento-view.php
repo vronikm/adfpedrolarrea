@@ -251,8 +251,7 @@
 											</div>	
 											
 											<button type="submit" class="btn btn-success btn-sm">Guardar</button>
-											<button type="reset" class="btn btn-dark btn-sm">Limpiar</button>
-
+											<a class="btn btn-dark btn-sm" href="#" onclick="cerrarVentana(); return false;">Regresar</a>
 											</form>							
 										</div>										
 									</div>
@@ -307,8 +306,11 @@
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/adminlte.min.js"></script>
 		
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/ajax.js" ></script>
-
-
+	<script>
+		function cerrarVentana() {
+			window.close();
+		}
+	</script>
 
   </body>
 </html>

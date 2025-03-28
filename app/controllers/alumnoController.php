@@ -1850,7 +1850,7 @@
 		public function datosRepresentante($alumnoid){			
 			$consulta_repre = "SELECT repre_identificacion IDENTIFICACION, 
 									concat(repre_primernombre, ' ', repre_segundonombre, ' ', repre_apellidopaterno, ' ', repre_apellidomaterno) AS REPRESENTANTE,
-									catalogo_descripcion PARENTESCO, repre_direccion, repre_correo, repre_celular, repre_factura
+									catalogo_descripcion PARENTESCO, repre_direccion, repre_correo, repre_celular
 									FROM sujeto_alumno, alumno_representante, general_tabla, general_tabla_catalogo
 									WHERE alumno_repreid = repre_id
 										and tabla_id = catalogo_tablaid
