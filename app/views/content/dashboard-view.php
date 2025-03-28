@@ -2,41 +2,73 @@
 	use app\controllers\dashboardController;
 	$insDashboard = new dashboardController();
 
-	$alumnosActivosSedeL=$insDashboard->obtenerAlumnosActivosSedeL();
+	$alumnosActivosSedeADFPL=$insDashboard->obtenerAlumnosActivosSedeADFPL();
+	$alumnosActivosSedeCantera=$insDashboard->obtenerAlumnosActivosSedeCantera();
 
-	$alumnosInactivosSedeL=$insDashboard->obtenerAlumnosInactivosSedeL();
+	$alumnosInactivosSedeADFPL=$insDashboard->obtenerAlumnosInactivosSedeADFPL();
+	$alumnosInactivosSedeCantera=$insDashboard->obtenerAlumnosInactivosSedeCantera();
 
-	$pagosCanceladoSedeL=$insDashboard->obtenerPagosCanceladoSedeL(1);	
+	$pagosCanceladoSedeADFPL=$insDashboard->obtenerPagosCancelados(1);	
+	$pagosCanceladoSedeCantera=$insDashboard->obtenerPagosCancelados(2);	
 
-	$pagosPendienteSedeL=$insDashboard->obtenerPagosPendienteSedeL(1);
+	$pagosPendienteSedeADFPL=$insDashboard->obtenerPagosPendientes(1);
+	$pagosPendienteSedeCantera=$insDashboard->obtenerPagosPendientes(2);
 
 	
-	if($alumnosActivosSedeL->rowCount()>0){
-		$alumnosActivosSedeL=$alumnosActivosSedeL->fetch();
-		$totalActivosSedeL=$alumnosActivosSedeL["totalActivosSedeL"];
+	if($alumnosActivosSedeADFPL->rowCount()>0){
+		$alumnosActivosSedeADFPL=$alumnosActivosSedeADFPL->fetch();
+		$totalActivosSedeADFPL=$alumnosActivosSedeADFPL["totalActivosSedeADFPL"];
 	}else{
-		$totalActivosSedeL= 0;
+		$totalActivosSedeADFPL= 0;
 	}
 
-	if($alumnosInactivosSedeL->rowCount()>0){
-		$alumnosInactivosSedeL=$alumnosInactivosSedeL->fetch();
-		$totalInactivosSedeL=$alumnosInactivosSedeL["totalInactivosSedeL"];
+	if($alumnosActivosSedeCantera->rowCount()>0){
+		$alumnosActivosSedeCantera=$alumnosActivosSedeCantera->fetch();
+		$totalActivosSedeCantera=$alumnosActivosSedeCantera["totalActivosSedeCantera"];
 	}else{
-		$totalInactivosSedeL= 0;
+		$totalActivosSedeCantera= 0;
 	}
 
-	if($pagosCanceladoSedeL->rowCount()>0){
-		$pagosCanceladoSedeL=$pagosCanceladoSedeL->fetch();
-		$totalCanceladoSedeL=$pagosCanceladoSedeL["totalCanceladoSedeL"];
+	if($alumnosInactivosSedeADFPL->rowCount()>0){
+		$alumnosInactivosSedeADFPL=$alumnosInactivosSedeADFPL->fetch();
+		$totalInactivosSedeADFPL=$alumnosInactivosSedeADFPL["totalInactivosSedeADFPL"];
 	}else{
-		$totalCanceladoSedeL= 0;
+		$totalInactivosSedeADFPL= 0;
+	}
+
+	if($alumnosInactivosSedeCantera->rowCount()>0){
+		$alumnosInactivosSedeCantera=$alumnosInactivosSedeCantera->fetch();
+		$totalInactivosSedeCantera=$alumnosInactivosSedeCantera["totalInactivosSedeCantera"];
+	}else{
+		$totalInactivosSedeCantera= 0;
+	}
+
+	if($pagosCanceladoSedeADFPL->rowCount()>0){
+		$pagosCanceladoSedeADFPL=$pagosCanceladoSedeADFPL->fetch();
+		$totalCanceladoSedeADFPL=$pagosCanceladoSedeADFPL["totalCancelados"];
+	}else{
+		$totalCanceladoSedeADFPL= 0;
+	}
+
+	if($pagosCanceladoSedeCantera->rowCount()>0){
+		$pagosCanceladoSedeCantera=$pagosCanceladoSedeCantera->fetch();
+		$totalCanceladoSedeCantera=$pagosCanceladoSedeCantera["totalCancelados"];
+	}else{
+		$totalCanceladoSedeCantera= 0;
 	}
 	
-	if($pagosPendienteSedeL->rowCount()>0){
-		$pagosPendienteSedeL=$pagosPendienteSedeL->fetch();
-		$totalPendienteSedeL=$pagosPendienteSedeL["totalPendienteSedeL"];
+	if($pagosPendienteSedeADFPL->rowCount()>0){
+		$pagosPendienteSedeADFPL=$pagosPendienteSedeADFPL->fetch();
+		$totalPendienteSedeADFPL=$pagosPendienteSedeADFPL["totalPendientes"];
 	}else{
-		$totalPendienteSedeL= 0;
+		$totalPendienteSedeADFPL= 0;
+	}
+
+	if($pagosPendienteSedeCantera->rowCount()>0){
+		$pagosPendienteSedeCantera=$pagosPendienteSedeCantera->fetch();
+		$totalPendienteSedeCantera=$pagosPendienteSedeCantera["totalPendientes"];
+	}else{
+		$totalPendienteSedeCantera= 0;
 	}
 ?>
 
@@ -122,7 +154,7 @@
 							<!-- small box -->
 								<div class="small-box bg-info">
 									<div class="inner">
-										<h3><?php echo $totalActivosSedeL; ?></h3>									
+										<h3><?php echo $totalActivosSedeADFPL; ?></h3>									
 										<p>Alumnos activos</>
 									</div>
 									<div class="icon">
@@ -136,7 +168,7 @@
 								<!-- small box -->
 								<div class="small-box bg-success">
 									<div class="inner">
-										<h3><?php echo $totalCanceladoSedeL; ?></h3>
+										<h3><?php echo $totalCanceladoSedeADFPL; ?></h3>
 										<p>Pagos receptados</p>
 									</div>
 									<div class="icon">
@@ -150,7 +182,7 @@
 								<!-- small box -->
 								<div class="small-box bg-warning">
 									<div class="inner">
-										<h3><?php echo $totalInactivosSedeL; ?></h3>
+										<h3><?php echo $totalInactivosSedeADFPL; ?></h3>
 										<p>Alumnos inactivos</p>
 									</div>
 									<div class="icon">
@@ -164,7 +196,7 @@
 								<!-- small box -->
 								<div class="small-box bg-dark">
 									<div class="inner">
-										<h3><?php echo $totalPendienteSedeL; ?></h3>
+										<h3><?php echo $totalPendienteSedeADFPL; ?></h3>
 										<p>Pagos pendientes</p>
 									</div>
 									<div class="icon">
@@ -177,6 +209,84 @@
 						</div>
 					</div>
 				</div>
+
+				
+				<div class="card card-default">
+					<div class="card-header">
+						<h3 class="card-title">LA CANTERA</h3>
+						<div class="card-tools">
+							<button type="button" class="btn btn-tool" data-card-widget="collapse">
+								<i class="fas fa-minus"></i>
+							</button>
+						</div>
+					</div>
+
+					<div class="card-body">
+						<div class="row">
+							<div class="col-lg-3 col-6">
+							<!-- small box -->
+								<div class="small-box bg-info">
+									<div class="inner">
+									<h3><?php echo $totalActivosSedeCantera; ?></h3>
+
+									<p>Alumnos activos</p>
+									</div>
+									<div class="icon">
+									<i class="ion ion-person"></i>
+									</div>
+									<a href="<?php echo APP_URL;?>alumnoList/" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
+								</div>
+							</div>
+							<!-- ./col -->
+							<div class="col-lg-3 col-6">
+							<!-- small box -->
+							<div class="small-box bg-success">
+								<div class="inner">
+								<h3><?php echo $totalCanceladoSedeCantera; ?></h3>
+
+								<p>Pagos receptados</p>
+								</div>
+								<div class="icon">
+								<i class="ion ion-cash"></i>
+								</div>
+								<a href="<?php echo APP_URL;?>reportePagos/2" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
+							</div>
+							</div>
+							<!-- ./col -->
+							<div class="col-lg-3 col-6">
+							<!-- small box -->
+							<div class="small-box bg-warning">
+								<div class="inner">
+								<h3><?php echo $totalInactivosSedeCantera; ?></h3>
+
+								<p>Alumnos inactivos</p>
+								</div>
+								<div class="icon">
+								<i class="ion ion-android-warning"></i>
+								</div>
+								<a href="<?php echo APP_URL;?>alumnoList/"  class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
+							</div>
+							</div>
+							<!-- ./col -->
+							<div class="col-lg-3 col-6">
+							<!-- small box -->
+							<div class="small-box bg-danger">
+								<div class="inner">
+								<h3><?php echo $totalPendienteSedeCantera; ?></h3>
+
+								<p>Pagos pendientes</p>
+								</div>
+								<div class="icon">
+								<i class="ion ion-cash"></i>
+								</div>
+								<a href="<?php echo APP_URL;?>reportePendientes/2" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
+							</div>
+							</div>
+							<!-- ./col -->
+						</div>
+					</div>
+				</div>
+
 			</div><!-- /.container-fluid -->
 		</section>
 		<!-- /.content -->
