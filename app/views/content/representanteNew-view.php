@@ -250,9 +250,9 @@
 											<div class="form-group">
 												<label for="conyuge_sexo">Género</label>
 												<div class="form-check">
-													<input class="col-sm-1 form-check-input" type="radio" id="conyuge_sexoM" name="conyuge_sexo" >
+													<input class="col-sm-1 form-check-input" type="radio" id="conyuge_sexoM" value="M" name="conyuge_sexo" >
 													<label class="col-sm-5 form-check-label" for="conyuge_sexoM">Masculino</label>
-													<input class="col-sm-1 form-check-input" type="radio" id="conyuge_sexoF" name="conyuge_sexo" >
+													<input class="col-sm-1 form-check-input" type="radio" id="conyuge_sexoF" value="F" name="conyuge_sexo" >
 													<label class="col-sm-4 form-check-label" for="conyuge_sexoF">Femenino</label>
 												</div> 
 											</div>
