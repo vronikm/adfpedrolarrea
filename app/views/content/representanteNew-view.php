@@ -154,14 +154,14 @@
 										<div class="col-md-3">
 											<div class="form-group">
 												<label for="repre_parentesco">Parentesco</label>
-												<select class="form-control select2" style="width: 100%;" id="repre_parentesco" name="repre_parentesco" >													
+												<select class="form-control select2" style="width: 100%;" id="repre_parentesco" name="repre_parentesco" required>													
 													<?php echo $insRepre->listarCatalogoParentesco(); ?>
 												</select>
 											</div> 
 										</div>
 										<div class="col-md-3">
 											<div class="form-group">
-												<label for="repre_sexo">Sexo</label>
+												<label for="repre_sexo">Género</label>
 												<div class="form-check">
 													<input class="col-sm-1 form-check-input" type="radio" id="repre_sexoM" value="M" name="repre_sexo" required>
 													<label class="col-sm-5 form-check-label" for="repre_sexoM" style="font-size: 14px;">Masculino</label>
@@ -173,7 +173,7 @@
 										<div class="col-md-4">
 											<div class="form-group">
 												<label for="repre_direccion">Dirección</label>
-												<input type="text" class="form-control" id="repre_direccion" name="repre_direccion"  required>
+												<input type="text" class="form-control" id="repre_direccion" name="repre_direccion" placeholder="Barrio, Calle principal, #casa, calle secundaria" required>
 											</div>
 										</div>              
 										<div class="col-md-3">
@@ -187,17 +187,6 @@
 												<label for="repre_celular">Celular</label>
 												<input type="text" class="form-control" id="repre_celular" name="repre_celular" data-inputmask='"mask": "0999999999"' data-mask placeholder="Celular" required>
 											</div> 
-										</div>
-										<div class="col-md-3">
-											<div class="form-group">
-												<label for="repre_factura">Requiere factura</label>
-												<div class="form-check">
-													<input class="col-sm-1 form-check-input" type="radio" id="repre_facturaS" value="S" name="repre_factura" required>
-													<label class="col-sm-5 form-check-label" for="repre_facturaS">Si</label>
-													<input class="col-sm-1 form-check-input" type="radio" id="repre_facturaN" value="N" name="repre_factura" >
-													<label class="col-sm-4 form-check-label" for="repre_facturaN">No</label>
-												</div> 
-											</div>
 										</div>
 									</div>									
 								</div>
@@ -259,7 +248,7 @@
 										</div>              
 										<div class="col-md-4">
 											<div class="form-group">
-												<label for="conyuge_sexo">Sexo</label>
+												<label for="conyuge_sexo">Género</label>
 												<div class="form-check">
 													<input class="col-sm-1 form-check-input" type="radio" id="conyuge_sexoM" name="conyuge_sexo" >
 													<label class="col-sm-5 form-check-label" for="conyuge_sexoM">Masculino</label>

@@ -189,6 +189,7 @@
 							<thead>
 								<tr>
 									<th>Identificación</th>
+									<th data-orderable="true"># de camiseta</th>
 									<th>Nombres</th>
 									<th>Apellidos</th>
 									<th>Año</th>									
@@ -250,6 +251,7 @@
 	<script>
 	$(function () {
 		$("#example1").DataTable({
+		"order": [[1, "desc"]], // Ordena la segunda columna ("# de camiseta") por defecto de manera descendente
 		"responsive": true, "lengthChange": false, "autoWidth": false,
 		"language": {
 			"decimal": "",

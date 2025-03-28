@@ -225,13 +225,18 @@
 													<label for="descuento_estado">Estado</label>
 													<select class="form-control select2" id="descuento_estado" name="descuento_estado" >	
 														<?php
+														if ($descuento_estado != ""){													
 															if ($descuento_estado == "S"){
 																echo "<option value='S' selected>Activo</option>
 																	 <option value='N'>Inactivo</option>";
 															}else{
 																echo "<option value='S'>Activo</option>
 																	 <option value='N' selected>Inactivo</option>";
-															}														
+															}		
+														}else{
+															echo "<option value='S' selected>Activo</option>
+															<option value='N'>Inactivo</option>";
+														}											
 														?>
 													</select>	
 													</div>

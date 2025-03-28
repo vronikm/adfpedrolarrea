@@ -235,10 +235,16 @@
 													</select>	
 												</div>
 											</div> 
-											<div class="col-md-3">
+											<div class="col-md-4">
 												<div class="form-group">
 													<label for="alumno_direccion">Dirección</label>
 													<textarea class="form-control" id="alumno_direccion" name="alumno_direccion" placeholder="Barrio, Calle principal, #casa, calle secundaria"></textarea>
+												</div>	
+											</div> 
+											<div class="col-md-4">
+												<div class="form-group">
+													<label for="alumno_observacion">Observación</label>
+													<textarea class="form-control" id="alumno_observacion" name="alumno_observacion" placeholder="Observacion"></textarea>
 												</div>	
 											</div>  
 											<div class="col-md-2">
@@ -255,7 +261,7 @@
 											</div>	 
 											<div class="col-md-3">
 												<div class="form-group">
-													<label for="alumno_genero">Sexo</label>
+													<label for="alumno_genero">Género</label>
 													<div class="form-check">
 														<input class="col-sm-1 form-check-input" type="radio" id="alumno_generoM" name="alumno_genero" value="M" required="required">
 														<label class="col-sm-5 form-check-label" for="alumno_generoM">Masculino</label>

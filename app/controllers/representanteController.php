@@ -93,10 +93,8 @@
 			$repre_celular 			  	= $this->limpiarCadena($_POST['repre_celular']);
 			$repre_parentesco 		  	= $this->limpiarCadena($_POST['repre_parentesco']);
 			$repre_sexo 			  	= "";
-			$repre_factura 			  	= "";
 
-			if (isset($_POST['repre_sexo'])){$repre_sexo = $_POST['repre_sexo'];}	
-			if (isset($_POST['repre_factura'])){$repre_factura = $_POST['repre_factura'];}	
+			if (isset($_POST['repre_sexo'])){$repre_sexo = $_POST['repre_sexo'];}
 
 			if($repre_identificacion=="" || $repre_primernombre=="" || $repre_apellidopaterno=="" || 
 				$repre_direccion=="" || $repre_correo=="" || $repre_celular==""){
@@ -176,11 +174,6 @@
 					"campo_nombre"=>"repre_parentesco",
 					"campo_marcador"=>":ParentescoRep",
 					"campo_valor"=>$repre_parentesco
-				],
-				[
-					"campo_nombre"=>"repre_factura",
-					"campo_marcador"=>":RepFactura",
-					"campo_valor"=>$repre_factura
 				]
 			];
 
@@ -327,7 +320,7 @@
 		}
 		
 		public function listarCatalogoParentesco(){
-			$option="";
+			$option ='<option value=0> Seleccione una opción</option>';
 
 			$consulta_datos="SELECT C.catalogo_valor, C.catalogo_descripcion 
 								FROM general_tabla_catalogo C
@@ -439,7 +432,6 @@
 			$repre_celular 			  	= $this->limpiarCadena($_POST['repre_celular']);
 			$repre_parentesco 		  	= $this->limpiarCadena($_POST['repre_parentesco']);
 			$repre_sexo 			  	= "";
-			$repre_factura			  	= "";
 
 			# Verificando campos obligatorios #
 			if($repre_identificacion=="" || $repre_primernombre=="" || $repre_apellidopaterno=="" || 
@@ -465,13 +457,13 @@
 				return json_encode($alerta);
 			}
 
-			if (isset($_POST['repre_factura'])) {
-				$repre_factura = $_POST['repre_factura'];
+			if (isset($_POST['repre_parentesco'])) {
+				$repre_parentesco = $_POST['repre_parentesco'];
 			}else{
 		    	$alerta=[
 					"tipo"=>"simple",
 					"titulo"=>"Ocurrió un error",
-					"texto"=>"No ha completado el campo obligatorio requiere factura",
+					"texto"=>"No ha completado el campo obligatorio parentesco",
 					"icono"=>"error"
 				];
 				return json_encode($alerta);
@@ -531,11 +523,6 @@
 						"campo_nombre"=>"repre_parentesco",
 						"campo_marcador"=>":ParentescoRep",
 						"campo_valor"=>$repre_parentesco
-					],
-					[
-						"campo_nombre"=>"repre_factura",
-						"campo_marcador"=>":RepFactura",
-						"campo_valor"=>$repre_factura
 					]
 				];
 				$condicion=[

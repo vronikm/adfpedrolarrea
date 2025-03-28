@@ -6,8 +6,6 @@
 
 	$repre_sexoM 		= "";
 	$repre_sexoF 		= "";
-	$repre_facturaS		= "";
-	$repre_facturaN		= "";
 	$repre_hermanosSi	= "";
 	$repre_hermanosNo	= "";
 	$conyuge_sexoM		= "";
@@ -20,12 +18,6 @@
 			$repre_sexoM = "checked";
 		}else{
 			$repre_sexoF = "checked";
-		}
-
-		if ($datosrepresentante['repre_factura']=='S'){
-			$repre_facturaS = "checked";
-		}else{
-			$repre_facturaN = "checked";
 		}
 	
 		$repre_id					= $datosrepresentante['repre_id'];
@@ -231,7 +223,7 @@
 										</div>
 										<div class="col-md-3">
 											<div class="form-group">
-												<label for="repre_sexo">Sexo</label>
+												<label for="repre_sexo">Género</label>
 												<div class="form-check">
 													<input class="col-sm-1 form-check-input" type="radio" id="repre_sexoM" name="repre_sexo" value="M" <?php echo $repre_sexoM;?> >
 													<label class="col-sm-5 form-check-label" for="repre_sexoM" style="font-size: 14px;">Masculino</label>
@@ -257,17 +249,6 @@
 												<label for="repre_celular">Celular</label>
 												<input type="text" class="form-control" id="repre_celular" name="repre_celular" value="<?php echo $repre_celular; ?>" >
 											</div> 
-										</div>
-										<div class="col-md-3">
-											<div class="form-group">
-												<label for="repre_factura">Requiere factura</label>
-												<div class="form-check">
-													<input class="col-sm-1 form-check-input" type="radio" id="repre_facturaS" value="S" name="repre_factura" <?php echo $repre_facturaS;?>>
-													<label class="col-sm-5 form-check-label" for="repre_facturaS">Si</label>
-													<input class="col-sm-1 form-check-input" type="radio" id="repre_facturaN" value="N" name="repre_factura" <?php echo $repre_facturaN;?>>
-													<label class="col-sm-4 form-check-label" for="repre_facturaN">No</label>
-												</div> 
-											</div>
 										</div>
 									</div>				
 								</div>
@@ -329,7 +310,7 @@
 										</div>              
 										<div class="col-md-4">
 											<div class="form-group">
-												<label for="conyuge_sexo">Sexo</label>
+												<label for="conyuge_sexo">Género</label>
 												<div class="form-check">
 													<input class="col-sm-1 form-check-input" type="radio" id="conyuge_sexoM" name="conyuge_sexo" value="M" <?php echo $conyuge_sexoM;?> >
 													<label class="col-sm-5 form-check-label" for="conyuge_sexoM">Masculino</label>

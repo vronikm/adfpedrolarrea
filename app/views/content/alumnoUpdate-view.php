@@ -342,10 +342,16 @@
 												</select>	
 											</div>
 										</div> 
-										<div class="col-md-3">
+										<div class="col-md-4">
 											<div class="form-group">
 												<label for="alumno_direccion">Dirección</label>
 												<input type="text" class="form-control" id="alumno_direccion" name="alumno_direccion" value="<?php echo $datos['alumno_direccion']; ?>">
+											</div>	
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+												<label for="alumno_observacion">Observación</label>
+												<input type="text" class="form-control" id="alumno_observacion" name="alumno_observacion" value="<?php echo $datos['alumno_observacion']; ?>">
 											</div>	
 										</div>
 										<div class="col-md-2">
@@ -362,7 +368,7 @@
 										</div>	  
 										<div class="col-md-3">
 											<div class="form-group">
-												<label for="alumno_genero">Sexo</label>
+												<label for="alumno_genero">Género</label>
 												<div class="form-check">
 													<input class="col-sm-1 form-check-input" type="radio" id="alumno_generoM" name="alumno_genero" value="M" <?php echo $alumno_generoM; ?> required>
 													<label class="col-sm-5 form-check-label" for="alumno_generoM">Masculino</label>

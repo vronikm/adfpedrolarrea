@@ -18,6 +18,7 @@
 			$alumno_nacionalidadid		= $this->limpiarCadena($_POST['alumno_nacionalidadid']);
 			$alumno_fechanacimiento 	= $this->limpiarCadena($_POST['alumno_fechanacimiento']);
 			$alumno_direccion 			= $this->limpiarCadena($_POST['alumno_direccion']);	
+			$alumno_observacion 		= $this->limpiarCadena($_POST['alumno_observacion']);	
 			$alumno_fechaingreso		= $this->limpiarCadena($_POST['alumno_fechaingreso']);
 			$alumno_sedeid 				= $this->limpiarCadena($_POST['alumno_sedeid']);
 			$alumno_nombrecorto 		= ""; //$this->limpiarCadena($_POST['alumno_nombrecorto']);
@@ -376,6 +377,11 @@
 					"campo_valor"=>$alumno_direccion
 				],
 				[
+					"campo_nombre"=>"alumno_observacion",
+					"campo_marcador"=>":Observacion",
+					"campo_valor"=>$alumno_observacion
+				],
+				[
 					"campo_nombre"=>"alumno_fechanacimiento",
 					"campo_marcador"=>":Fechanacimiento",
 					"campo_valor"=>$alumno_fechanacimiento
@@ -628,7 +634,7 @@
 				$consulta_datos = "SELECT * FROM sujeto_alumno WHERE alumno_primernombre = ''";
 			}			
 
-			$consulta_datos .= " AND alumno_estado <> 'E'"; 
+			$consulta_datos .= " AND alumno_estado <> 'E' ORDER BY alumno_numcamiseta"; 
 			
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
@@ -646,6 +652,7 @@
 				$tabla.='
 					<tr>
 						<td>'.$rows['alumno_identificacion'].'</td>
+						<td>'.$rows['alumno_numcamiseta'].'</td>
 						<td>'.$rows['alumno_primernombre'].' '.$rows['alumno_segundonombre'].'</td>
 						<td>'.$rows['alumno_apellidopaterno'].' '.$rows['alumno_apellidomaterno'].'</td>
 						<td>'.$rows['alumno_fechanacimiento'].'</td>
@@ -911,6 +918,7 @@
 			$alumno_nacionalidadid		= $this->limpiarCadena($_POST['alumno_nacionalidadid']);
 			$alumno_fechanacimiento 	= $this->limpiarCadena($_POST['alumno_fechanacimiento']);
 			$alumno_direccion 			= $this->limpiarCadena($_POST['alumno_direccion']);	
+			$alumno_observacion 		= $this->limpiarCadena($_POST['alumno_observacion']);	
 			$alumno_fechaingreso		= $this->limpiarCadena($_POST['alumno_fechaingreso']);
 			$alumno_sedeid 				= $this->limpiarCadena($_POST['alumno_sedeid']);
 			$alumno_nombrecorto 		= ""; //$this->limpiarCadena($_POST['alumno_nombrecorto']);
@@ -1014,6 +1022,11 @@
 					"campo_valor"=>$alumno_direccion
 				],
 				[
+					"campo_nombre"=>"alumno_observacion",
+					"campo_marcador"=>":Observacion",
+					"campo_valor"=>$alumno_observacion
+				],
+				[
 					"campo_nombre"=>"alumno_fechanacimiento",
 					"campo_marcador"=>":Fechanacimiento",
 					"campo_valor"=>$alumno_fechanacimiento
@@ -1110,7 +1123,6 @@
        			$outputFile = $img_dir.$foto;
 
 				# Moviendo imagen al directorio #
-				//if(!move_uploaded_file($_FILES['alumno_foto']['tmp_name'],$img_dir.$foto)){
 				if ($this->resizeImageGD($inputFile, $maxWidth, $maxHeight, $outputFile)) {
 					
 				}else{
@@ -1194,7 +1206,6 @@
        			$outputFile = $dir_cedula.$CedulaA;
 
 				# Moviendo imagen al directorio #
-				//if(!move_uploaded_file($_FILES['alumno_foto']['tmp_name'],$img_dir.$foto)){
 				if ($this->resizeImageGD($inputFile, $maxWidth, $maxHeight, $outputFile)) {
 					
 				}else{
@@ -1278,7 +1289,6 @@
        			$outputFile = $dir_cedula.$CedulaR;
 
 				# Moviendo imagen al directorio #
-				//if(!move_uploaded_file($_FILES['alumno_foto']['tmp_name'],$img_dir.$foto)){
 				if ($this->resizeImageGD($inputFile, $maxWidth, $maxHeight, $outputFile)) {
 					
 				}else{
@@ -1849,8 +1859,6 @@
 			$datos = $this->ejecutarConsulta($consulta_repre);		
 			return $datos;
 		}
-
-		/* ==================================== Roles ==================================== */
 
 		public function listarOptionSede($rolid = null, $usuario = null ){
 			$option="";
