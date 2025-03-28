@@ -272,7 +272,7 @@
 								<!-- small box -->
 								<div class="small-box bg-dark">
 									<div class="inner">
-										<h3><?php echo $totalPendienteSedeADFPL; ?></h3>
+										<h3><?php echo $totalPendienteSedeCantera; ?></h3>
 										<p>Pagos pendientes</p>
 									</div>
 									<div class="icon">
