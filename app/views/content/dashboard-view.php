@@ -269,18 +269,17 @@
 							</div>
 							<!-- ./col -->
 							<div class="col-lg-3 col-6">
-							<!-- small box -->
-							<div class="small-box bg-danger">
-								<div class="inner">
-								<h3><?php echo $totalPendienteSedeCantera; ?></h3>
-
-								<p>Pagos pendientes</p>
+								<!-- small box -->
+								<div class="small-box bg-dark">
+									<div class="inner">
+										<h3><?php echo $totalPendienteSedeADFPL; ?></h3>
+										<p>Pagos pendientes</p>
+									</div>
+									<div class="icon">
+										<i class="ion ion-cash icon-white"></i>
+									</div>
+									<a href="<?php echo APP_URL;?>reportePendientes/1" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>							
 								</div>
-								<div class="icon">
-								<i class="ion ion-cash"></i>
-								</div>
-								<a href="<?php echo APP_URL;?>reportePendientes/2" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
-							</div>
 							</div>
 							<!-- ./col -->
 						</div>
