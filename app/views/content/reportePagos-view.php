@@ -115,7 +115,7 @@
 										<div class="input-group-prepend">
 											<span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
 										</div>
-										<input type="date" class="form-control" id="pago_fecha_fin" name="pago_fecha_fin" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" value=<?php echo $fecha_inicio;?> data-mask required>										
+										<input type="date" class="form-control" id="pago_fecha_fin" name="pago_fecha_fin" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" value=<?php echo $fecha_fin;?> data-mask required>										
 									</div>
 									<!-- /.input group -->
 								</div>

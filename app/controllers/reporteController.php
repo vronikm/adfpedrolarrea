@@ -31,7 +31,7 @@
 								LEFT JOIN alumno_pago_transaccion PT ON PT.transaccion_id  = T.IDT
 							where pago_estado <> 'E'
 								and alumno_sedeid = ".$sede_id."
-								and pago_fecharegistro between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
+								and pago_fecha between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
 							
 							union all 
 														
@@ -53,7 +53,8 @@
 								inner join general_sede S on S.sede_id = alumno_sedeid
 							where transaccion_estado <> 'E'
 								and alumno_sedeid = ".$sede_id."
-								and transaccion_fecharegistro between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'";
+								and transaccion_fecha between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
+								ORDER BY FECHA_PAGO DESC";
 
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
@@ -118,7 +119,7 @@
 								GROUP BY PT.transaccion_pagoid)T ON T.transaccion_pagoid = P.pago_id
 								LEFT JOIN alumno_pago_transaccion PT ON PT.transaccion_id  = T.IDT
 							where pago_estado <> 'E'
-								and pago_fecharegistro between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
+								and pago_fecha between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
 							
 							union all 
 														
@@ -139,7 +140,7 @@
 								inner join general_tabla_catalogo F ON F.catalogo_valor = T.transaccion_formapagoid 
 								inner join general_sede S on S.sede_id = alumno_sedeid
 							where transaccion_estado <> 'E'
-								and transaccion_fecharegistro between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
+								and transaccion_fecha between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
 								ORDER BY FECHA_PAGO DESC";
 
 			$datos = $this->ejecutarConsulta($consulta_datos);
@@ -383,7 +384,7 @@
 			$VALOR_PAGADO = 0;
 			$PAGOS = 0;
 			$consulta_datos="SELECT sede_nombre SEDE,
-								pago_fecharegistro FECHA_REG_SISTEMA, 
+								pago_fecha FECHA_PAGO, 
 								R.catalogo_descripcion RUBRO,  
 								F.catalogo_descripcion FORMA_PAGO,
 								count(*) PAGOS, 
@@ -400,13 +401,13 @@
 								LEFT JOIN alumno_pago_transaccion PT ON PT.transaccion_id  = T.IDT
 							WHERE pago_estado <> 'E'
 								and alumno_sedeid = ".$sede_id."
-								and pago_fecharegistro between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
-							GROUP BY SEDE, FECHA_REG_SISTEMA, RUBRO, FORMA_PAGO							
+								and pago_fecha between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
+							GROUP BY SEDE, FECHA_PAGO, RUBRO, FORMA_PAGO							
 							
 							union all 
 														
 							SELECT sede_nombre SEDE,
-								transaccion_fecharegistro FECHA_REG_SISTEMA,  
+								transaccion_fecha FECHA_PAGO,  
 								CONCAT_WS(' ', R.catalogo_descripcion, ' - Abono') RUBRO,  
 								F.catalogo_descripcion FORMA_PAGO, 
 								count(*) PAGOS,
@@ -419,9 +420,9 @@
 								inner join general_sede S on S.sede_id = alumno_sedeid
 							WHERE transaccion_estado <> 'E'
 								and alumno_sedeid = ".$sede_id."
-								and transaccion_fecharegistro between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
-							GROUP BY SEDE, FECHA_REG_SISTEMA, RUBRO, FORMA_PAGO
-							ORDER BY SEDE, FECHA_REG_SISTEMA, RUBRO";
+								and transaccion_fecha between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
+							GROUP BY SEDE, FECHA_PAGO, RUBRO, FORMA_PAGO
+							ORDER BY SEDE, FECHA_PAGO, RUBRO";
 
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
@@ -431,7 +432,7 @@
 				$tabla.='
 					<tr>
 						<td>'.$rows['SEDE'].'</td>
-						<td>'.$rows['FECHA_REG_SISTEMA'].'</td>
+						<td>'.$rows['FECHA_PAGO'].'</td>
 						<td>'.$rows['RUBRO'].'</td>
 						<td>'.$rows['FORMA_PAGO'].'</td>
 						<td style="text-align: right">'.$rows['PAGOS'].'</td>
@@ -453,7 +454,7 @@
 			$tabla="";
 			$VALOR_PAGADO = 0;
 			$consulta_datos="SELECT sede_nombre SEDE,
-								pago_fecharegistro FECHA_REG_SISTEMA, 
+								pago_fecha FECHA_PAGO, 
 								R.catalogo_descripcion RUBRO,   
 								F.catalogo_descripcion FORMA_PAGO,
 								count(*) PAGOS, 
@@ -469,13 +470,13 @@
 								GROUP BY PT.transaccion_pagoid)T ON T.transaccion_pagoid = P.pago_id
 								LEFT JOIN alumno_pago_transaccion PT ON PT.transaccion_id  = T.IDT
 							where pago_estado <> 'E'
-								and pago_fecharegistro between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
-							GROUP BY SEDE, FECHA_REG_SISTEMA, RUBRO, FORMA_PAGO
+								and pago_fecha between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
+							GROUP BY SEDE, FECHA_PAGO, RUBRO, FORMA_PAGO
 							
 							union all 
 														
 							SELECT sede_nombre SEDE,
-								transaccion_fecharegistro FECHA_REG_SISTEMA,  
+								transaccion_fecha FECHA_PAGO,  
 								CONCAT_WS(' ', R.catalogo_descripcion, ' - Abono') RUBRO, 
 								F.catalogo_descripcion FORMA_PAGO, 
 								count(*) PAGOS,
@@ -487,8 +488,8 @@
 								inner join general_tabla_catalogo F ON F.catalogo_valor = T.transaccion_formapagoid 								
 								inner join general_sede S on S.sede_id = alumno_sedeid
 							where transaccion_estado <> 'E'
-								and transaccion_fecharegistro between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
-							GROUP BY SEDE, FECHA_REG_SISTEMA, RUBRO, FORMA_PAGO
+								and transaccion_fecha between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
+							GROUP BY SEDE, FECHA_PAGO, RUBRO, FORMA_PAGO
 							ORDER BY SEDE, RUBRO";
 
 			$datos = $this->ejecutarConsulta($consulta_datos);
@@ -498,7 +499,7 @@
 				$tabla.='
 					<tr>
 						<td>'.$rows['SEDE'].'</td>
-						<td>'.$rows['FECHA_REG_SISTEMA'].'</td>
+						<td>'.$rows['FECHA_PAGO'].'</td>
 						<td>'.$rows['RUBRO'].'</td>
 						<td>'.$rows['FORMA_PAGO'].'</td>
 						<td>'.$rows['PAGOS'].'</td>
@@ -569,11 +570,10 @@
 			$tabla="";
 			$VALOR_PAGADO = 0;
 			$PAGOS = 0;
-			$consulta_datos=" SELECT SEDE, FECHA_REG_SISTEMA, FORMA_PAGO, SUM(PAGOS) PAGOS, SUM(VALOR_PAGADO) VALOR_PAGADO
+			$consulta_datos="SELECT SEDE, FECHA_PAGO, FORMA_PAGO, SUM(PAGOS) PAGOS, SUM(VALOR_PAGADO) VALOR_PAGADO
 								FROM(
 									SELECT sede_nombre SEDE,
-									pago_fecharegistro FECHA_REG_SISTEMA, 
-									pago_fecha,
+									pago_fecha FECHA_PAGO,
 									F.catalogo_descripcion FORMA_PAGO,
 									count(*) PAGOS, 
 									SUM(((P.pago_saldo + P.pago_valor) - (IFNULL(PT.transaccion_valorcalculado, P.pago_saldo))))VALOR_PAGADO
@@ -589,13 +589,13 @@
 									LEFT JOIN alumno_pago_transaccion PT ON PT.transaccion_id  = T.IDT
 								WHERE pago_estado <> 'E'
 									and alumno_sedeid = ".$sede_id."
-									and pago_fecharegistro between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
-								GROUP BY SEDE, FECHA_REG_SISTEMA, FORMA_PAGO
+									and pago_fecha between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
+								GROUP BY SEDE, FECHA_PAGO, FORMA_PAGO
 								
 								union all 
 															
 								SELECT sede_nombre SEDE,
-									transaccion_fecharegistro FECHA_REG_SISTEMA,
+									transaccion_fecha FECHA_PAGO,
 									F.catalogo_descripcion FORMA_PAGO, 
 									count(*) PAGOS,
 									SUM(transaccion_valor) VALOR_PAGADO
@@ -607,11 +607,11 @@
 									inner join general_sede S on S.sede_id = alumno_sedeid
 								WHERE transaccion_estado <> 'E'
 									and alumno_sedeid = ".$sede_id."
-									and transaccion_fecharegistro between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
-								GROUP BY SEDE, FECHA_REG_SISTEMA, FORMA_PAGO
+									and transaccion_fecha between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
+								GROUP BY SEDE, FECHA_PAGO, FORMA_PAGO
 								) FORMAPAGO
-								group by SEDE, FECHA_REG_SISTEMA, FORMA_PAGO
-								order by SEDE, FECHA_REG_SISTEMA";
+								group by SEDE, FECHA_PAGO, FORMA_PAGO
+								order by SEDE, FECHA_PAGO";
 
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
@@ -621,7 +621,7 @@
 				$tabla.='
 					<tr>
 						<td>'.$rows['SEDE'].'</td>
-						<td>'.$rows['FECHA_REG_SISTEMA'].'</td>
+						<td>'.$rows['FECHA_PAGO'].'</td>
 						<td>'.$rows['FORMA_PAGO'].'</td>
 						<td style="text-align: right">'.$rows['PAGOS'].'</td>
 						<td style="text-align: right">'.$rows['VALOR_PAGADO'].'</td>
@@ -641,7 +641,7 @@
 			$tabla="";
 			$VALOR_PAGADO = 0;
 			$consulta_datos="SELECT sede_nombre SEDE,
-								pago_fecharegistro FECHA_REG_SISTEMA, 
+								pago_fecha FECHA_PAGO, 
 								R.catalogo_descripcion RUBRO,   
 								F.catalogo_descripcion FORMA_PAGO,
 								count(*) PAGOS, 
@@ -657,13 +657,13 @@
 								GROUP BY PT.transaccion_pagoid)T ON T.transaccion_pagoid = P.pago_id
 								LEFT JOIN alumno_pago_transaccion PT ON PT.transaccion_id  = T.IDT
 							where pago_estado <> 'E'
-								and pago_fecharegistro between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
-							GROUP BY SEDE, FECHA_REG_SISTEMA, RUBRO, FORMA_PAGO
+								and pago_fecha between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
+							GROUP BY SEDE, FECHA_PAGO, RUBRO, FORMA_PAGO
 							
 							union all 
 														
 							SELECT sede_nombre SEDE,
-								transaccion_fecharegistro FECHA_REG_SISTEMA,  
+								transaccion_fecha FECHA_PAGO,  
 								CONCAT_WS(' ', R.catalogo_descripcion, ' - Abono') RUBRO, 
 								F.catalogo_descripcion FORMA_PAGO, 
 								count(*) PAGOS,
@@ -675,8 +675,8 @@
 								inner join general_tabla_catalogo F ON F.catalogo_valor = T.transaccion_formapagoid 								
 								inner join general_sede S on S.sede_id = alumno_sedeid
 							where transaccion_estado <> 'E'
-								and transaccion_fecharegistro between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
-							GROUP BY SEDE, FECHA_REG_SISTEMA, RUBRO, FORMA_PAGO
+								and transaccion_fecha between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
+							GROUP BY SEDE, FECHA_PAGO, RUBRO, FORMA_PAGO
 							ORDER BY SEDE, RUBRO";
 
 			$datos = $this->ejecutarConsulta($consulta_datos);
@@ -686,7 +686,7 @@
 				$tabla.='
 					<tr>
 						<td>'.$rows['SEDE'].'</td>
-						<td>'.$rows['FECHA_REG_SISTEMA'].'</td>
+						<td>'.$rows['FECHA_PAGO'].'</td>
 						<td>'.$rows['RUBRO'].'</td>
 						<td>'.$rows['FORMA_PAGO'].'</td>
 						<td>'.$rows['PAGOS'].'</td>
