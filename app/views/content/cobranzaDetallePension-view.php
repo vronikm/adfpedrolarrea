@@ -53,7 +53,7 @@
 	<!-- Theme style -->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/adminlte.css">
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/sweetalert2.min.css">
-	<script src="<?php echo APP_URL; ?>app/views/dist/js/sweetalert2.all.min.js" ></script>
+
   </head>
   <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
@@ -95,7 +95,7 @@
 							<div class="invoice p-3 mb-3">							
 								<div class="col-sm-11 invoice-col">									
 									<address class="text-center"><br>
-										<strong class="profile-username">ESCUELA INDEPENDIENTE DEL VALLE</strong><br><br>											
+										<strong class="profile-username">ACADEMIA DE FÚTBOL PEDRO LARREA</strong><br><br>											
 										<div class="row">
 											<div class="row">
 												<div class="col-4"></div>														
@@ -179,6 +179,7 @@
 	<!-- AdminLTE App -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/adminlte.min.js"></script>		
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/ajax.js" ></script>
+	<script src="<?php echo APP_URL; ?>app/views/dist/js/sweetalert2.all.min.js" ></script>
     
 	<script type="text/javascript">
         function cerrarPestana() {
