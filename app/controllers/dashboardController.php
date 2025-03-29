@@ -107,6 +107,31 @@
 															) AS subconsulta;");
 			return $pagosPendientes;
 		}
+
+		public function dashboardAlumnos($sedeid, $estado){
+			$tabla="";
+			$consulta_datos="SELECT * FROM sujeto_alumno WHERE alumno_sedeid = $sedeid AND alumno_estado = '".$estado."'";
+			
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){
+				$tabla.='
+					<tr>
+						<td>'.$rows['alumno_identificacion'].'</td>
+						<td>'.$rows['alumno_numcamiseta'].'</td>
+						<td>'.$rows['alumno_primernombre'].' '.$rows['alumno_segundonombre'].'</td>
+						<td>'.$rows['alumno_apellidopaterno'].' '.$rows['alumno_apellidomaterno'].'</td>
+						<td>'.$rows['alumno_fechanacimiento'].'</td>
+					</tr>';	
+			}
+			return $tabla;			
+		}
+
+		public function informacionSede($sedeid){		
+			$consulta_datos="SELECT * FROM general_sede WHERE sede_id  = $sedeid";
+			$datos = $this->ejecutarConsulta($consulta_datos);		
+			return $datos;
+		}
 	}
 
 		

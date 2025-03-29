@@ -1,22 +1,27 @@
 <?php
-	use app\controllers\reporteController;
-	$insPendientes = new reporteController();	
-	
-	$sede_id 	= ($url[1] != "") ? $url[1] : 0;
+	use app\controllers\dashboardController;
+	$alumnosEstado = new dashboardController();
+	$sedeid = $alumnosEstado->limpiarCadena($url[1]);
+	$estado = $alumnosEstado->limpiarCadena($url[2]);
 
-	$datos=$insPendientes->seleccionarDatos("Unico","general_sede","sede_id",$sede_id);
-	if($datos->rowCount()==1){
-		$datos=$datos->fetch();
-		$sedeid = $datos["sede_id"];
+	$sede = $alumnosEstado->informacionSede($sedeid);
+	if($sede->rowCount()==1){
+		$sede	 = $sede->fetch();
+		$sede_id = $sede["sede_id"];
 		
-		if($sedeid==1){
+		if($sede_id==1){
 			$sede_nombre = "CANCHA SINTÉTICA JIPIRO";	
 		}
 		else{
-			$sede_nombre = $datos["sede_nombre"];
+			$sede_nombre = $sede["sede_nombre"];
 		}
+		
+	}
+
+	if($estado== 'A'){
+		$textoEstado = "ACTIVOS";
 	}else{
-		$sede_nombre = "";
+		$textoEstado = "INACTIVOS";
 	}
 ?>
 
@@ -26,7 +31,7 @@
     <meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>ADF Pedro Larrea| Pagos Pendientes</title>
+	<title><?php echo APP_NAME; ?>| Alumnos <?php echo $textoEstado; ?> </title>
 	<link rel="icon" type="image/png" href="<?php echo APP_URL; ?>app/views/dist/img/Logos/LogoRojo.png">
 	<!-- Google Font: Source Sans Pro -->
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -38,89 +43,70 @@
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 	<!-- Theme style -->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/adminlte.css">
-
-
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/sweetalert2.min.css">
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/sweetalert2.all.min.js" ></script>
     
   </head>
   <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
+      <!-- Navbar -->
+      <?php require_once "app/views/inc/navbar.php"; ?>
+      <!-- /.navbar -->
 
-		<!-- Preloader -->
-		<!--?php require_once "app/views/inc/preloader.php"; ?-->
-		<!-- /.Preloader -->
+      <!-- Main Sidebar Container -->
+      <?php require_once "app/views/inc/main-sidebar.php"; ?>
+      <!-- /.Main Sidebar Container -->  
 
-		<!-- Navbar -->
-		<?php require_once "app/views/inc/navbar.php"; ?>
-		<!-- /.navbar -->
-
-		<!-- Main Sidebar Container -->
-		<?php require_once "app/views/inc/main-sidebar.php"; ?>
-		<!-- /.Main Sidebar Container -->  
-
-      	<!-- vista -->
-      	<div class="content-wrapper">
-
-			<!-- Content Header (Page header) -->
-			<div class="content-header">
-				<div class="container-fluid">
+      <!-- vista -->
+      <div class="content-wrapper">
+		<!-- Content Header (Page header) -->
+		<div class="content-header">
+			<div class="container-fluid">
 				<div class="row mb-2">
 					<div class="col-sm-6">
-					<h4 class="m-0">PAGOS PENDIENTES <?php echo $sede_nombre; ?></h4>
+						<h4 class="m-0">ALUMNOS <?php echo $textoEstado." ".$sede_nombre; ?></h4>
 					</div><!-- /.col -->
 					<div class="col-sm-6">
-					<ol class="breadcrumb float-sm-right">
-						<li class="breadcrumb-item"><a href="#">Nuevo</a></li>
-						<li class="breadcrumb-item active">Dashboard v1</li>
-					</ol>
+						<ol class="breadcrumb float-sm-right">
+							<li class="breadcrumb-item"><a href="#">Nuevo</a></li>
+							<li class="breadcrumb-item active">Dashboard v1</li>
+						</ol>
 					</div><!-- /.col -->
 				</div><!-- /.row -->
-				</div><!-- /.container-fluid -->
-			</div>
-			<!-- /.content-header -->
-
-			<!-- Main content -->
-			<section class="content">
-				<div class="container-fluid">
-					
-					<div class="row">
-						<div class="col-12">
-							<div class="card">
-							<div class="card-header">
-								<h3 class="card-title">Alumnos</h3>
-							</div>
-							<!-- ./card-header -->
-							<div class="card-body">
-							<table id="example1" class="table table-bordered table-striped table-sm" style="font-size: 13px;">
-									<thead>
-										<tr>
-											<th>Identificación</th>
-											<th>Nombres</th>
-											<th>T.Pendientes</th>
-											<th>Saldos Pendientes</th>
-											<th>T.Pensiones</th>
-											<th>Valor Pensiones</th>									
-										</tr>
-									</thead>
-									<tbody>
-										<?php 
-											echo $insPendientes->valoresPendientes($sede_id); 
-										?>
-									</tbody>
-								</table>
-							</div>
-							<!-- /.card-body -->
-							</div>
-							<!-- /.card -->
-						</div>
-					</div>
-				
-				</div><!-- /.container-fluid -->
-			</section>
-			<!-- /.content -->
-      
+			</div><!-- /.container-fluid -->
 		</div>
+		<!-- /.content-header -->
+		<!-- Section listado de alumnos activos-->
+		<section class="content">
+			<div class="container-fluid">
+			<!-- Small boxes (Stat box) -->
+				<div class="card card-default">
+					<div class="card-body">
+						<table id="example1" class="table table-bordered table-striped table-sm">
+							<thead>
+								<tr>
+									<th>Identificación</th>
+									<th data-orderable="true"># de camiseta</th>
+									<th>Nombres</th>
+									<th>Apellidos</th>
+									<th>F. Nacimiento</th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php 
+									echo $alumnosEstado->dashboardAlumnos($sedeid, $estado); 
+								?>								
+							</tbody>
+						</table>	
+					</div>
+				</div>
+			<!-- /.row -->
+			</div><!-- /.container-fluid -->
+
+		</section>
+		<!-- /.section -->
+      
+      </div>
       <!-- /.vista -->
 
       <?php require_once "app/views/inc/footer.php"; ?>
@@ -153,11 +139,14 @@
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 	<!-- AdminLTE App -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/adminlte.min.js"></script>
-	
-	<!-- Page specific script -->
+	<script src="<?php echo APP_URL; ?>app/views/dist/js/ajax.js" ></script>
+	<script src="<?php echo APP_URL; ?>app/views/dist/js/main.js" ></script>	
+
+     <!-- Page specific script -->
 	<script>
 	$(function () {
 		$("#example1").DataTable({
+		"order": [[1, "desc"]], // Ordena la segunda columna ("# de camiseta") por defecto de manera descendente
 		"responsive": true, "lengthChange": false, "autoWidth": false,
 		"language": {
 			"decimal": "",
@@ -225,11 +214,7 @@
 		});
 	});
 	</script>
-
-	<script src="<?php echo APP_URL; ?>app/views/dist/js/ajax.js" ></script>
-	<script src="<?php echo APP_URL; ?>app/views/dist/js/main.js" ></script>
-    
-  </body>
+  </body> 
 </html>
 
 

@@ -84,11 +84,7 @@
 					<td ></td>
 					<td ></td>
 					<td ></td>
-					<td ></td>
-					<td >TOTAL</td>
-					<td style="text-align: right">'.number_format($VALOR_PAGADO, 2, '.',',').'</td>
-					<td style="text-align: right">'.number_format($VALOR_PENDIENTE, 2, '.',',').'</td>
-					<td> </td>				
+					<td ></td>			
 				</tr>';	
 
 			return $tabla;			
@@ -261,24 +257,7 @@
 						<td>'.$rows['NUM_PENSION'].'</td>
 						<td>'.$rows['PENSION'].'</td>						
 					</tr>';							
-			}
-
-			$tabla.='
-				<tr data-widget="expandable-table" aria-expanded="false">
-					<td colspan="2">SUB TOTAL</td>					
-					<td>'.$NUM_SALDO.'</td>
-					<td>'.$SALDO.'</td>
-					<td>'.$NUM_PENSION.'</td>
-					<td>'.$PENSION.'</td>						
-				</tr>';	
-
-			$tabla.='
-				<tr data-widget="expandable-table" aria-expanded="false">
-					<td colspan="4">TOTAL</td>				
-					<td>'.$NUM_PENSION + $NUM_SALDO.'</td>
-					<td>'.$PENSION + $SALDO.'</td>						
-				</tr>';
-				
+			}			
 			return $tabla;
 		}		
 		public function listarOptionRubro($rubro){

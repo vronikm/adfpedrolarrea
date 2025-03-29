@@ -22,7 +22,14 @@
 	$datos=$insRecibidos->seleccionarDatos("Unico","general_sede","sede_id",$sede_id);
 	if($datos->rowCount()==1){
 		$datos=$datos->fetch();
-		$sede_nombre		= $datos['sede_nombre'];
+		$sede_id = $datos["sede_id"];
+		
+		if($sede_id==1){
+			$sede_nombre = "CANCHA SINTÉTICA JIPIRO";	
+		}
+		else{
+			$sede_nombre = $datos["sede_nombre"];
+		}
 	}else{
 		$sede_nombre = "";
 	}
@@ -67,7 +74,7 @@
 			<div class="container-fluid">
 			<div class="row mb-2">
 				<div class="col-sm-6">
-				<h1 class="m-0">Búsqueda de pagos realizados <?php echo $sede_nombre; ?></h1>
+				<h4 class="m-0">PAGOS REALIZADOS <?php echo $sede_nombre; ?></h4>
 				</div><!-- /.col -->
 				<div class="col-sm-6">
 				<ol class="breadcrumb float-sm-right">
@@ -209,47 +216,77 @@
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/ajax.js" ></script>
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/main.js" ></script>
     <!-- Page specific script -->
+
 	<script>
 	$(function () {
 		$("#example1").DataTable({
-			"paging": true,
-			"lengthChange": false,
-			"searching": false,
-			"ordering": false,
-			"info": true,
-			"autoWidth": false,
-			"responsive": true, 
-			"language": {
-				"decimal": "",
-				"emptyTable": "No hay datos disponibles en la tabla",
-				"info": "Mostrando _START_ a _END_ de _TOTAL_ entradas",
-				"infoEmpty": "Mostrando 0 a 0 de 0 entradas",
-				"infoFiltered": "(filtrado de _MAX_ entradas totales)",
-				"infoPostFix": "",
-				"thousands": ",",
-				"lengthMenu": "Mostrar _MENU_ entradas",
-				"loadingRecords": "Cargando...",
-				"processing": "Procesando...",
-				"search": "Buscar:",
-				"zeroRecords": "No se encontraron registros coincidentes",
-				"paginate": {
-					"first": "Primero",
-					"last": "Último",
-					"next": "Siguiente",
-					"previous": "Anterior"
-				},
-				"aria": {
-					"sortAscending": ": activar para ordenar la columna ascendente",
-					"sortDescending": ": activar para ordenar la columna descendente"
-				},
-				"buttons": {
-					"copy": "Copiar",
-					"print": "Imprimir"
-				}
+		"order": [[1, "desc"]], // Ordena la segunda columna ("# de camiseta") por defecto de manera descendente
+		"responsive": true, "lengthChange": false, "autoWidth": false,
+		"language": {
+			"decimal": "",
+			"emptyTable": "No hay datos disponibles en la tabla",
+			"info": "Mostrando _START_ a _END_ de _TOTAL_ entradas",
+			"infoEmpty": "Mostrando 0 a 0 de 0 entradas",
+			"infoFiltered": "(filtrado de _MAX_ entradas totales)",
+			"infoPostFix": "",
+			"thousands": ",",
+			"lengthMenu": "Mostrar _MENU_ entradas",
+			"loadingRecords": "Cargando...",
+			"processing": "Procesando...",
+			"search": "Buscar:",
+			"zeroRecords": "No se encontraron registros coincidentes",
+			"paginate": {
+				"first": "Primero",
+				"last": "Último",
+				"next": "Siguiente",
+				"previous": "Anterior"
 			},
-			"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-			}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+			"aria": {
+				"sortAscending": ": activar para ordenar la columna ascendente",
+				"sortDescending": ": activar para ordenar la columna descendente"
+			},
+			"buttons": {
+				"copy": "Copiar",
+				"print": "Imprimir",
+                "text": 'Imprimir Tabla',
+                "title": 'Datos de Alumnos',
+                "messageTop": 'Generado por el sistema de gestión de alumnos.',
+                "messageBottom": 'Página generada automáticamente.',
+                customize: function(win) {
+                    $(win.document.body)
+                        .css('font-family', 'Arial')
+                        .css('background-color', '#f3f3f3');
+
+                    // Cambiar el estilo de la tabla impresa
+                    $(win.document.body).find('table')
+                        .addClass('display')  // Añadir una clase CSS a la tabla impresa
+                        .css('font-size', '12pt')
+                        .css('border', '1px solid black');
+
+                    // Agregar logotipo al principio
+                    $(win.document.body).prepend(
+                        '<img src="https://example.com/logo.png" style="position:absolute; top:0; left:0; width:100px;" />'
+                    );
+
+                    // Modificar título y agregar estilos CSS adicionales
+                    $(win.document.body).find('h1')
+                        .css('text-align', 'center')
+                        .css('color', '#4CAF50');
+				}
+			}
+		},
+		"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+		}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+		$('#example2').DataTable({
+		"paging": true,
+		"lengthChange": false,
+		"searching": false,
+		"ordering": true,
+		"info": true,
+		"autoWidth": false,
+		"responsive": true,
 		});
+	});
 	</script>
   </body>
 </html>

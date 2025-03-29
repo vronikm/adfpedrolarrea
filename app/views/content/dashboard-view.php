@@ -140,7 +140,7 @@
 			<!-- Small boxes (Stat box) -->
 				<div class="card card-default">
 					<div class="card-header">
-						<h3 class="card-title">ACADEMIA DE FÚTBOL PEDRO LARREA</h3>
+						<h3 class="card-title">CANCHA SINTÉTICA JIPIRO</h3>
 						<div class="card-tools">
 							<button type="button" class="btn btn-tool" data-card-widget="collapse">
 								<i class="fas fa-minus"></i>
@@ -160,7 +160,7 @@
 									<div class="icon">
 										<i class="ion ion-person icon-white"></i>
 									</div>
-									<a href="<?php echo APP_URL;?>alumnoList/" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
+									<a href="<?php echo APP_URL;?>dashboardAlumnos/1/A/" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
 								</div>
 							</div>
 							<!-- ./col -->
@@ -188,7 +188,7 @@
 									<div class="icon">
 										<i class="ion ion-android-warning"></i>
 									</div>
-									<a href="<?php echo APP_URL;?>pagosList/" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
+									<a href="<?php echo APP_URL;?>dashboardAlumnos/1/I/" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
 								</div>
 							</div>
 							<!-- ./col -->
@@ -234,7 +234,7 @@
 									<div class="icon">
 									<i class="ion ion-person"></i>
 									</div>
-									<a href="<?php echo APP_URL;?>alumnoList/" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
+									<a href="<?php echo APP_URL;?>dashboardAlumnos/2/A/" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
 								</div>
 							</div>
 							<!-- ./col -->
@@ -264,7 +264,7 @@
 								<div class="icon">
 								<i class="ion ion-android-warning"></i>
 								</div>
-								<a href="<?php echo APP_URL;?>alumnoList/"  class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
+								<a href="<?php echo APP_URL;?>dashboardAlumnos/2/I/"  class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
 							</div>
 							</div>
 							<!-- ./col -->
