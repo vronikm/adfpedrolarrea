@@ -53,7 +53,6 @@
 	<!-- Theme style -->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/adminlte.css">
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/sweetalert2.min.css">
-	<script src="<?php echo APP_URL; ?>app/views/dist/js/sweetalert2.all.min.js" ></script>
     
   </head>
   <body class="hold-transition sidebar-mini layout-fixed">
@@ -215,6 +214,7 @@
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/adminlte.min.js"></script>	
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/ajax.js" ></script>
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/main.js" ></script>
+	<script src="<?php echo APP_URL; ?>app/views/dist/js/sweetalert2.all.min.js" ></script>
     <!-- Page specific script -->
 
 	<script>
@@ -275,17 +275,8 @@
 				}
 			}
 		},
-		"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+		//"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
 		}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-		$('#example2').DataTable({
-		"paging": true,
-		"lengthChange": false,
-		"searching": false,
-		"ordering": true,
-		"info": true,
-		"autoWidth": false,
-		"responsive": true,
-		});
 	});
 	</script>
   </body>

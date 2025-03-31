@@ -81,7 +81,7 @@
 				<div class="container-fluid">
 					<div class="row mb-2">
 						<div class="col-sm-6">
-							<h4 class="m-0">Horario <?php echo $horario_nombre.' '.$horario_detalle." Sede ". $sede['sede_nombre']; ?></h4>
+							<h4 class="m-0">Horario <?php echo $horario_nombre.' '.$horario_detalle; ?></h4>
 						</div><!-- /.col -->
 						<div class="col-sm-6">
 							<ol class="breadcrumb float-sm-right">
@@ -106,26 +106,26 @@
 								<div class="row invoice-info">
 									<div class="col-sm-6 invoice-col">										
 										<address class="text-center">												
-											<img src="<?php echo APP_URL.'app/views/imagenes/fotos/sedes/'.$sede['sede_foto'] ?>" style="width: 180px; height: 100px;"/>
-											<br>Dirección: <?php echo $sede["sede_direccion"]; ?><br>
-											Celular: <?php echo $sede["sede_telefono"]." - ".$sede["sede_nombre"]; ?> - ECUADOR								
+											<img src="<?php echo APP_URL.'app/views/imagenes/fotos/sedes/'.$sede['sede_foto'] ?>" style="width: 170px; height: 160px;"/>											
 										</address>
 									</div>
 									<!-- /.col -->
 									<div class="col-sm-6 invoice-col">									
-										<address class="text-center">	
-											<strong class="profile-username">ESCUELA INDEPENDIENTE DEL VALLE <?php echo $sede["sede_nombre"]; ?></strong><br>									
+										<address class="text-center"> <br><br>
+											<strong class="profile-username">ACADEMIA DE FÚTBOL PEDRO LARREA</strong>
+											<br>Dirección: <?php echo $sede["sede_direccion"]; ?><br>
+											Celular: <?php echo $sede["sede_telefono"]; ?> 													
 											<div class="row">
 												<div class="col-12 table-responsive">
 													<div class="row">
 														<div class="col-4"></div>														
-														<div class="col-4">
+														<div class="col-4"><br>
 															<table class="table table-striped table-sm">
 																<thead>
 																	<tr style="font-size: 14px">
 																		<th>DIA</th>
 																		<th>MES</th>
-																		<th>AÑO</th>																
+																		<th>AÑO</th>															
 																	</tr>
 																</thead>
 																<tbody>
