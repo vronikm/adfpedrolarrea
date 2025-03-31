@@ -5,17 +5,17 @@
 	if(isset($_POST['asistencia_fecha_inicio'])){
 		$fecha_inicio = $insAsistencia->limpiarCadena($_POST['asistencia_fecha_inicio']);
 	} ELSE{
-		$fecha_inicio = $insAsistencia->fechaMarcacion();
-		$fecha_inicio = $fecha_inicio->fetch(); 
-		$fecha_inicio = $fecha_inicio['FECHA_MAXIMA'];
+
+			$fecha_inicio = date("Y-m-d");
+	
 	}
 
 	if(isset($_POST['asistencia_fecha_fin'])){
 		$fecha_fin = $insAsistencia->limpiarCadena($_POST['asistencia_fecha_fin']);
 	} ELSE{
-		$fecha_fin = $insAsistencia->fechaMarcacion();
-		$fecha_fin = $fecha_fin->fetch(); 
-		$fecha_fin = $fecha_fin['FECHA_MAXIMA'];
+
+			$fecha_fin = date("Y-m-d");
+
 	}	
 
 	if(isset($_POST['empleado_nombre'])){
