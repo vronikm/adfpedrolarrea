@@ -39,6 +39,7 @@
         }
     }
 
+
     $data="alumno.jpg";
     $image = $generator->render_image($symbology, $data, $optionsQR);
     imagejpeg($image, $filename);
@@ -50,7 +51,7 @@
     $pdf->SetMargins(0,0,0);	    
  	   
     $pdf->AddPage();
-    $pdf->Image(APP_URL.'app/views/imagenes/fotos/sedes/'.$sede_foto, 24, 10, 44, 36);
+    $pdf->Image($sede_foto, 24, 10, 44, 36);
     $pdf->SetLineWidth(0.1); $pdf->Rect(10, 10, 190, 40, "D"); $x=15; $y=13;  
     $pdf->SetXY( $x, $y ); $pdf->SetFont( "Arial", "B", 12 ); $pdf->Cell( 240, 10, mb_convert_encoding("ACADEMIA DE FÚTBOL PEDRO LARREA", 'ISO-8859-1', 'UTF-8'), 0, 0, 'C'); $y+=5;
     $pdf->SetXY( $x, $y); $pdf->SetFont( "Arial", "", 10 ); $pdf->Cell(240, 12, mb_convert_encoding("Dirección: ".$sede["sede_direccion"], 'ISO-8859-1', 'UTF-8'), 0, 0, 'C'); $y+=5;
