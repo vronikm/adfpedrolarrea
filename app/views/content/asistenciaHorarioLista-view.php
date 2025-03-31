@@ -7,7 +7,13 @@
 	if($horario_id != 0){
 		$horarioSede=$insAlumno->BuscarHorarioSede($horario_id);		
 		if($horarioSede->rowCount()==1){
-			$horarioSede	=	$horarioSede->fetch();				
+			$horarioSede = $horarioSede->fetch();
+			if($horarioSede["horario_sedeid"] ==1){
+				$sede_nombre="JIPIRO";
+			}
+			else{
+				$sede_nombre = $horarioSede["sede_nombre"];
+			}
 		}
 	}
 ?>
@@ -60,7 +66,7 @@
 				<div class="row mb-2">
 					<div class="col-sm-6">
 						<!--h4 class="m-0">Lista horario sede:  </h4-->
-						<h5 class="m-0">Horario <?php echo $horarioSede["horario_nombre"] ." - ". $horarioSede["horario_detalle"] ." - "."Sede ". $horarioSede["sede_nombre"]; ?></h5>
+						<h5 class="m-0">Horario <?php echo $horarioSede["horario_nombre"] ." - ". $horarioSede["horario_detalle"] ." - "."Sede ". $sede_nombre; ?></h5>
 					</div><!-- /.col -->
 					<div class="col-sm-6">
 						<ol class="breadcrumb float-sm-right">

@@ -8,8 +8,13 @@
 	if($sede_id != 0){
 		$sede=$insAsignar->BuscarSede($sede_id);		
 		if($sede->rowCount()==1){
-			$sede				=	$sede->fetch();				
-			$sede_nombre		= 	$sede['sede_nombre'];	
+			$sede =	$sede->fetch();			
+			if($sede['sede_id'] ==1){
+				$sede_nombre="JIPIRO";
+			}
+			else{
+				$sede_nombre = $sede['sede_nombre'];
+			}
 		}
 	}else{
 		$sede_nombre 	= '';

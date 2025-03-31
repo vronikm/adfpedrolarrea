@@ -1193,7 +1193,7 @@
 		}
 
 		public function BuscarSede($sede_id){
-			$consulta_datos="SELECT sede_nombre FROM general_sede WHERE sede_id = ".$sede_id;	
+			$consulta_datos="SELECT sede_id, sede_nombre FROM general_sede WHERE sede_id = ".$sede_id;	
 
 			$datos = $this->ejecutarConsulta($consulta_datos);		
 			return $datos;
