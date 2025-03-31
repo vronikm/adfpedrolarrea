@@ -27,6 +27,12 @@
 	$sede=$insHorario->informacionSede($lugar_sedeid);
 	if($sede->rowCount()==1){
 		$sede=$sede->fetch(); 
+
+		if ($sede['sede_foto']!=""){
+            $sede_foto = APP_URL.'app/views/imagenes/fotos/sedes/'.$sede['sede_foto'];
+        }else{
+            $sede_foto = APP_URL.'app/views/imagenes/fotos/sedes/default_sede.jpg';
+        }
     }
 ?>
 
@@ -106,7 +112,7 @@
 								<div class="row invoice-info">
 									<div class="col-sm-6 invoice-col">										
 										<address class="text-center">												
-											<img src="<?php echo APP_URL.'app/views/imagenes/fotos/sedes/'.$sede['sede_foto'] ?>" style="width: 170px; height: 160px;"/>											
+											<img src="<?php echo $sede_foto ?>" style="width: 170px; height: 160px;"/>											
 										</address>
 									</div>
 									<!-- /.col -->

@@ -31,6 +31,12 @@
 	$sede=$insHorario->informacionSede($lugar_sedeid);
 	if($sede->rowCount()==1){
 		$sede=$sede->fetch(); 
+
+        if ($sede['sede_foto']!=""){
+            $sede_foto = APP_URL.'app/views/imagenes/fotos/sedes/'.$sede['sede_foto'];
+        }else{
+            $sede_foto = APP_URL.'app/views/imagenes/fotos/sedes/default_sede.jpg';
+        }
     }
 
     $HorarioPDF = $insHorario->HorarioPDF($horario_id);
@@ -66,7 +72,7 @@
     // logo : 80 de largo por 55 de alto
     //,,ancho,
 
-    $pdf->Image(APP_URL.'app/views/imagenes/fotos/sedes/'.$sede['sede_foto'], 34, 10, 44, 36);
+    $pdf->Image($sede_foto, 34, 10, 44, 36);
     //$pdf->Image(APP_URL.'app/views/dist/img/Logos/login.jpg', 165, 88, 25, 25);
 
     $pdf->SetLineWidth(0.1); $pdf->Rect(10, 10, 190, 45, "D"); $x=15; $y=13;
@@ -74,9 +80,9 @@
     $pdf->SetXY( $x, $y ); $pdf->SetFont( "Arial", "B", 11 ); $pdf->Cell( 270, 15, mb_convert_encoding("ACADEMIA DE FÚTBOL PEDRO LARREA", 'ISO-8859-1', 'UTF-8'), 0, 0, 'C'); $y+=5;
 
     $pdf->SetXY( $x+8, $y+10); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell(16, 35, mb_convert_encoding("Dirección:", 'ISO-8859-1', 'UTF-8'), 0, 0, 'C');
-    $pdf->SetXY( $x+5, $y+10); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell( 135, 35, mb_convert_encoding($sede["sede_direccion"], 'ISO-8859-1', 'UTF-8'), 0, 0, 'C'); $y+=5;
+    $pdf->SetXY( $x+9, $y+10); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell( 135, 35, mb_convert_encoding($sede["sede_direccion"], 'ISO-8859-1', 'UTF-8'), 0, 0, 'C'); $y+=5;
     $pdf->SetXY( $x, $y+10); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell(35, 35, mb_convert_encoding("Celular:", 'ISO-8859-1', 'UTF-8'), 0, 0, 'C');
-    $pdf->SetXY( $x-11, $y+10); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell( 90, 35, mb_convert_encoding($sede["sede_telefono"], 'ISO-8859-1', 'UTF-8'), 0, 0,'C');
+    $pdf->SetXY( $x-12, $y+10); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell( 90, 35, mb_convert_encoding($sede["sede_telefono"], 'ISO-8859-1', 'UTF-8'), 0, 0,'C');
 
     $pdf->SetLineWidth(0.1); $pdf->Rect(120, 30, 60, 10, "D");
     $pdf->Line(120, 35, 180, 35);
@@ -131,13 +137,14 @@
     $pdf->SetXY( 97, 83); $pdf->SetFont( "Arial", "", 8 ); $pdf->Cell( 20, 0, mb_convert_encoding($CanchaPDF['Miercoles']?? '', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
     $pdf->SetXY( 132, 83); $pdf->SetFont( "Arial", "", 8 ); $pdf->Cell( 20, 0, mb_convert_encoding($CanchaPDF['Jueves']?? '', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
     $pdf->SetXY( 167, 83); $pdf->SetFont( "Arial", "", 8 ); $pdf->Cell( 20, 0, mb_convert_encoding($CanchaPDF['Viernes']?? '', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
-   
+
     $pdf->SetXY( 27, 93 ); $pdf->SetFont( "Arial", "", 8 ); $pdf->Cell( 20, 0, mb_convert_encoding($ProfesorPDF['Lunes']?? '', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
     $pdf->SetXY( 62, 93 ); $pdf->SetFont( "Arial", "", 8 ); $pdf->Cell( 20, 0, mb_convert_encoding($ProfesorPDF['Martes']?? '', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
     $pdf->SetXY( 97, 93 ); $pdf->SetFont( "Arial", "", 8 ); $pdf->Cell( 20, 0, mb_convert_encoding($ProfesorPDF['Miercoles']?? '', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
     $pdf->SetXY( 132, 93 ); $pdf->SetFont( "Arial", "", 8 ); $pdf->Cell( 20, 0, mb_convert_encoding($ProfesorPDF['Jueves']?? '', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
     $pdf->SetXY( 167, 93 ); $pdf->SetFont( "Arial", "", 8 ); $pdf->Cell( 20, 0, mb_convert_encoding($ProfesorPDF['Viernes']?? '', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
-     
+
+
     $pdf->Image(APP_URL.$filename, 171, 100, 23, 23);
       
     unlink($filename);
