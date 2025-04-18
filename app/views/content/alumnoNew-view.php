@@ -112,6 +112,7 @@
 								<li class="nav-item"><a class="nav-link" href="#cedula" data-toggle="tab">Cédula</a></li>
 								<li class="nav-item"><a class="nav-link" href="#contactoem" data-toggle="tab">Contacto emergencia</a></li>											
 								<li class="nav-item"><a class="nav-link" href="#informacionm" data-toggle="tab">Información Médica</a></li>
+								<li class="nav-item"><a class="nav-link" href="#horario" data-toggle="tab">Horario</a></li>							
 							</ul>
 						</div><!-- /.card-header -->
 					
@@ -430,13 +431,49 @@
 										</div>
 									</div>
 									
-										<div class="card-footer">						
-											<button type="submit" class="btn btn-success btn-sm">Guardar</button>
-											<button type="reset" class="btn btn-dark btn-sm">Limpiar</button>
-											<a class="btn btn-dark btn-sm" href="#" onclick="cerrarVentana(); return false;">Regresar</a>					
-										</div>	
-									</form>	
+									<!-- Tab horario del alumno -->
+									<div class="tab-pane" id="horario">
+										<div class="container-fluid">													
+											<!-- Table row -->
+											<div class="row">
+												<div class="col-md-4">
+													<div class="form-group">
+														<label for="horarioid">Horarios</label>
+														<select id="horarioid" class="form-control select2" name="horarioid">
+															<option value="">Seleccione un horario</option>																					
+															<?php echo $insAlumno->listarhorarios(); ?>
+														</select>
+													</div>          
+												</div>
 
+												<div class="col-md-12 table-responsive">
+													<table class="table table-striped table-bordered table-sm">											
+														<thead>																
+															<tr>		
+																<th></th>												
+																<th>LUNES</th>	
+																<th>MARTES</th>
+																<th>MIERCOLES</th>
+																<th>JUEVES</th>
+																<th>VIERNES</th>																																		
+															</tr>
+														</thead>	
+														<tbody id="tabla_horario">				
+														</tbody>
+													</table>
+												</div>
+												<!-- /.col -->
+											</div>
+											
+										</div><!-- /.container-fluid -->
+									</div>
+									<!-- /.tab-pane -->		
+									<div class="card-footer">						
+										<button type="submit" class="btn btn-success btn-sm">Guardar</button>
+										<button type="reset" class="btn btn-dark btn-sm">Limpiar</button>
+										<a class="btn btn-dark btn-sm" href="#" onclick="cerrarVentana(); return false;">Regresar</a>					
+									</div>	
+								</form>	
 								<!-- /.tab-pane -->
 							</div>
 							<!-- /.tab-content -->
@@ -629,6 +666,32 @@
 		}
 		// DropzoneJS Demo Code End
 	</script>
+
+	<!-- horarioid-->
+	<script>
+		$(document).ready(function() {
+			$('#horarioid').change(function() {
+				var horario_id = $(this).val();
+
+				if (horario_id) {
+					$.ajax({
+						type: 'POST',
+						url: '<?php echo APP_URL; ?>app/ajax/alumnoAjax.php',
+						data: {
+							modulo_alumno: 'cargarHorario',
+							horarioid: horario_id							
+						},
+						success: function(response) {
+							$('#tabla_horario').html(response);
+						}
+					});
+				} else {
+					$('#horarioid').html('<option value="">Seleccione un horario</option>');
+				}
+			});
+		});
+	</script>	
+
 	<script>
 		function cerrarVentana() {
 			window.close();

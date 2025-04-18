@@ -207,7 +207,7 @@
 											<div class="col-md-3">
 												<div class="form-group">
 													<label for="empleado_tipopersonalid">Tipo empleado</label>
-													<select class="form-control select2" id="empleado_tipopersonalid" name="empleado_tipopersonalid">									
+													<select class="form-control select2" id="empleado_tipopersonalid" name="empleado_tipopersonalid" onchange="toggleEspecialidad()"> 									
 														<?php echo $insempleado->listarTipoPersonal($empleado_tipopersonalid); ?>
 													</select>	
 												</div>
@@ -215,7 +215,7 @@
 											<div class="col-md-4">
 												<div class="form-group">
 													<label for="empleado_especialidadid">Especialidad</label>
-													<select class="form-control select2" id="empleado_especialidadid" name="empleado_especialidadid">									
+													<select class="form-control select2" id="empleado_especialidadid" name="empleado_especialidadid" disabled>									
 														<?php echo $insempleado->OptionEspecialidad($empleado_especialidadid); ?>
 													</select>	
 												</div>
@@ -367,7 +367,19 @@
                 placeholder: "0"
             }).mask("#empleado_sueldo");
         });
-    </script>    
+    </script>
+	<script>
+		function toggleEspecialidad() {
+			var tipoEmpleado = document.getElementById("empleado_tipopersonalid").value;
+			var especialidad = document.getElementById("empleado_especialidadid");
+
+			if (tipoEmpleado === "TPP") {
+				especialidad.disabled = false; // Habilita el campo
+			} else {
+				especialidad.disabled = true; // Deshabilita el campo
+			}
+		}
+	</script>
   </body>
 </html>
 

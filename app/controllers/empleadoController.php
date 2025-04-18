@@ -35,6 +35,10 @@
 				];
 				return json_encode($alerta);
 			}
+			# Verificando campos obligatorios #
+			if($empleado_tipopersonalid!="TPP"){
+				$empleado_especialidadid = "";
+			}
 			# Verificando email #
 			if($empleado_correo!=""){
 				if(filter_var($empleado_correo, FILTER_VALIDATE_EMAIL)){
@@ -59,8 +63,8 @@
 				}
 			}
 
-				# Verificando celular #
-				if($empleado_celular!=""){
+			# Verificando celular #
+			if($empleado_celular!=""){
 				$check_movil=$this->ejecutarConsulta("SELECT empleado_celular FROM sujeto_empleado WHERE empleado_celular='$empleado_celular'");
 				if($check_movil->rowCount()>0){
 					$alerta=[
@@ -428,6 +432,10 @@
 					"icono"=>"error"
 				];
 				return json_encode($alerta);
+			}
+			# Verificando campos obligatorios #
+			if($empleado_tipopersonalid!="TPP"){
+				$empleado_especialidadid = "";
 			}
 
 			$empleado_datos_reg=[

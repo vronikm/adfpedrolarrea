@@ -114,6 +114,28 @@
 		$cemer_celular		="";
 		$cemer_parentesco	="";
 	}
+
+	$horario_id=$insAlumno->HorarioID($alumnoid);
+	if($horario_id->rowCount()==1){
+		$horario_id=$horario_id->fetch(); 
+		$horarioid = $horario_id['asignahorario_horarioid'];
+    }else{
+		$horarioid = 0;
+	}
+
+	$datoshorario=$insAlumno->seleccionarDatos("Unico","asistencia_horario","horario_id",$horarioid);
+	if($datoshorario->rowCount()==1){
+		$datoshorario=$datoshorario->fetch();
+		$lugar_sedeid 		= $datoshorario['horario_sedeid'];
+		$horario_nombre 	= $datoshorario['horario_nombre'];
+		$horario_detalle	= $datoshorario['horario_detalle'];
+		$horario_estado		= $datoshorario['horario_estado'];
+	}else{
+		$lugar_sedeid = isset($_POST['horario_sedeid']) ? $insHorario->limpiarCadena($_POST['horario_sedeid']) : 0;
+		$horario_nombre 	= "";
+		$horario_detalle	= "";
+		$horario_estado		= "";
+	}
 ?>
 
 <!DOCTYPE html>
@@ -223,6 +245,7 @@
 								<li class="nav-item"><a class="nav-link" href="#cedula" data-toggle="tab">Cédula</a></li>
 								<li class="nav-item"><a class="nav-link" href="#contactoem" data-toggle="tab">Contacto emergencia</a></li>											
 								<li class="nav-item"><a class="nav-link" href="#informacionm" data-toggle="tab">Información Médica</a></li>
+								<li class="nav-item"><a class="nav-link" href="#horario" data-toggle="tab">Horario</a></li>
 							</ul>
 						</div><!-- /.card-header -->
 					
@@ -538,6 +561,47 @@
 								</div>
 								<!-- /.tab-pane -->
 
+								<!-- Tab horario del alumno -->
+								<div class="tab-pane" id="horario">
+									<div class="container-fluid">													
+										<!-- Table row -->
+										<div class="row">
+											<div class="col-md-4">
+												<div class="form-group">
+													<label for="horarioid">Horarios</label>
+													<select id="horarioid" class="form-control select2" name="horarioid">
+														<option value="">Seleccione un horario</option>																					
+														<?php echo $insAlumno->listarhorariosProfile($horarioid, $datos['alumno_sedeid']); ?>
+													</select>
+												</div>          
+											</div>
+
+											<div class="col-md-12 table-responsive">
+												<table class="table table-striped table-bordered table-sm">											
+													<thead>												
+														<tr>													
+															<th colspan="8">Horario <?php echo $horario_nombre." - ".$horario_detalle; ?></th>																							
+														</tr>
+														<tr>		
+															<th></th>												
+															<th>LUNES</th>	
+															<th>MARTES</th>
+															<th>MIERCOLES</th>
+															<th>JUEVES</th>
+															<th>VIERNES</th>																																		
+														</tr>
+													</thead>	
+													<tbody id="tabla_horario">														
+															<?php echo $datos=$insAlumno->generarHorarioProfile($horarioid);?>	
+													</tbody>
+												</table>
+											</div>
+											<!-- /.col -->
+										</div>	
+									</div><!-- /.container-fluid -->
+								</div>
+								<!-- /.tab-pane -->								 	
+
 							</div>
 							<!-- /.tab-content -->
 						</div><!-- /.card-body -->
@@ -686,61 +750,34 @@
 		// BS-Stepper Init
 		document.addEventListener('DOMContentLoaded', function () {
 			window.stepper = new Stepper(document.querySelector('.bs-stepper'))
-		})
-
-		// DropzoneJS Demo Code Start
-		Dropzone.autoDiscover = false
-
-		// Get the template HTML and remove it from the doumenthe template HTML and remove it from the doument
-		var previewNode = document.querySelector("#template")
-		previewNode.id = ""
-		var previewTemplate = previewNode.parentNode.innerHTML
-		previewNode.parentNode.removeChild(previewNode)
-
-		var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
-			url: "/target-url", // Set the url
-			thumbnailWidth: 80,
-			thumbnailHeight: 80,
-			parallelUploads: 20,
-			previewTemplate: previewTemplate,
-			autoQueue: false, // Make sure the files aren't queued until manually added
-			previewsContainer: "#previews", // Define the container to display the previews
-			clickable: ".fileinput-button" // Define the element that should be used as click trigger to select files.
-		})
-
-		myDropzone.on("addedfile", function(file) {
-			// Hookup the start button
-			file.previewElement.querySelector(".start").onclick = function() { myDropzone.enqueueFile(file) }
-		})
-
-		// Update the total progress bar
-		myDropzone.on("totaluploadprogress", function(progress) {
-			document.querySelector("#total-progress .progress-bar").style.width = progress + "%"
-		})
-
-		myDropzone.on("sending", function(file) {
-			// Show the total progress bar when upload starts
-			document.querySelector("#total-progress").style.opacity = "1"
-			// And disable the start button
-			file.previewElement.querySelector(".start").setAttribute("disabled", "disabled")
-		})
-
-		// Hide the total progress bar when nothing's uploading anymore
-		myDropzone.on("queuecomplete", function(progress) {
-			document.querySelector("#total-progress").style.opacity = "0"
-		})
-
-		// Setup the buttons for all transfers
-		// The "add files" button doesn't need to be setup because the config
-		// `clickable` has already been specified.
-		document.querySelector("#actions .start").onclick = function() {
-			myDropzone.enqueueFiles(myDropzone.getFilesWithStatus(Dropzone.ADDED))
-		}
-		document.querySelector("#actions .cancel").onclick = function() {
-			myDropzone.removeAllFiles(true)
-		}
-		// DropzoneJS Demo Code End
+		})		
 	</script>
+
+		<!-- horarioid-->
+		<script>
+		$(document).ready(function() {
+			$('#horarioid').change(function() {
+				var horario_id = $(this).val();
+
+				if (horario_id) {
+					$.ajax({
+						type: 'POST',
+						url: '<?php echo APP_URL; ?>app/ajax/alumnoAjax.php',
+						data: {
+							modulo_alumno: 'cargarHorario',
+							horarioid: horario_id							
+						},
+						success: function(response) {
+							$('#tabla_horario').html(response);
+						}
+					});
+				} else {
+					$('#horarioid').html('<option value="">Seleccione un horario</option>');
+				}
+			});
+		});
+	</script>	
+	
 	<script>
 		function cerrarVentana() {
 			window.close();
