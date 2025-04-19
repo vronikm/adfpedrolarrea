@@ -78,20 +78,30 @@
 				$datos = $datos->fetchAll();
 			}
 
-			foreach($datos as $rows){
-                $celular = substr($rows['repre_celular'], 1);				
-				$tabla.='				
+			foreach ($datos as $rows) {
+				$numeroOriginal = $rows['repre_celular'];
+				$soloNumeros = preg_replace('/[^0-9]/', '', $numeroOriginal);
+				if (substr($soloNumeros, 0, 1) === "0") {
+					$soloNumeros = substr($soloNumeros, 1);
+				}
+				$celular = $soloNumeros;
+			
+				$mensaje = "Estimado representante, Academia de Fútbol Pedro Larrea le recuerda que a la presente fecha usted mantiene un saldo pendiente de pensiones, por el valor de USD $" . $rows["TOTAL_MORA"] . " del mes Abril, debido a que Ud. tiene un saldo a favor del mes de Febrero. En la actualidad contamos con una plataforma de control para la Academia, y a partir de Mayo los pagos se realizarán hasta el 5 de cada mes. Agradecemos su gentileza en realizar el pago correspondiente.";
+				$mensajeCodificado = urlencode($mensaje);
+				$linkWhatsapp = "https://api.whatsapp.com/send?phone=593$celular&text=$mensajeCodificado";
+				
+				$tabla .= '
 					<tr>
-                        <td>'.$rows['sede_nombre'].'</td>
-						<td>'.$rows['repre_identificacion'].'</td>
-						<td>'.$rows['REPRE'].'</td>
-						<td>'.$rows['ALUMNO'].'</td>
-						<td>'.$rows['TOTAL_MORA'].'</td>
-						<td>                            
-							<a href="https://wa.me/593'.$celular.'?text=Estimado representante, Academia de Fútbol Pedro Larrea le recuerda que a la presente fecha usted mantiene un saldo pendiente de pensiones, por el valor de USD $'.$rows["TOTAL_MORA"].', agradecemos su gentileza en realizar el pago correspondiente." target="_blank" class="btn float-right btn-actualizar btn-xs" style="margin-right: 5px;">Notificar</a>										
-                            <a href="'.APP_URL.'cobranzaDetallePension/'.$rows['repre_id'].'/" class="btn float-right btn-ver btn-xs" style="margin-right: 5px;">Detalle</a>
+						<td>' . $rows['sede_nombre'] . '</td>
+						<td>' . $rows['repre_identificacion'] . '</td>
+						<td>' . $rows['REPRE'] . '</td>
+						<td>' . $rows['ALUMNO'] . '</td>
+						<td>' . $rows['TOTAL_MORA'] . '</td>
+						<td>
+							<a href="' . $linkWhatsapp . '" target="_blank" class="btn float-right btn-actualizar btn-xs" style="margin-right: 5px;">Notificar</a>
+							<a href="' . APP_URL . 'cobranzaDetallePension/' . $rows['repre_id'] . '/" class="btn float-right btn-ver btn-xs" style="margin-right: 5px;">Detalle</a>
 						</td>
-					</tr>';	
+					</tr>';
 			}
 			return $tabla;			
 		}
@@ -106,7 +116,7 @@
                                                 CONCAT_WS(' ',repre_primernombre, repre_segundonombre, repre_apellidopaterno, repre_apellidomaterno) as REPRE,
                                                 IFNULL(P.SALDO,0) AS SALDO, 
                                                 IFNULL(PEN.TOTAL,0) AS PENSION, 
-                                                PEN.FECHA,
+PEN.FECHA,
                                                 P.FECHASALDOS,
                                                 FECHATRX.FECHATRX,
                                                 sede_nombre,
@@ -116,7 +126,7 @@
                                             inner join general_sede on sede_id = alumno_sedeid
                                             LEFT JOIN (
                                                 SELECT 
-                                                pago_alumnoid, alumno_repreid as REPRESALDOS,
+                                                pago                                                _alumnoid, alumno_repreid as REPRESALDOS,
                                                 MAX(pago_fecha) AS FECHASALDOS,
                                                 COUNT(pago_saldo) AS TOTAL, 
                                                 SUM(pago_saldo) AS SALDO
@@ -179,7 +189,7 @@
 						<td>'.$rows['ALUMNO'].'</td>
 						<td>'.$rows['TOTAL_MORA'].'</td>
 						<td>                            
-							<a href="https://wa.me/593'.$celular.'?text=Estimado representante, Escuela IDV Loja le recuerda que a la presente fecha usted mantiene un saldo pendiente de pensiones, por el valor de USD $'.$rows["TOTAL_MORA"].', agradecemos su gentileza en realizar el pago correspondiente." target="_blank" class="btn float-right btn-actualizar btn-xs" style="margin-right: 5px;">Notificar</a>										
+							<a href="https://wa.me/593'.$celular.'?text=Estimado representante, Academia de Fútbol Pedro Larrea le recuerda que a la presente fecha usted mantiene un saldo pendiente de pensiones, por el valor de USD $'.$rows["TOTAL_MORA"].', agradecemos su gentileza en realizar el pago correspondiente." target="_blank" class="btn float-right btn-actualizar btn-xs" style="margin-right: 5px;">Notificar</a>										
                             <a href="'.APP_URL.'cobranzaDetallePension/'.$rows['repre_id'].'/" class="btn float-right btn-ver btn-xs" style="margin-right: 5px;">Detalle</a>
 						</td>
 					</tr>';	
@@ -234,6 +244,8 @@
 			}
 
 			foreach($datos as $rows){
+				$mensaje = "Estimado representante, Academia de Fútbol Pedro Larrea le recuerda que a la presente fecha usted mantiene un saldo pendiente de uniformes, por el valor de USD $" . $rows["TOTAL_MORA"] . ", agradecemos su gentileza en realizar el pago correspondiente.";
+				$mensajeCodificado = urlencode($mensaje);
                 $celular = substr($rows['repre_celular'], 1);				
 				$tabla.='				
 					<tr>
@@ -243,7 +255,12 @@
 						<td>'.$rows['ALUMNO'].'</td>
 						<td>'.$rows['TOTAL_MORA'].'</td>
 						<td>                            
-							<a href="https://wa.me/593'.$celular.'?text=Estimado representante, Escuela IDV Loja le recuerda que a la presente fecha usted mantiene un saldo pendiente de uniformes, por el valor de USD $'.$rows["TOTAL_MORA"].', agradecemos su gentileza en realizar el pago correspondiente." target="_blank" class="btn float-right btn-actualizar btn-xs" style="margin-right: 5px;">Notificar</a>										
+							<a href="https://wa.me/593<?php echo $celular; ?>?text=<?php echo $mensajeCodificado; ?>" 
+								target="_blank" 
+								class="btn float-right btn-actualizar btn-xs" 
+								style="margin-right: 5px;">
+								Notificar
+							</a>
                             <a href="'.APP_URL.'cobranzaDetalleUniforme/'.$rows['repre_id'].'/" class="btn float-right btn-ver btn-xs" style="margin-right: 5px;">Detalle</a>
 						</td>
 					</tr>';	

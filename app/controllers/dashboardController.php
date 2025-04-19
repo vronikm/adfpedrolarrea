@@ -15,11 +15,6 @@
 		    return $alumnosActivosSedeC;
 		}
 
-        public function obtenerAlumnosActivosSedeV(){
-			$alumnosActivosSedeV=$this->ejecutarConsulta("SELECT count(*) totalActivosSedeV FROM sujeto_alumno WHERE alumno_estado='A' and alumno_sedeid = 3");
-		    return $alumnosActivosSedeV;
-		}
-
 		/*----------  Obtener total alumnos inactivos  ----------*/
 		public function obtenerAlumnosInactivosSedeADFPL(){
 			$alumnosActivosSedeL=$this->ejecutarConsulta("SELECT count(*) totalInactivosSedeADFPL FROM sujeto_alumno WHERE alumno_estado='I' and alumno_sedeid = 1");
@@ -29,11 +24,6 @@
 		public function obtenerAlumnosInactivosSedeCantera(){
 			$alumnosActivosSedeC=$this->ejecutarConsulta("SELECT count(*) totalInactivosSedeCantera FROM sujeto_alumno WHERE alumno_estado='I' and alumno_sedeid = 2");
 		    return $alumnosActivosSedeC;
-		}
-
-        public function obtenerAlumnosInactivosSedeV(){
-			$alumnosActivosSedeV=$this->ejecutarConsulta("SELECT count(*) totalInactivosSedeV FROM sujeto_alumno WHERE alumno_estado='I' and alumno_sedeid = 3");
-		    return $alumnosActivosSedeV;
 		}
 
 		/*----------  Obtener total pagos cancelados  ----------*/
@@ -131,6 +121,10 @@
 			$consulta_datos="SELECT * FROM general_sede WHERE sede_id  = $sedeid";
 			$datos = $this->ejecutarConsulta($consulta_datos);		
 			return $datos;
+		}
+		public function obtenerRepresentantes(){
+			$representantes=$this->ejecutarConsulta("SELECT count(*) totalRepresentantes FROM alumno_representante WHERE repre_estado='A'");
+		    return $representantes;
 		}
 	}
 

@@ -97,6 +97,7 @@
 										<tr>
 											<th>Identificación</th>
 											<th>Nombres</th>
+											<th>Fecha ingreso</th>
 											<th>T.Pendientes</th>
 											<th>Saldos Pendientes</th>
 											<th>T.Pensiones</th>

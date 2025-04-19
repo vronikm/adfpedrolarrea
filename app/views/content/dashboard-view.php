@@ -14,6 +14,7 @@
 	$pagosPendienteSedeADFPL=$insDashboard->obtenerPagosPendientes(1);
 	$pagosPendienteSedeCantera=$insDashboard->obtenerPagosPendientes(2);
 
+	$representantes=$insDashboard->obtenerRepresentantes();
 	
 	if($alumnosActivosSedeADFPL->rowCount()>0){
 		$alumnosActivosSedeADFPL=$alumnosActivosSedeADFPL->fetch();
@@ -70,6 +71,13 @@
 	}else{
 		$totalPendienteSedeCantera= 0;
 	}
+
+	if($representantes->rowCount()>0){
+		$representantes=$representantes->fetch();
+		$totalRepresentantes=$representantes["totalRepresentantes"];
+	}else{
+		$totalRepresentantes= 0;
+	}
 ?>
 
 <!DOCTYPE html>
@@ -88,6 +96,11 @@
 	<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 	<!-- Tempusdominus Bootstrap 4 -->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+	<!-- Bootstrap 5 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+      integrity="sha256-9kPW/n5nn53j4WMRYAxe9c1rCY96Oogo/MKSVdKzPmI="
+      crossorigin="anonymous"
+    />
 	<!-- iCheck -->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
 	<!-- JQVMap -->
@@ -150,67 +163,68 @@
 
 					<div class="card-body">
 						<div class="row">
-							<div class="col-lg-3 col-6">
-							<!-- small box -->
-								<div class="small-box bg-info">
-									<div class="inner">
-										<h3><?php echo $totalActivosSedeADFPL; ?></h3>									
-										<p>Alumnos activos</>
+							<!-- Alumnos activos -->
+							<div class="col-md-3 mb-3">
+								<a href="<?php echo APP_URL; ?>dashboardAlumnos/1/A/" class="text-decoration-none">
+									<div class="info-box d-flex shadow-sm rounded border">
+										<span class="info-box-icon bg-primary text-white d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
+										<i class="bi bi-people-fill fs-2"></i>
+										</span>
+										<div class="info-box-content ms-2">
+											<span class="info-box-text h6 text-muted">Alumnos activos</span>
+											<span class="info-box-number h3 text-dark"><?php echo $totalActivosSedeADFPL; ?></span>
+										</div>
 									</div>
-									<div class="icon">
-										<i class="ion ion-person icon-white"></i>
-									</div>
-									<a href="<?php echo APP_URL;?>dashboardAlumnos/1/A/" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
-								</div>
+								</a>
 							</div>
-							<!-- ./col -->
-							<div class="col-lg-3 col-6">
-								<!-- small box -->
-								<div class="small-box bg-success">
-									<div class="inner">
-										<h3><?php echo $totalCanceladoSedeADFPL; ?></h3>
-										<p>Pagos receptados</p>
-									</div>
-									<div class="icon">
-										<i class="ion ion-cash icon-white"></i>
-									</div>
-									<a href="<?php echo APP_URL;?>reportePagos/1" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
-								</div>
-							</div>
-							<!-- ./col -->
-							<div class="col-lg-3 col-6">
-								<!-- small box -->
-								<div class="small-box bg-warning">
-									<div class="inner">
-										<h3><?php echo $totalInactivosSedeADFPL; ?></h3>
-										<p>Alumnos inactivos</p>
-									</div>
-									<div class="icon">
-										<i class="ion ion-android-warning"></i>
-									</div>
-									<a href="<?php echo APP_URL;?>dashboardAlumnos/1/I/" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
-								</div>
-							</div>
-							<!-- ./col -->
-							<div class="col-lg-3 col-6">
-								<!-- small box -->
-								<div class="small-box bg-dark">
-									<div class="inner">
-										<h3><?php echo $totalPendienteSedeADFPL; ?></h3>
-										<p>Pagos pendientes</p>
-									</div>
-									<div class="icon">
-										<i class="ion ion-cash icon-white"></i>
-									</div>
-									<a href="<?php echo APP_URL;?>reportePendientes/1" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>							
-								</div>
-							</div>
-							<!-- ./col -->
-						</div>
-					</div>
-				</div>
 
-				
+							<div class="col-md-3 mb-3">
+								<a href="<?php echo APP_URL; ?>reportePagos/1" class="text-decoration-none">
+									<div class="info-box d-flex shadow-sm rounded border">
+										<span class="info-box-icon bg-success text-white d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
+										<i class="bi bi-check2-circle fs-2"></i>
+										</span>
+										<div class="info-box-content ms-2">
+											<span class="info-box-text h6 text-muted">Pagos Receptados</span>
+											<span class="info-box-number h3 text-dark"><?php echo $totalCanceladoSedeADFPL; ?></span>
+										</div>
+									</div>
+								</a>
+							</div>
+
+							<!-- Alumnos inactivos -->
+							<div class="col-md-3 mb-3">
+								<a href="<?php echo APP_URL; ?>dashboardAlumnos/1/I/" class="text-decoration-none">
+									<div class="info-box d-flex shadow-sm rounded border">
+										<span class="info-box-icon bg-secondary text-white d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
+											<i class="bi bi-person-x-fill fs-2"></i>
+										</span>
+										<div class="info-box-content ms-2">
+											<span class="info-box-text h6 text-muted">Alumnos inactivos</span>
+											<span class="info-box-number h3 text-dark"><?php echo $totalInactivosSedeADFPL; ?></span>
+										</div>
+									</div>
+								</a>
+							</div>
+
+							<!-- Alumnos con mora -->
+							<div class="col-md-3 mb-3">
+								<a href="<?php echo APP_URL; ?>reportePendientes/1" class="text-decoration-none">
+									<div class="info-box d-flex shadow-sm rounded border">
+										<span class="info-box-icon bg-danger text-white d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
+										<i class="bi bi-exclamation-triangle-fill fs-2"></i>
+										</span>
+										<div class="info-box-content ms-2">
+											<span class="info-box-text h6 text-muted">Alumnos con mora</span>
+											<span class="info-box-number h3 text-dark"><?php echo $totalPendienteSedeADFPL; ?></span>
+										</div>
+									</div>
+								</a>
+							</div>
+						</div>
+						<!-- ./col -->
+					</div>
+				</div>				
 				<div class="card card-default">
 					<div class="card-header">
 						<h3 class="card-title">LA CANTERA</h3>
@@ -223,69 +237,169 @@
 
 					<div class="card-body">
 						<div class="row">
-							<div class="col-lg-3 col-6">
-							<!-- small box -->
-								<div class="small-box bg-info">
-									<div class="inner">
-									<h3><?php echo $totalActivosSedeCantera; ?></h3>
+							<!-- Alumnos activos -->
+							<div class="col-md-3 mb-3">
+								<a href="<?php echo APP_URL; ?>dashboardAlumnos/2/A/" class="text-decoration-none">
+									<div class="info-box d-flex shadow-sm rounded border">
+										<span class="info-box-icon bg-primary text-white d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
+										<i class="bi bi-people-fill fs-2"></i>
+										</span>
+										<div class="info-box-content ms-2">
+											<span class="info-box-text h6 text-muted">Alumnos activos</span>
+											<span class="info-box-number h3 text-dark"><?php echo $totalActivosSedeCantera; ?></span>
+										</div>
+									</div>
+								</a>
+							</div>
 
-									<p>Alumnos activos</p>
+							<div class="col-md-3 mb-3">
+								<a href="<?php echo APP_URL; ?>reportePagos/2" class="text-decoration-none">
+									<div class="info-box d-flex shadow-sm rounded border">
+										<span class="info-box-icon bg-success text-white d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
+										<i class="bi bi-check2-circle fs-2"></i>
+										</span>
+										<div class="info-box-content ms-2">
+											<span class="info-box-text h6 text-muted">Pagos Receptados</span>
+											<span class="info-box-number h3 text-dark"><?php echo $totalCanceladoSedeCantera; ?></span>
+										</div>
 									</div>
-									<div class="icon">
-									<i class="ion ion-person"></i>
-									</div>
-									<a href="<?php echo APP_URL;?>dashboardAlumnos/2/A/" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
-								</div>
+								</a>
 							</div>
-							<!-- ./col -->
-							<div class="col-lg-3 col-6">
-							<!-- small box -->
-							<div class="small-box bg-success">
-								<div class="inner">
-								<h3><?php echo $totalCanceladoSedeCantera; ?></h3>
 
-								<p>Pagos receptados</p>
-								</div>
-								<div class="icon">
-								<i class="ion ion-cash"></i>
-								</div>
-								<a href="<?php echo APP_URL;?>reportePagos/2" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
+							<!-- Alumnos inactivos -->
+							<div class="col-md-3 mb-3">
+								<a href="<?php echo APP_URL; ?>dashboardAlumnos/2/I/" class="text-decoration-none">
+									<div class="info-box d-flex shadow-sm rounded border">
+										<span class="info-box-icon bg-secondary text-white d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
+											<i class="bi bi-person-x-fill fs-2"></i>
+										</span>
+										<div class="info-box-content ms-2">
+											<span class="info-box-text h6 text-muted">Alumnos inactivos</span>
+											<span class="info-box-number h3 text-dark"><?php echo $totalInactivosSedeCantera; ?></span>
+										</div>
+									</div>
+								</a>
 							</div>
-							</div>
-							<!-- ./col -->
-							<div class="col-lg-3 col-6">
-							<!-- small box -->
-							<div class="small-box bg-warning">
-								<div class="inner">
-								<h3><?php echo $totalInactivosSedeCantera; ?></h3>
 
-								<p>Alumnos inactivos</p>
-								</div>
-								<div class="icon">
-								<i class="ion ion-android-warning"></i>
-								</div>
-								<a href="<?php echo APP_URL;?>dashboardAlumnos/2/I/"  class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
-							</div>
-							</div>
-							<!-- ./col -->
-							<div class="col-lg-3 col-6">
-								<!-- small box -->
-								<div class="small-box bg-dark">
-									<div class="inner">
-										<h3><?php echo $totalPendienteSedeCantera; ?></h3>
-										<p>Pagos pendientes</p>
+							<!-- Alumnos con mora -->
+							<div class="col-md-3 mb-3">
+								<a href="<?php echo APP_URL; ?>reportePendientes/2" class="text-decoration-none">
+									<div class="info-box d-flex shadow-sm rounded border">
+										<span class="info-box-icon bg-danger h6 text-white d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
+										<i class="bi bi-exclamation-triangle-fill fs-2"></i>
+										</span>
+										<div class="info-box-content ms-2">
+											<span class="info-box-text h6 text-muted">Alumnos con mora</span>
+											<span class="info-box-number h3 text-dark"><?php echo $totalPendienteSedeCantera; ?></span>
+										</div>
 									</div>
-									<div class="icon">
-										<i class="ion ion-cash icon-white"></i>
-									</div>
-									<a href="<?php echo APP_URL;?>reportePendientes/1" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>							
-								</div>
+								</a>
 							</div>
-							<!-- ./col -->
+						</div>
+						<!-- ./col -->
+					</div>
+				</div>				
+				<div class="card card-default">
+					<div class="card-header">
+						<h3 class="card-title">LA FLORESTA</h3>
+						<div class="card-tools">
+							<button type="button" class="btn btn-tool" data-card-widget="collapse">
+								<i class="fas fa-minus"></i>
+							</button>
 						</div>
 					</div>
-				</div>
+					<div class="card-body">
+						<div class="row">
+							<!-- Alumnos activos -->
+							<div class="col-md-3 mb-3">
+								<a href="<?php echo APP_URL; ?>dashboardAlumnos/2/A/" class="text-decoration-none">
+									<div class="info-box d-flex shadow-sm rounded border">
+										<span class="info-box-icon bg-primary text-white d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
+										<i class="bi bi-people-fill fs-2"></i>
+										</span>
+										<div class="info-box-content ms-2">
+											<span class="info-box-text h6 text-muted">Alumnos activos</span>
+											<span class="info-box-number h3 text-dark"><?php echo $totalActivosSedeCantera; ?></span>
+										</div>
+									</div>
+								</a>
+							</div>
 
+							<div class="col-md-3 mb-3">
+								<a href="<?php echo APP_URL; ?>reportePagos/2" class="text-decoration-none">
+									<div class="info-box d-flex shadow-sm rounded border">
+										<span class="info-box-icon bg-success text-white d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
+										<i class="bi bi-check2-circle fs-2"></i>
+										</span>
+										<div class="info-box-content ms-2">
+											<span class="info-box-text h6 text-muted">Pagos Receptados</span>
+											<span class="info-box-number h3 text-dark"><?php echo $totalCanceladoSedeCantera; ?></span>
+										</div>
+									</div>
+								</a>
+							</div>
+
+							<!-- Alumnos inactivos -->
+							<div class="col-md-3 mb-3">
+								<a href="<?php echo APP_URL; ?>dashboardAlumnos/2/I/" class="text-decoration-none">
+									<div class="info-box d-flex shadow-sm rounded border">
+										<span class="info-box-icon bg-secondary text-white d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
+											<i class="bi bi-person-x-fill fs-2"></i>
+										</span>
+										<div class="info-box-content ms-2">
+											<span class="info-box-text h6 text-muted">Alumnos inactivos</span>
+											<span class="info-box-number h3 text-dark"><?php echo $totalInactivosSedeCantera; ?></span>
+										</div>
+									</div>
+								</a>
+							</div>
+
+							<!-- Alumnos con mora -->
+							<div class="col-md-3 mb-3">
+								<a href="<?php echo APP_URL; ?>reportePendientes/2" class="text-decoration-none">
+									<div class="info-box d-flex shadow-sm rounded border">
+										<span class="info-box-icon bg-danger text-white d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
+										<i class="bi bi-exclamation-triangle-fill fs-2"></i>
+										</span>
+										<div class="info-box-content ms-2">
+											<span class="info-box-text h6 text-muted">Alumnos con mora</span>
+											<span class="info-box-number h3 text-dark"><?php echo $totalPendienteSedeCantera; ?></span>
+										</div>
+									</div>
+								</a>
+							</div>
+						</div>
+						<!-- ./col -->
+					</div>	
+				</div>
+				<div class="card card-default">
+					<div class="card-header">
+						<h3 class="card-title">REPRESENTANTES INGRESADOS</h3>
+						<div class="card-tools">
+							<button type="button" class="btn btn-tool" data-card-widget="collapse">
+								<i class="fas fa-minus"></i>
+							</button>
+						</div>
+					</div>
+					<div class="card-body">
+						<div class="row">
+							<!-- Alumnos activos -->
+							<div class="col-md-3 mb-3 align-items-center">
+								<a href="<?php echo APP_URL; ?>representanteList/" class="text-decoration-none">
+									<div class="info-box d-flex shadow-sm rounded border">
+										<span class="info-box-icon bg-warning text-white d-flex align-items-center justify-content-center" style="width: 90px; height: 100px;">
+										<i class="bi bi-people-fill fs-2"></i>
+										</span>
+										<div class="info-box-content ms-2">
+											<span class="info-box-text h6 text-muted">Representantes activos</span>
+											<span class="info-box-number h3 text-dark"><?php echo $totalRepresentantes; ?></span>
+										</div>
+									</div>
+								</a>
+							</div>
+						</div>	
+					</div>
+				</div>
 			</div><!-- /.container-fluid -->
 		</section>
 		<!-- /.content -->
@@ -334,5 +448,11 @@
 	<script src="<?php echo APP_URL; ?>app/views/js/ajax.js" ></script>
 	<script src="<?php echo APP_URL; ?>app/views/js/main.js" ></script>	
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/sweetalert2.all.min.js" ></script>
+	<script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+      integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+      crossorigin="anonymous"
+    ></script>
+	
   </body>
 </html>

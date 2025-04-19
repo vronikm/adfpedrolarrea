@@ -277,7 +277,8 @@
 			$option="";
 			$consulta_datos="SELECT empleado_id, empleado_nombre 
 								FROM sujeto_empleado
-								WHERE empleado_estado = 'A'";
+								WHERE empleado_tipopersonalid = 'TPP'
+									AND empleado_estado = 'A'";
 							
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();

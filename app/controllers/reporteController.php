@@ -195,6 +195,7 @@
 			$consulta_datos="SELECT 
 									alumno_id, 
 									alumno_identificacion, 
+									alumno_fechaingreso,
 									CONCAT_WS(' ', alumno_primernombre, alumno_segundonombre, alumno_apellidopaterno, alumno_apellidomaterno) AS NOMBRES,  
 									IFNULL(P.TOTAL,0) AS NUM_SALDO, 
 									IFNULL(P.SALDO,0) AS SALDO, 
@@ -252,6 +253,7 @@
 					<tr data-widget="expandable-table" aria-expanded="false">
 						<td>'.$rows['alumno_identificacion'].'</td>
 						<td>'.$rows['NOMBRES'].'</td>
+						<td>'.$rows['alumno_fechaingreso'].'</td>
 						<td>'.$rows['NUM_SALDO'].'</td>
 						<td>'.$rows['SALDO'].'</td>
 						<td>'.$rows['NUM_PENSION'].'</td>
