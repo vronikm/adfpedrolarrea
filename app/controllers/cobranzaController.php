@@ -86,7 +86,7 @@
 				}
 				$celular = $soloNumeros;
 			
-				$mensaje = "Estimado representante, Academia de Fútbol Pedro Larrea le recuerda que a la presente fecha usted mantiene un saldo pendiente de pensiones, por el valor de USD $" . $rows["TOTAL_MORA"] . " del mes Abril, debido a que Ud. tiene un saldo a favor del mes de Febrero. En la actualidad contamos con una plataforma de control para la Academia, y a partir de Mayo los pagos se realizarán hasta el 5 de cada mes. Agradecemos su gentileza en realizar el pago correspondiente.";
+				$mensaje = "Estimado representante, Academia de Fútbol Pedro Larrea le recuerda que a la presente fecha usted mantiene un saldo pendiente de pensiones, por el valor de USD $" . $rows["TOTAL_MORA"] . " de Abril, debido a que Ud. tiene un saldo a favor del mes de Febrero. En la actualidad contamos con una plataforma de control para la Academia, y a partir de Mayo los pagos se realizarán hasta el 5 de cada mes. Agradecemos su gentileza en realizar el pago correspondiente.";
 				$mensajeCodificado = urlencode($mensaje);
 				$linkWhatsapp = "https://api.whatsapp.com/send?phone=593$celular&text=$mensajeCodificado";
 				

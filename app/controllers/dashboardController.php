@@ -46,7 +46,7 @@
 
 		/*----------  Obtener total pagos pendientes  ----------*/
 		public function obtenerPagosPendientes($sedeid){
-			$pagosPendientes=$this->ejecutarConsulta("SELECT SUM(IFNULL(subconsulta.NUM_SALDO,0)) + SUM(IFNULL(subconsulta.NUM_PENSION,0)) as totalPendientes 
+			$pagosPendientes=$this->ejecutarConsulta("SELECT count(*) as totalPendientes 
 															FROM (
 																SELECT 
 																	alumno_id, 
