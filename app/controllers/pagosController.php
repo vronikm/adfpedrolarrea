@@ -1400,7 +1400,7 @@
 		}
 
 		public function generarRecibo($pagoid){
-			$consulta_datos="SELECT sede_nombre,
+			$consulta_datos="SELECT sede_nombre, sede_email, escuela_nombre, 
 						 IFNULL(T.total, 0) TOTAL_PP,
 						(P.pago_saldo + P.pago_valor) DEUDA_INICIAL, 
 						((P.pago_saldo + P.pago_valor) - (IFNULL(PT.transaccion_valorcalculado, P.pago_saldo)))PAGO_INICIAL, 
@@ -1426,6 +1426,7 @@
 							INNER JOIN sujeto_alumno A ON A.alumno_id = P.pago_alumnoid
 							INNER JOIN general_tabla_catalogo R ON R.catalogo_valor = P.pago_rubroid 
 							INNER JOIN general_tabla_catalogo F ON F.catalogo_valor = P.pago_formapagoid
+							INNER JOIN general_escuela ES on ES.escuela_id = 1
 							INNER JOIN general_sede S on S.sede_id = A.alumno_sedeid 
 							LEFT JOIN alumno_representante E on E.repre_id = A.alumno_repreid
 							LEFT JOIN(SELECT COUNT(1) total, PT.transaccion_pagoid, MIN(PT.transaccion_id) IDT

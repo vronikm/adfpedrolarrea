@@ -19,7 +19,7 @@
 
 	$fecha_recibo = strrev($datos["pago_recibo"]);
 	$first12Chars =  strrev(substr($datos["pago_recibo"], 0, 12));
-    $nombre_sede  = $datos["sede_nombre"];
+    $nombre_sede  = $datos["escuela_nombre"];
 
 	$pairs = [];
 	$length = strlen($first12Chars);
@@ -40,7 +40,7 @@
 		$sede=$sede->fetch(); 
     }
    											
-    $data="Recibo ".$datos["pago_recibo"]. "\n".$datos["pago_fecharegistro"]. " | ".$recibo_hora."\n".$sede['sede_nombre']."\n".$sede["sede_telefono"]."\n".$sede["sede_email"];
+    $data="Recibo ".$datos["pago_recibo"]. "\n".$datos["pago_fecharegistro"]. " | ".$recibo_hora."\n".$sede['escuela_nombre']."\n".$sede["sede_telefono"]."\n".$sede["sede_email"];
 
     $image = $generator->render_image($symbology, $data, $optionsQR);
     imagejpeg($image, $filename);
