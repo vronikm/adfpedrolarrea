@@ -17,7 +17,7 @@
 
 		$fecha_recibo = strrev($datos["pago_recibo"]);
 		$first12Chars =  strrev(substr($datos["pago_recibo"], 0, 12));
-		$nombre_sede  = $datos["escuela_nombre"];
+		$nombre_sede  = mb_convert_encoding($datos["escuela_nombre"], 'ISO-8859-1', 'UTF-8');
 
 		$pairs = [];
 		$length = strlen($first12Chars);
@@ -51,7 +51,7 @@
 	$pdf->SetAutoPagebreak(False);
 	$pdf->SetMargins(0,0,0);	    
 
-        $pdf->AddPage();
+    $pdf->AddPage();
 	
 	// logo : 80 de largo por 55 de alto
         //,,ancho,
@@ -147,16 +147,15 @@
 	// ... código previo de tu vista ...
 
 	// Ejemplo: generar nombre de archivo
-	$filename = $datos['pago_recibo'];
+	$filenamepdf = $datos['pago_recibo'].".pdf";
 
 	// Ruta completa
-	$pdfPath = PDF_DIR . $filename;
+	$pdfPath = PDF_DIR . $filenamepdf;
 
 
-        $pdf->Output($pdfPath.".pdf","F","T");
-	//$path = "bookings/".$fecha.$file."booking.pdf";  
+    $pdf->Output($pdfPath,"F","T");
 
-        //Envio de correo
+    //Envio de correo
 	// Datos del correo
 	$to = $datos['CORREO_REP'];
 	$subject = $datos['RUBRO']." ".$datos['pago_periodo'];

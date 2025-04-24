@@ -10,7 +10,6 @@
 	
 	$insAlumno = new pagosController();	
 	$pagoid=$insLogin->limpiarCadena($url[1]);
-
 	$datos=$insAlumno->generarReciboPendiente($pagoid);
 
 	if($datos->rowCount()==1){
@@ -18,7 +17,7 @@
 
 		$fecha_recibo = strrev($datos["transaccion_recibo"]);
 		$first12Chars =  strrev(substr($datos["transaccion_recibo"], 0, 12));
-		$nombre_sede  = $datos["sede_nombre"];
+		$nombre_sede  = mb_convert_encoding($datos["escuela_nombre"], 'ISO-8859-1', 'UTF-8');
 
 		$pairs = [];
 		$length = strlen($first12Chars);
@@ -39,9 +38,9 @@
 		$sede=$sede->fetch(); 
     }
 
-	$data="Recibo ".$datos["transaccion_recibo"]. "\n".$datos["transaccion_fecha"]. " | ".$recibo_hora."\n".$sede['sede_nombre']."\n".$sede["sede_telefono"]."\n".$sede["sede_email"];
+	$data="Recibo ".$datos["transaccion_recibo"]. "\n".$datos["transaccion_fecha"]. " | ".$recibo_hora."\n".$nombre_sede."\n".$sede["sede_telefono"]."\n".$sede["sede_email"];
 	
-	$image = $generator->render_image($symbology, $data, $optionsQR);
+		$image = $generator->render_image($symbology, $data, $optionsQR);
     	imagejpeg($image, $filename);
     	imagedestroy($image);
 
@@ -57,16 +56,14 @@
 	// logo : 80 de largo por 55 de alto
         //,,ancho,
 
-        $pdf->Image(APP_URL.'app/views/imagenes/fotos/sedes/'.$sede['sede_foto'], 34, 10, 47, 26);
-        //$pdf->Image(APP_URL.'app/views/dist/img/Logos/login.jpg', 165, 88, 25, 25);
+        $pdf->Image(APP_URL.'app/views/imagenes/fotos/sedes/'.$sede['sede_foto'], 34, 10, 47, 40);
 
         $pdf->SetLineWidth(0.1); $pdf->Rect(10, 10, 190, 40, "D"); $x=15; $y=13;       		
 
-		$pdf->SetXY( $x, $y ); $pdf->SetFont( "Arial", "B", 11 ); $pdf->Cell( 260, 8, "ESCUELA INDEPENDIENTE DEL VALLE", 0, 0, 'C'); $y+=5;
-		$pdf->SetXY( $x, $y ); $pdf->SetFont( "Arial", "B", 11 ); $pdf->Cell( 260, 8, $nombre_sede, 0, 0, 'C'); $y+=17;
+		$pdf->SetXY( $x, $y ); $pdf->SetFont( "Arial", "B", 11 ); $pdf->Cell( 260, 8, mb_convert_encoding($nombre_sede, 'ISO-8859-1', 'UTF-8'), 0, 0, 'C'); $y+=5;
 
-		$pdf->SetXY( $x, $y); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell(100, 8, mb_convert_encoding("Dirección: ".$sede["sede_direccion"], 'ISO-8859-1', 'UTF-8'), 0, 0, 'C'); $y+=5;
-		$pdf->SetXY( $x, $y); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell(100, 8, mb_convert_encoding("Celular: ".$sede["sede_telefono"], 'ISO-8859-1', 'UTF-8'), 0, 0, 'C');
+		$pdf->SetXY( $x, $y); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell(250, 8, mb_convert_encoding("Dirección: ".$sede["sede_direccion"], 'ISO-8859-1', 'UTF-8'), 0, 0, 'C'); $y+=5;
+		$pdf->SetXY( $x, $y); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell(250, 8, mb_convert_encoding("Celular: ".$sede["sede_telefono"], 'ISO-8859-1', 'UTF-8'), 0, 0, 'C');
 
         $pdf->SetLineWidth(0.1); $pdf->Rect(130, 35, 60, 10, "D");
         $pdf->Line(130, 38, 190, 38);
@@ -74,7 +71,6 @@
         $pdf->SetXY( 130, 32.5); $pdf->SetFont( "Arial", "", 5 ); $pdf->Cell( 20, 8, "DIA", 0, 0, 'C');
         $pdf->SetXY( 150, 32.5); $pdf->SetFont( "Arial", "", 5 ); $pdf->Cell( 20, 8, "MES", 0, 0, 'C');
         $pdf->SetXY( 170, 32.5); $pdf->SetFont( "Arial", "", 5 ); $pdf->Cell( 20, 8, mb_convert_encoding("AÑO", 'ISO-8859-1', 'UTF-8'), 0, 0, 'C');
-
         //FECHA VARIABLE
         $pdf->SetXY( 130, 38); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell( 20, 8, date('d', strtotime($datos['transaccion_fecha'])), 0, 0, 'C');
         $pdf->SetXY( 150, 38); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell( 20, 8,date('m', strtotime($datos['transaccion_fecha'])), 0, 0, 'C');
@@ -85,6 +81,7 @@
 
         $pdf->SetLineWidth(0.1); $pdf->Rect(10, 51, 190, 70, "D");
         //margen, alto izquierdo de separación de línea, ancho de la fila de lado a lado, alto derecho de separación de línea
+
         $pdf->Line(10, 60, 200, 60);
         $pdf->Line(10, 67, 200, 67);
         $pdf->Line(10, 74, 200, 74);
@@ -154,11 +151,11 @@
     
     NOTA: Este correo electrónico servirá como recibo oficial de su pago.
     
-    Escuela de Fútbol Inpendiente del Valle ".$nombre_sede;
+	".$nombre_sede;
     
 	$message = mb_convert_encoding($message, 'ISO-8859-1', 'UTF-8');
 
-	$from = "escuelaidvloja@gmail.com";
+	$from =  $datos["sede_email"];
 	$headers = "From: " . $from;
 
 	// Ruta del archivo adjunto
