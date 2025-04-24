@@ -136,8 +136,23 @@
 
 	//echo "$fecha";		
 	//$pdf->Output("recibos/recibo-".$num.".pdf","F","T");
+	define('PDF_DIR', __DIR__ . 'app/views/dist/pdf/');
 
-    $pdf->Output("app/views/dist/pdf/".$datos['pago_recibo'].".pdf","F","T");
+	// Verifica que el directorio exista, si no, créalo
+	if (!is_dir(PDF_DIR)) {
+		mkdir(PDF_DIR, 0755, true);
+	}
+
+	// ... código previo de tu vista ...
+
+	// Ejemplo: generar nombre de archivo
+	$filenamepdf = $datos['pago_recibo'].".pdf";
+
+	// Ruta completa
+	$pdfPath = PDF_DIR . $filenamepdf;
+
+
+    $pdf->Output($pdfPath,"F","T");
 
     //Envio de correo
 	// Datos del correo
