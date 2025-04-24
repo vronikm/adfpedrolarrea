@@ -16,7 +16,6 @@
 				$foto = APP_URL.'app/views/dist/img/foto.jpg';
 			}
 			$modulo_sede 		= 'actualizar';
-			$sede_escuelaid		= $datosSede['escuelaId'];
 			$sede_nombre		= $datosSede['sede_nombre'];
 			$sede_direccion		= $datosSede['sede_direccion'];
 			$sede_email 		= $datosSede['sede_email'];
@@ -27,7 +26,6 @@
 		}
 	}else{
 		$modulo_sede 		= 'registrar';
-		$sede_escuelaid		= '';
 		$sede_nombre 		= '';
 		$sede_direccion		= '';
 		$sede_email 		= '';		
