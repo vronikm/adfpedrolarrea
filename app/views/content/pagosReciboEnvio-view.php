@@ -39,7 +39,7 @@
 		$sede=$sede->fetch(); 
     }
 
-    $data="Recibo ".$datos["pago_recibo"]. "\n".$datos["pago_fecharegistro"]. " | ".$recibo_hora."\n".$sede['sede_nombre']."\n".$sede["sede_telefono"]."\n".$sede["sede_email"];
+    $data="Recibo ".$datos["pago_recibo"]. "\n".$datos["pago_fecharegistro"]. " | ".$recibo_hora."\n".$nombre_sede."\n".$sede["sede_telefono"]."\n".$sede["sede_email"];
 
     	$image = $generator->render_image($symbology, $data, $optionsQR);
     	imagejpeg($image, $filename);
