@@ -18,7 +18,7 @@
 
 		$fecha_recibo = strrev($datos["pago_recibo"]);
 		$first12Chars =  strrev(substr($datos["pago_recibo"], 0, 12));
-		$nombre_sede  = $datos["sede_nombre"];
+		$nombre_sede  = $datos["escuela_nombre"];
 
 		$pairs = [];
 		$length = strlen($first12Chars);
@@ -152,11 +152,11 @@
     
     NOTA: Este correo electrónico servirá como recibo oficial de su pago.
     
-    Escuela de Fútbol Inpendiente del Valle ".$nombre_sede;
+    ".$nombre_sede;
     
 	$message = mb_convert_encoding($message, 'ISO-8859-1', 'UTF-8');
 
-	$from = "escuelaidvloja@gmail.com";
+	$from = $datos["sede_email"];
 	$headers = "From: " . $from;
 
 	// Ruta del archivo adjunto
