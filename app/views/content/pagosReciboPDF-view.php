@@ -1,7 +1,5 @@
-<?php	
-
+<?php
     use app\controllers\pagosController;
-
     include 'app/lib/barcode.php';
     include 'app/lib/fpdf.php';
 
@@ -62,7 +60,7 @@
 
     $pdf->SetLineWidth(0.1); $pdf->Rect(10, 10, 190, 40, "D"); $x=15; $y=13;
   
-    $pdf->SetXY( $x, $y ); $pdf->SetFont( "Arial", "B", 11 ); $pdf->Cell( 260, 8, mb_convert_encoding("ACADEMIA DE FÚTBOL PEDRO LARREA", 'ISO-8859-1', 'UTF-8'),0, 0, 'C'); $y+=5;
+    $pdf->SetXY( $x, $y ); $pdf->SetFont( "Arial", "B", 11 ); $pdf->Cell( 260, 8, mb_convert_encoding($nombre_sede, 'ISO-8859-1', 'UTF-8'), 0, 0, 'C'); $y+=5;
 
     $pdf->SetXY( $x, $y); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell(250, 8, mb_convert_encoding("Dirección: ".$sede["sede_direccion"], 'ISO-8859-1', 'UTF-8'), 0, 0, 'C'); $y+=5;
     $pdf->SetXY( $x, $y); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell(250, 8, mb_convert_encoding("Celular: ".$sede["sede_telefono"], 'ISO-8859-1', 'UTF-8'), 0, 0, 'C');
