@@ -1,11 +1,10 @@
 <?php
+
 	use app\controllers\pagosController;
 
 	include 'app/lib/barcode.php';
 	
 	$generator = new barcode_generator();
-	('Content-Type: image/svg+xml');
-	
 	$symbology="qr";
 	$optionsQR=array('sx'=>4,'sy'=>4,'p'=>-10);	
 
@@ -26,7 +25,7 @@
 		} 
 
 		$first12Chars =  strrev(substr($datos["transaccion_recibo"], 0, 12));
-		$nombre_sede  = $datos["sede_nombre"];
+		$nombre_sede  = mb_convert_encoding($datos["escuela_nombre"], 'ISO-8859-1', 'UTF-8');
 		
 		$pairs = [];
 		$length = strlen($first12Chars);
@@ -133,15 +132,15 @@
 								<div class="row invoice-info">
 									<div class="col-sm-6 invoice-col">										
 										<address class="text-center">												
-											<img src="<?php echo APP_URL.'app/views/imagenes/fotos/sedes/'.$sede['sede_foto'] ?>" style="width: 200px; height: 100px;"/>
+											<img src="<?php echo APP_URL.'app/views/imagenes/fotos/sedes/'.$sede['sede_foto'] ?>" style="width: 200px; height: 190px;"/>
 											<br>Dirección: <?php echo $sede["sede_direccion"]; ?><br>
-											Celular: <?php echo $sede["sede_telefono"]; ?> - LOJA - ECUADOR										
+											Celular: <?php echo $sede["sede_telefono"]; ?>									
 										</address>
 									</div>
 									<!-- /.col -->
 									<div class="col-sm-6 invoice-col">									
 										<address class="text-center">	
-											<strong class="profile-username">ESCUELA INDEPENDIENTE DEL VALLE <?php echo $nombre_sede ?> </strong><br><br>								
+											<strong class="profile-username"><?php echo $nombre_sede ?> </strong><br><br>								
 											<div class="row">
 												<div class="col-12 table-responsive">
 													<div class="row">
@@ -233,7 +232,7 @@
 
 									<div class="col-4">										
 										<?php											
-											$svg = $generator->render_svg($symbology,"Recibo ".$datos["transaccion_recibo"]. "\n".$datos["transaccion_fecharegistro"]. " | ".$recibo_hora."\n".$sede['sede_nombre']."\n".$sede["sede_telefono"]."\n".$sede["sede_email"], $optionsQR);											
+											$svg = $generator->render_svg($symbology,"Recibo ".$datos["transaccion_recibo"]. "\n".$datos["transaccion_fecharegistro"]. " | ".$recibo_hora."\n".$nombre_sede."\n".$sede["sede_telefono"]."\n".$sede["sede_email"], $optionsQR);											
 											echo $svg;  
 										?>								
 									</div>
