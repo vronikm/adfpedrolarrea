@@ -4,12 +4,13 @@
 	include 'app/lib/fpdf.php';
 
 	$generator = new barcode_generator();
-    	$symbology="qr";
-    	$optionsQR=array('sx'=>4,'sy'=>4,'p'=>-12);
-    	$filename = "app/views/dist/img/temp/";
+    $symbology="qr";
+    $optionsQR=array('sx'=>4,'sy'=>4,'p'=>-12);
+    $filename = "app/views/dist/img/temp/";
 	
 	$insAlumno = new pagosController();	
 	$pagoid=$insLogin->limpiarCadena($url[1]);
+
 	$datos=$insAlumno->generarRecibo($pagoid);
 
 	if($datos->rowCount()==1){
@@ -17,7 +18,7 @@
 
 		$fecha_recibo = strrev($datos["pago_recibo"]);
 		$first12Chars =  strrev(substr($datos["pago_recibo"], 0, 12));
-		$nombre_sede  = mb_convert_encoding($datos["escuela_nombre"], 'ISO-8859-1', 'UTF-8');
+		$nombre_sede  = $datos["escuela_nombre"];
 
 		$pairs = [];
 		$length = strlen($first12Chars);
@@ -54,8 +55,7 @@
     $pdf->AddPage();
 	
 	// logo : 80 de largo por 55 de alto
-        //,,ancho,
-		
+        //,,ancho,		
 		$pdf->Image(APP_URL.'app/views/imagenes/fotos/sedes/'.$sede['sede_foto'], 34, 10, 47, 40);
 
         $pdf->SetLineWidth(0.1); $pdf->Rect(10, 10, 190, 40, "D"); $x=15; $y=13;       		
@@ -137,23 +137,7 @@
 	//echo "$fecha";		
 	//$pdf->Output("recibos/recibo-".$num.".pdf","F","T");
 
-	define('PDF_DIR', __DIR__ . 'app/views/dist/pdf/');
-
-	// Verifica que el directorio exista, si no, créalo
-	if (!is_dir(PDF_DIR)) {
-		mkdir(PDF_DIR, 0755, true);
-	}
-
-	// ... código previo de tu vista ...
-
-	// Ejemplo: generar nombre de archivo
-	$filenamepdf = $datos['pago_recibo'].".pdf";
-
-	// Ruta completa
-	$pdfPath = PDF_DIR . $filenamepdf;
-
-
-    $pdf->Output($pdfPath,"F","T");
+    $pdf->Output("app/views/dist/pdf/".$datos['pago_recibo'].".pdf","F","T");
 
     //Envio de correo
 	// Datos del correo
