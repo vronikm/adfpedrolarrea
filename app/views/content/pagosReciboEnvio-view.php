@@ -2,6 +2,7 @@
 	use app\controllers\pagosController;
 	include 'app/lib/barcode.php';	
 	include 'app/lib/fpdf.php';
+	include 'app/lib/phpmailer/class.phpmailer.php';
 
 	$generator = new barcode_generator();
     $symbology="qr";
@@ -143,6 +144,12 @@
 		mkdir(PDF_DIR, 0755, true);
 	}
 
+	$pdf = new FPDF();
+	$pdf->AddPage();
+	$pdf->SetFont('Arial','B',16);
+	$pdf->Cell(40,10,'¡Recibo de Pago Generado!');
+
+
 	// ... código previo de tu vista ...
 
 	// Ejemplo: generar nombre de archivo
@@ -153,6 +160,7 @@
 
 
     $pdf->Output($pdfPath,"F","T");
+	$mail->addAttachment($pdfPath);
 
     //Envio de correo
 	// Datos del correo
