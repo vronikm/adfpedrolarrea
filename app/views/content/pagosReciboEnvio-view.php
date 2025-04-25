@@ -4,6 +4,8 @@
 	include 'app/lib/fpdf.php';
 	include 'app/lib/phpmailer/class.phpmailer.php';
 
+	$mail = new PHPMailer();
+
 	$generator = new barcode_generator();
     $symbology="qr";
     $optionsQR=array('sx'=>4,'sy'=>4,'p'=>-12);
