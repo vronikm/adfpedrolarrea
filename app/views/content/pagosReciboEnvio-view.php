@@ -2,9 +2,6 @@
 	use app\controllers\pagosController;
 	include 'app/lib/barcode.php';	
 	include 'app/lib/fpdf.php';
-	include 'app/lib/phpmailer/class.phpmailer.php';
-
-	$mail = new PHPMailer();
 
 	$generator = new barcode_generator();
     $symbology="qr";
@@ -139,30 +136,8 @@
 
 	//echo "$fecha";		
 	//$pdf->Output("recibos/recibo-".$num.".pdf","F","T");
-	define('PDF_DIR', __DIR__ . 'app/views/dist/pdf/');
 
-	// Verifica que el directorio exista, si no, créalo
-	if (!is_dir(PDF_DIR)) {
-		mkdir(PDF_DIR, 0755, true);
-	}
-
-	$pdf = new FPDF();
-	$pdf->AddPage();
-	$pdf->SetFont('Arial','B',16);
-	$pdf->Cell(40,10,'¡Recibo de Pago Generado!');
-
-
-	// ... código previo de tu vista ...
-
-	// Ejemplo: generar nombre de archivo
-	$filenamepdf = $datos['pago_recibo'].".pdf";
-
-	// Ruta completa
-	$pdfPath = PDF_DIR . $filenamepdf;
-
-
-    $pdf->Output($pdfPath,"F","T");
-	$mail->addAttachment($pdfPath);
+    $pdf->Output("app/views/dist/pdf/".$datos['pago_recibo'].".pdf","F","T");
 
     //Envio de correo
 	// Datos del correo
