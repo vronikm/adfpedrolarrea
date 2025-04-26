@@ -5,25 +5,15 @@
 	class dashboardController extends mainModel{
 
 		/*----------  Obtener total alumnos activos  ----------*/
-		public function obtenerAlumnosActivosSedeADFPL(){
-			$alumnosActivosSedeL=$this->ejecutarConsulta("SELECT count(*) totalActivosSedeADFPL FROM sujeto_alumno WHERE alumno_estado='A' and alumno_sedeid = 1");
-		    return $alumnosActivosSedeL;
-		}
-
-		public function obtenerAlumnosActivosSedeCantera(){
-			$alumnosActivosSedeC=$this->ejecutarConsulta("SELECT count(*) totalActivosSedeCantera FROM sujeto_alumno WHERE alumno_estado='A' and alumno_sedeid = 2");
-		    return $alumnosActivosSedeC;
+		public function obtenerAlumnosActivos($sedeid){
+			$alumnosActivos=$this->ejecutarConsulta("SELECT count(*) totalActivos FROM sujeto_alumno WHERE alumno_estado='A' and alumno_sedeid = $sedeid");
+		    return $alumnosActivos;
 		}
 
 		/*----------  Obtener total alumnos inactivos  ----------*/
-		public function obtenerAlumnosInactivosSedeADFPL(){
-			$alumnosActivosSedeL=$this->ejecutarConsulta("SELECT count(*) totalInactivosSedeADFPL FROM sujeto_alumno WHERE alumno_estado='I' and alumno_sedeid = 1");
-		    return $alumnosActivosSedeL;
-		}
-
-		public function obtenerAlumnosInactivosSedeCantera(){
-			$alumnosActivosSedeC=$this->ejecutarConsulta("SELECT count(*) totalInactivosSedeCantera FROM sujeto_alumno WHERE alumno_estado='I' and alumno_sedeid = 2");
-		    return $alumnosActivosSedeC;
+		public function obtenerAlumnosInactivos($sedeid){
+			$alumnosInactivos=$this->ejecutarConsulta("SELECT count(*) totalInactivos FROM sujeto_alumno WHERE alumno_estado='I' and alumno_sedeid = $sedeid");
+		    return $alumnosInactivos;
 		}
 
 		/*----------  Obtener total pagos cancelados  ----------*/
@@ -125,6 +115,15 @@
 		public function obtenerRepresentantes(){
 			$representantes=$this->ejecutarConsulta("SELECT count(*) totalRepresentantes FROM alumno_representante WHERE repre_estado='A'");
 		    return $representantes;
+		}
+
+		public function totalAlumnosActivos(){
+			$alumnosActivos=$this->ejecutarConsulta("SELECT count(*) totalAlumnosActivos FROM sujeto_alumno WHERE alumno_estado='A'");
+		    return $alumnosActivos;
+		}
+		public function totalAlumnosInactivos(){
+			$alumnosInactivos=$this->ejecutarConsulta("SELECT count(*) totalAlumnosInactivos FROM sujeto_alumno WHERE alumno_estado='I'");
+		    return $alumnosInactivos;
 		}
 	}
 

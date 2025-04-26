@@ -2,53 +2,73 @@
 	use app\controllers\dashboardController;
 	$insDashboard = new dashboardController();
 
-	$alumnosActivosSedeADFPL=$insDashboard->obtenerAlumnosActivosSedeADFPL();
-	$alumnosActivosSedeCantera=$insDashboard->obtenerAlumnosActivosSedeCantera();
+	$alumnosActivosSedeJipiro=$insDashboard->obtenerAlumnosActivos(1);
+	$alumnosActivosSedeCantera=$insDashboard->obtenerAlumnosActivos(2);
+	$alumnosActivosSedeForest=$insDashboard->obtenerAlumnosActivos(3);
 
-	$alumnosInactivosSedeADFPL=$insDashboard->obtenerAlumnosInactivosSedeADFPL();
-	$alumnosInactivosSedeCantera=$insDashboard->obtenerAlumnosInactivosSedeCantera();
+	$alumnosInactivosSedeJipiro=$insDashboard->obtenerAlumnosInactivos(1);
+	$alumnosInactivosSedeCantera=$insDashboard->obtenerAlumnosInactivos(2);
+	$alumnosInactivosSedeForest=$insDashboard->obtenerAlumnosInactivos(3);
 
-	$pagosCanceladoSedeADFPL=$insDashboard->obtenerPagosCancelados(1);	
+	$pagosCanceladoSedeJipiro=$insDashboard->obtenerPagosCancelados(1);	
 	$pagosCanceladoSedeCantera=$insDashboard->obtenerPagosCancelados(2);	
+	$pagosCanceladoSedeForest=$insDashboard->obtenerPagosCancelados(3);
 
-	$pagosPendienteSedeADFPL=$insDashboard->obtenerPagosPendientes(1);
+	$pagosPendienteSedeJipiro=$insDashboard->obtenerPagosPendientes(1);
 	$pagosPendienteSedeCantera=$insDashboard->obtenerPagosPendientes(2);
+	$pagosPendienteSedeForest=$insDashboard->obtenerPagosPendientes(3);
 
 	$representantes=$insDashboard->obtenerRepresentantes();
+	$alumnosActivos=$insDashboard->totalAlumnosActivos();
+	$alumnosInactivos=$insDashboard->totalAlumnosInactivos();
 	
-	if($alumnosActivosSedeADFPL->rowCount()>0){
-		$alumnosActivosSedeADFPL=$alumnosActivosSedeADFPL->fetch();
-		$totalActivosSedeADFPL=$alumnosActivosSedeADFPL["totalActivosSedeADFPL"];
+	if($alumnosActivosSedeJipiro->rowCount()>0){
+		$alumnosActivosSedeJipiro=$alumnosActivosSedeJipiro->fetch();
+		$totalActivosSedeJipiro=$alumnosActivosSedeJipiro["totalActivos"];
 	}else{
-		$totalActivosSedeADFPL= 0;
+		$totalActivosSedeJipiro= 0;
 	}
 
 	if($alumnosActivosSedeCantera->rowCount()>0){
 		$alumnosActivosSedeCantera=$alumnosActivosSedeCantera->fetch();
-		$totalActivosSedeCantera=$alumnosActivosSedeCantera["totalActivosSedeCantera"];
+		$totalActivosSedeCantera=$alumnosActivosSedeCantera["totalActivos"];
 	}else{
 		$totalActivosSedeCantera= 0;
 	}
 
-	if($alumnosInactivosSedeADFPL->rowCount()>0){
-		$alumnosInactivosSedeADFPL=$alumnosInactivosSedeADFPL->fetch();
-		$totalInactivosSedeADFPL=$alumnosInactivosSedeADFPL["totalInactivosSedeADFPL"];
+	if($alumnosActivosSedeForest->rowCount()>0){
+		$alumnosActivosSedeForest=$alumnosActivosSedeForest->fetch();
+		$totalActivosSedeForest=$alumnosActivosSedeForest["totalActivos"];
 	}else{
-		$totalInactivosSedeADFPL= 0;
+		$totalActivosSedeForest= 0;
+	}
+
+	if($alumnosInactivosSedeJipiro->rowCount()>0){
+		$alumnosInactivosSedeJipiro=$alumnosInactivosSedeJipiro->fetch();
+		$totalInactivosSedeJipiro=$alumnosInactivosSedeJipiro["totalInactivos"];
+	}else{
+		$totalInactivosSedeJipiro= 0;
 	}
 
 	if($alumnosInactivosSedeCantera->rowCount()>0){
 		$alumnosInactivosSedeCantera=$alumnosInactivosSedeCantera->fetch();
-		$totalInactivosSedeCantera=$alumnosInactivosSedeCantera["totalInactivosSedeCantera"];
+		$totalInactivosSedeCantera=$alumnosInactivosSedeCantera["totalInactivos"];
 	}else{
 		$totalInactivosSedeCantera= 0;
 	}
 
-	if($pagosCanceladoSedeADFPL->rowCount()>0){
-		$pagosCanceladoSedeADFPL=$pagosCanceladoSedeADFPL->fetch();
-		$totalCanceladoSedeADFPL=$pagosCanceladoSedeADFPL["totalCancelados"];
+	if($alumnosInactivosSedeForest->rowCount()>0){
+		$alumnosInactivosSedeForest=$alumnosInactivosSedeForest->fetch();
+		$totalInactivosSedeForest=$alumnosInactivosSedeForest["totalInactivos"];
 	}else{
-		$totalCanceladoSedeADFPL= 0;
+		$totalInactivosSedeForest= 0;
+	}
+
+	if($pagosCanceladoSedeJipiro->rowCount()>0){
+		$pagosCanceladoSedeJipiro=$pagosCanceladoSedeJipiro->fetch();
+		$totalCanceladoSedeJipiro=$pagosCanceladoSedeJipiro["totalCancelados"];
+	}else{
+		$totalCanceladoSedeJipiro= 0;
 	}
 
 	if($pagosCanceladoSedeCantera->rowCount()>0){
@@ -57,12 +77,19 @@
 	}else{
 		$totalCanceladoSedeCantera= 0;
 	}
-	
-	if($pagosPendienteSedeADFPL->rowCount()>0){
-		$pagosPendienteSedeADFPL=$pagosPendienteSedeADFPL->fetch();
-		$totalPendienteSedeADFPL=$pagosPendienteSedeADFPL["totalPendientes"];
+
+	if($pagosCanceladoSedeForest->rowCount()>0){
+		$pagosCanceladoSedeForest=$pagosCanceladoSedeForest->fetch();
+		$totalCanceladoSedeForest=$pagosCanceladoSedeForest["totalCancelados"];
 	}else{
-		$totalPendienteSedeADFPL= 0;
+		$totalCanceladoSedeForest= 0;
+	}
+	
+	if($pagosPendienteSedeJipiro->rowCount()>0){
+		$pagosPendienteSedeJipiro=$pagosPendienteSedeJipiro->fetch();
+		$totalPendienteSedeJipiro=$pagosPendienteSedeJipiro["totalPendientes"];
+	}else{
+		$totalPendienteSedeJipiro= 0;
 	}
 
 	if($pagosPendienteSedeCantera->rowCount()>0){
@@ -72,12 +99,36 @@
 		$totalPendienteSedeCantera= 0;
 	}
 
+	if($pagosPendienteSedeForest->rowCount()>0){
+		$pagosPendienteSedeForest=$pagosPendienteSedeForest->fetch();
+		$totalPendienteSedeForest=$pagosPendienteSedeForest["totalPendientes"];
+	}else{
+		$totalPendienteSedeForest= 0;
+	}
+
 	if($representantes->rowCount()>0){
 		$representantes=$representantes->fetch();
 		$totalRepresentantes=$representantes["totalRepresentantes"];
 	}else{
 		$totalRepresentantes= 0;
 	}
+
+	if($alumnosActivos->rowCount()>0){
+		$alumnosActivos=$alumnosActivos->fetch();
+		$totalAlumnosActivos=$alumnosActivos["totalAlumnosActivos"];
+	}else{
+		$totalAlumnosActivos= 0;
+	}
+
+	if($alumnosInactivos->rowCount()>0){
+		$alumnosInactivos=$alumnosInactivos->fetch();
+		$totalAlumnosInactivos=$alumnosInactivos["totalAlumnosInactivos"];
+	}else{
+		$totalAlumnosInactivos= 0;
+	}
+
+	$totalCancelados = $totalCanceladoSedeJipiro + $totalCanceladoSedeCantera + $totalCanceladoSedeForest;
+	$totalPendientes = $totalPendienteSedeJipiro + $totalPendienteSedeCantera + $totalPendienteSedeForest;
 ?>
 
 <!DOCTYPE html>
@@ -172,7 +223,7 @@
 										</span>
 										<div class="info-box-content ms-2">
 											<span class="info-box-text h6 text-muted">Alumnos activos</span>
-											<span class="info-box-number h3 text-dark"><?php echo $totalActivosSedeADFPL; ?></span>
+											<span class="info-box-number h3 text-dark"><?php echo $totalActivosSedeJipiro; ?></span>
 										</div>
 									</div>
 								</a>
@@ -186,7 +237,7 @@
 										</span>
 										<div class="info-box-content ms-2">
 											<span class="info-box-text h6 text-muted">Pagos Receptados</span>
-											<span class="info-box-number h3 text-dark"><?php echo $totalCanceladoSedeADFPL; ?></span>
+											<span class="info-box-number h3 text-dark"><?php echo $totalCanceladoSedeJipiro; ?></span>
 										</div>
 									</div>
 								</a>
@@ -201,7 +252,7 @@
 										</span>
 										<div class="info-box-content ms-2">
 											<span class="info-box-text h6 text-muted">Alumnos inactivos</span>
-											<span class="info-box-number h3 text-dark"><?php echo $totalInactivosSedeADFPL; ?></span>
+											<span class="info-box-number h3 text-dark"><?php echo $totalInactivosSedeJipiro; ?></span>
 										</div>
 									</div>
 								</a>
@@ -216,7 +267,7 @@
 										</span>
 										<div class="info-box-content ms-2">
 											<span class="info-box-text h6 text-muted">Alumnos con mora</span>
-											<span class="info-box-number h3 text-dark"><?php echo $totalPendienteSedeADFPL; ?></span>
+											<span class="info-box-number h3 text-dark"><?php echo $totalPendienteSedeJipiro; ?></span>
 										</div>
 									</div>
 								</a>
@@ -312,28 +363,28 @@
 						<div class="row">
 							<!-- Alumnos activos -->
 							<div class="col-md-3 mb-3">
-								<a href="<?php echo APP_URL; ?>dashboardAlumnos/2/A/" class="text-decoration-none">
+								<a href="<?php echo APP_URL; ?>dashboardAlumnos/3/A/" class="text-decoration-none">
 									<div class="info-box d-flex shadow-sm rounded border">
 										<span class="info-box-icon bg-primary text-white d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
 										<i class="bi bi-people-fill fs-2"></i>
 										</span>
 										<div class="info-box-content ms-2">
 											<span class="info-box-text h6 text-muted">Alumnos activos</span>
-											<span class="info-box-number h3 text-dark"><?php echo $totalActivosSedeCantera; ?></span>
+											<span class="info-box-number h3 text-dark"><?php echo $totalActivosSedeForest; ?></span>
 										</div>
 									</div>
 								</a>
 							</div>
 
 							<div class="col-md-3 mb-3">
-								<a href="<?php echo APP_URL; ?>reportePagos/2" class="text-decoration-none">
+								<a href="<?php echo APP_URL; ?>reportePagos/3" class="text-decoration-none">
 									<div class="info-box d-flex shadow-sm rounded border">
 										<span class="info-box-icon bg-success text-white d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
 										<i class="bi bi-check2-circle fs-2"></i>
 										</span>
 										<div class="info-box-content ms-2">
 											<span class="info-box-text h6 text-muted">Pagos Receptados</span>
-											<span class="info-box-number h3 text-dark"><?php echo $totalCanceladoSedeCantera; ?></span>
+											<span class="info-box-number h3 text-dark"><?php echo $totalCanceladoSedeForest; ?></span>
 										</div>
 									</div>
 								</a>
@@ -341,14 +392,14 @@
 
 							<!-- Alumnos inactivos -->
 							<div class="col-md-3 mb-3">
-								<a href="<?php echo APP_URL; ?>dashboardAlumnos/2/I/" class="text-decoration-none">
+								<a href="<?php echo APP_URL; ?>dashboardAlumnos/3/I/" class="text-decoration-none">
 									<div class="info-box d-flex shadow-sm rounded border">
 										<span class="info-box-icon bg-secondary text-white d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
 											<i class="bi bi-person-x-fill fs-2"></i>
 										</span>
 										<div class="info-box-content ms-2">
 											<span class="info-box-text h6 text-muted">Alumnos inactivos</span>
-											<span class="info-box-number h3 text-dark"><?php echo $totalInactivosSedeCantera; ?></span>
+											<span class="info-box-number h3 text-dark"><?php echo $totalInactivosSedeForest; ?></span>
 										</div>
 									</div>
 								</a>
@@ -356,14 +407,14 @@
 
 							<!-- Alumnos con mora -->
 							<div class="col-md-3 mb-3">
-								<a href="<?php echo APP_URL; ?>reportePendientes/2" class="text-decoration-none">
+								<a href="<?php echo APP_URL; ?>reportePendientes/3" class="text-decoration-none">
 									<div class="info-box d-flex shadow-sm rounded border">
 										<span class="info-box-icon bg-danger text-white d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
 										<i class="bi bi-exclamation-triangle-fill fs-2"></i>
 										</span>
 										<div class="info-box-content ms-2">
 											<span class="info-box-text h6 text-muted">Alumnos con mora</span>
-											<span class="info-box-number h3 text-dark"><?php echo $totalPendienteSedeCantera; ?></span>
+											<span class="info-box-number h3 text-dark"><?php echo $totalPendienteSedeForest; ?></span>
 										</div>
 									</div>
 								</a>
@@ -374,7 +425,7 @@
 				</div>
 				<div class="card card-default">
 					<div class="card-header">
-						<h3 class="card-title">REPRESENTANTES INGRESADOS</h3>
+						<h3 class="card-title">CONSOLIDADO</h3>
 						<div class="card-tools">
 							<button type="button" class="btn btn-tool" data-card-widget="collapse">
 								<i class="fas fa-minus"></i>
@@ -383,16 +434,60 @@
 					</div>
 					<div class="card-body">
 						<div class="row">
-							<!-- Alumnos activos -->
-							<div class="col-md-3 mb-3 align-items-center">
+							<!-- Representantes activos -->
+							<div class="col-md-3 mb-3">
 								<a href="<?php echo APP_URL; ?>representanteList/" class="text-decoration-none">
 									<div class="info-box d-flex shadow-sm rounded border">
-										<span class="info-box-icon bg-warning text-white d-flex align-items-center justify-content-center" style="width: 90px; height: 100px;">
+										<span class="info-box-icon bg-warning text-white d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
 										<i class="bi bi-people-fill fs-2"></i>
 										</span>
 										<div class="info-box-content ms-2">
-											<span class="info-box-text h6 text-muted">Representantes activos</span>
+											<span class="info-box-text h6 text-muted">Representantes</span>
 											<span class="info-box-number h3 text-dark"><?php echo $totalRepresentantes; ?></span>
+										</div>
+									</div>
+								</a>
+							</div>
+
+							<!-- Alumnos activos -->
+							<div class="col-md-3 mb-3 align-items-center">
+								<a href="#" class="text-decoration-none">
+									<div class="info-box d-flex shadow-sm rounded border">
+										<span class="info-box-icon bg-warning text-white d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
+										<i class="bi bi-people-fill fs-2"></i>
+										</span>
+										<div class="info-box-content ms-2">
+											<span class="info-box-text h6 text-muted">Alumnos activos</span>
+											<span class="info-box-number h3 text-dark"><?php echo $totalAlumnosActivos; ?></span>
+										</div>
+									</div>
+								</a>
+							</div>
+
+							<!-- Alumnos inactivos -->
+							<div class="col-md-3 mb-3 align-items-center">
+								<a href="#" class="text-decoration-none">
+									<div class="info-box d-flex shadow-sm rounded border">
+										<span class="info-box-icon bg-warning text-white d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
+										<i class="bi bi-people-fill fs-2"></i>
+										</span>
+										<div class="info-box-content ms-2">
+											<span class="info-box-text h6 text-muted">Alumnos Inactivos</span>
+											<span class="info-box-number h3 text-dark"><?php echo $totalAlumnosInactivos; ?></span>
+										</div>
+									</div>
+								</a>
+							</div>
+							<!-- Pendientes -->
+							<div class="col-md-3 mb-3 align-items-center">
+								<a href="#" class="text-decoration-none">
+									<div class="info-box d-flex shadow-sm rounded border">
+										<span class="info-box-icon bg-warning text-white d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
+										<i class="bi bi-people-fill fs-2"></i>
+										</span>
+										<div class="info-box-content ms-2">
+											<span class="info-box-text h6 text-muted">Alumnos con mora</span>
+											<span class="info-box-number h3 text-dark"><?php echo $totalPendientes; ?></span>
 										</div>
 									</div>
 								</a>

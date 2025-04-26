@@ -2,6 +2,7 @@
 	use app\controllers\reporteController;
 	$insRecibidos = new reporteController();
 	$sede_id 	  = ($url[1] != "") ? $url[1] : 0;
+	$sede_nombre  = "";
 
 	if(isset($_POST['pago_fecha_inicio'])){
 		$fecha_inicio = $insRecibidos->limpiarCadena($_POST['pago_fecha_inicio']);
@@ -21,17 +22,9 @@
 
 	$datos=$insRecibidos->seleccionarDatos("Unico","general_sede","sede_id",$sede_id);
 	if($datos->rowCount()==1){
-		$datos=$datos->fetch();
-		$sede_id = $datos["sede_id"];
-		
-		if($sede_id==1){
-			$sede_nombre = "CANCHA SINTÉTICA JIPIRO";	
-		}
-		else{
-			$sede_nombre = $datos["sede_nombre"];
-		}
-	}else{
-		$sede_nombre = "";
+		$datos		  = $datos->fetch();
+		$sede_id 	  = $datos["sede_id"];
+		$sede_nombre  = $datos["sede_nombre"];
 	}
 ?>
 
