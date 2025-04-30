@@ -2106,11 +2106,12 @@
 
 		public function BuscarUsuario($identificacion){		
 			$consulta_datos="SELECT empleado_id, empleado_identificacion, empleado_nombre, empleado_correo, empleado_celular, 
-									empleado_direccion, empleado_fechaingreso, empleado_foto, CASE WHEN empleado_estado = 'A' THEN 'Activo' WHEN empleado_estado = 'I' THEN 'Inactivo' ELSE 'Sin definir' END Estado, 
-									sede_nombre, catalogo_descripcion AS Especialidad
+									empleado_direccion, empleado_fechaingreso, empleado_foto, CASE WHEN empleado_estado = 'A' 
+									THEN 'Activo' WHEN empleado_estado = 'I' THEN 'Inactivo' ELSE 'Sin definir' END Estado, 
+									sede_nombre, catalogo_descripcion AS TipoEmpleado
 								FROM sujeto_empleado
 								INNER JOIN general_sede ON sede_id = empleado_sedeid
-								LEFT JOIN general_tabla_catalogo ON catalogo_valor = empleado_especialidadid
+								LEFT JOIN general_tabla_catalogo ON catalogo_valor = empleado_tipopersonalid
 								LEFT JOIN general_tabla ON tabla_id = catalogo_tablaid
 								where empleado_estado = 'A'
 									AND empleado_identificacion = '$identificacion'";

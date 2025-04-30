@@ -35,7 +35,7 @@
 		$empleadoid=$datos["empleado_id"];
 		$empleado_nombre = $datos['empleado_nombre']; 
 		$empleado_identificacion = $datos['empleado_identificacion'];
-		$Especialidad = $datos['Especialidad']; 
+		$TipoEmpleado = $datos['TipoEmpleado']; 
 		$empleado_fechaingreso = $datos['empleado_fechaingreso'];
 		$sede_nombre = $datos['sede_nombre']; 
 		$estado = $datos['Estado'];
@@ -50,7 +50,7 @@
 		$empleadoid= 0 ;
 		$empleado_nombre = ''; 
 		$empleado_identificacion = '';
-		$Especialidad = ''; 
+		$TipoEmpleado = ''; 
 		$empleado_fechaingreso = '';
 		$sede_nombre = ''; 
 		$estado = '';
@@ -143,7 +143,7 @@
 
 									<ul class="list-group list-group-unbordered mb-3">
 										<li class="list-group-item">
-											<b>Entrenador</b> <a class="float-right"><?php echo $Especialidad; ?></a>
+											<b>Tipo Empleado</b> <a class="float-right"><?php echo $TipoEmpleado; ?></a>
 										</li>
 										<li class="list-group-item">
 											<b>Fecha de ingreso</b> <a class="float-right"><?php echo $empleado_fechaingreso; ?></a>
