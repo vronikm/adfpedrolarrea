@@ -2110,8 +2110,8 @@
 									sede_nombre, catalogo_descripcion AS Especialidad
 								FROM sujeto_empleado
 								INNER JOIN general_sede ON sede_id = empleado_sedeid
-								INNER JOIN general_tabla_catalogo ON catalogo_valor = empleado_especialidadid
-								INNER JOIN general_tabla ON tabla_id = catalogo_tablaid
+								LEFT JOIN general_tabla_catalogo ON catalogo_valor = empleado_especialidadid
+								LEFT JOIN general_tabla ON tabla_id = catalogo_tablaid
 								where empleado_estado = 'A'
 									AND empleado_identificacion = '$identificacion'";
 				
