@@ -220,9 +220,9 @@
 
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
-                    <a href="<?php echo APP_URL."reporteRepresentanteFactura/" ?>" class="nav-link <?php if ($url[0]=='reporteRepresentanteFactura') echo 'active'; else echo ''; ?>">
+                    <a href="<?php echo APP_URL."reportePensionAlumno/" ?>" class="nav-link <?php if ($url[0]=='reportePensionAlumno') echo 'active'; else echo ''; ?>">
                       <i class="nav-icon far fa-circle text-info"></i>
-                      <p>Facturación</p>
+                      <p>Pensión por alumno</p>
                     </a>
                   </li>
                 </ul>

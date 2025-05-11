@@ -1059,6 +1059,33 @@
 			}
 			return $tabla;
 		}
+
+		public function pensionAlumno(){
+			$tabla="";
+			$consulta_datos="SELECT sede_nombre, alumno_id, alumno_identificacion, CONCAT(alumno_apellidopaterno,' ',alumno_apellidomaterno) APELLIDOS, 
+									CONCAT(alumno_primernombre,' ', alumno_segundonombre) NOMBRES, IFNULL(descuento_valor,35) PENSION, descuento_detalle DETALLE, descuento_fecha
+								FROM sujeto_alumno
+								LEFT JOIN (SELECT descuento_id, descuento_alumnoid, descuento_valor, descuento_detalle, descuento_fecha 
+												FROM alumno_pago_descuento WHERE descuento_estado = 'S') AS Descuento ON descuento_alumnoid = alumno_id
+								INNER JOIN general_sede ON sede_id = alumno_sedeid
+								WHERE alumno_estado = 'A'";
+
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){
+				$tabla.='
+					<tr>
+						<td>'.$rows['sede_nombre'].'</td>
+						<td>'.$rows['alumno_identificacion'].'</td>
+						<td>'.$rows['APELLIDOS'].'</td>
+						<td>'.$rows['NOMBRES'].'</td>
+						<td>'.$rows['PENSION'].'</td>
+						<td>'.$rows['DETALLE'].'</td>
+						<td>'.$rows['descuento_fecha'].'</td>
+					</tr>';	
+			}
+			return $tabla;			
+		}
 	}
 			
 											

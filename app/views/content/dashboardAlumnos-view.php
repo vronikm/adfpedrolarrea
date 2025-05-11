@@ -8,14 +8,7 @@
 	if($sede->rowCount()==1){
 		$sede	 = $sede->fetch();
 		$sede_id = $sede["sede_id"];
-		
-		if($sede_id==1){
-			$sede_nombre = "CANCHA SINTÉTICA JIPIRO";	
-		}
-		else{
-			$sede_nombre = $sede["sede_nombre"];
-		}
-		
+		$sede_nombre = $sede["sede_nombre"];	
 	}
 
 	if($estado== 'A'){
