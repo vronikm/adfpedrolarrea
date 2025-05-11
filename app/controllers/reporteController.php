@@ -41,7 +41,7 @@
 								transaccion_fecharegistro FECHA_REG_SISTEMA, 
 								transaccion_periodo PERIODO,  
 								R.catalogo_descripcion RUBRO,  
-								F.catalogo_descripcion FORMA_PAGO, 
+								F.catalogo_descripcion FORMA_PAGO, 								
 								transaccion_valor VALOR_PAGADO, 
 								transaccion_valorcalculado - transaccion_valor VALOR_PENDIENTE,
 								case (transaccion_valorcalculado - transaccion_valor) when 0 then 'Cancelado' else 'Pendiente' end ESTADO_PAGO
@@ -101,6 +101,7 @@
 								pago_periodo PERIODO,  
 								R.catalogo_descripcion RUBRO,  
 								F.catalogo_descripcion FORMA_PAGO, 
+								pago_concepto CONCEPTO,
 								((P.pago_saldo + P.pago_valor) - (IFNULL(PT.transaccion_valorcalculado, P.pago_saldo)))VALOR_PAGADO, 
 								IFNULL(PT.transaccion_valorcalculado, P.pago_saldo) VALOR_PENDIENTE,
 								case IFNULL(PT.transaccion_valorcalculado, P.pago_saldo) when 0 then 'Cancelado' else 'Pendiente' end ESTADO_PAGO
@@ -126,6 +127,7 @@
 								transaccion_periodo PERIODO,  
 								R.catalogo_descripcion RUBRO,  
 								F.catalogo_descripcion FORMA_PAGO, 
+								transaccion_concepto CONCEPTO,
 								transaccion_valor VALOR_PAGADO, 
 								transaccion_valorcalculado - transaccion_valor VALOR_PENDIENTE,
 								case (transaccion_valorcalculado - transaccion_valor) when 0 then 'Cancelado' else 'Pendiente' end ESTADO_PAGO
@@ -156,6 +158,7 @@
 						<td>'.$rows['FORMA_PAGO'].'</td>
 						<td style="text-align: right">'.$rows['VALOR_PAGADO'].'</td>
 						<td style="text-align: right">'.$rows['VALOR_PENDIENTE'].'</td>
+						<td>'.$rows['CONCEPTO'].'</td>
 						<td>'.$rows['ESTADO_PAGO'].'</td>
 					</tr>';	
 			}
@@ -1068,7 +1071,8 @@
 								LEFT JOIN (SELECT descuento_id, descuento_alumnoid, descuento_valor, descuento_detalle, descuento_fecha 
 												FROM alumno_pago_descuento WHERE descuento_estado = 'S') AS Descuento ON descuento_alumnoid = alumno_id
 								INNER JOIN general_sede ON sede_id = alumno_sedeid
-								WHERE alumno_estado = 'A'";
+								WHERE alumno_estado = 'A'
+								ORDER BY descuento_valor DESC, descuento_detalle DESC";
 
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
