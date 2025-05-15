@@ -27,6 +27,10 @@ formularios_ajax.forEach(formularios => {
                 .then(respuesta => respuesta.json())
                 .then(respuesta => {
                     return alertas_ajax(respuesta);
+                    // ✅ SOLUCIÓN AÑADIDA: recargar la página completa
+                    setTimeout(() => {
+                        location.reload();
+                    }, 500); // opcional: pequeña espera para que se vea el mensaje
                 });
 
             return; // Salir antes de mostrar la alerta
