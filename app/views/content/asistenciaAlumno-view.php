@@ -11,11 +11,8 @@
 		}
 	}
 	
-	if(isset($_POST['fecha'])){
-		$fechahoy =  $insAlumno->limpiarCadena($_POST['fecha']);		
-	} ELSE{
-		$fechahoy = date('Y-m-d');		
-	}
+	
+	$fechahoy = date('Y-m-d');	
 ?>
 
 <!DOCTYPE html>
@@ -56,31 +53,13 @@
 					<a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
 				</li>
 				<form action="<?php echo APP_URL."asistenciaAlumno/$horario_id" ?>" method="POST" autocomplete="off" enctype="multipart/form-data" >
-				<div class="container-fluid">					
-					<div class="col-xm-6">		
-						<li class="nav-item d-sm-inline-block">
-							<div class="card-comment">											
-								<div class="input-group">
-									<div class="input-group-prepend">
-										<span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-									</div>
-									<?php 
-										if($_SESSION['rol']!= 1 && $_SESSION['rol']!= 2){
-											echo '<input class="form-control" value="'.$fechahoy.'" disabled>';
-											echo '<input type="hidden" name="fecha" value="'.$fechahoy.'">';
-										}else{
-											echo '<input type="date" class="form-control" id="fecha" name="fecha" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask value="'.$fechahoy.'" required>';
-										}
-									?>							
-								</div>				
-							</div>				
-						</li>
-					</div>
-					<div class="col-xm-6">
-						<li class="nav-item d-sm-inline-block">
-							<button type="submit" class="nav-link form-control btn-xs btn-info">Generar lista</button>											
-						</li>
-					</div>
+				<div class="container-fluid">
+				<?php 
+					
+						$fechahoy = date('Y-m-d');	
+											echo "La fecha de hoy es: ".$fechahoy;
+									
+										?>	
 				</div>
 				</form>	
 				
@@ -120,9 +99,9 @@
 							</thead>
 							<tbody>
 								<?php 
-									if(isset($_POST['fecha'])){												
+																				
 										echo $insAlumno->ListadoAlumnos($horarioSede["horario_id"],$fechahoy);		
-									}										
+																		
 								?>								
 							</tbody>	
 						</table>	
