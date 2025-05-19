@@ -191,28 +191,15 @@
     
 	// Enviar el correo
 	if (mail($to, $subject, $body, $headers)) {
-		$alerta=[
-			"tipo"=>"simple",
-	        	"titulo"=>"Envio de recibo",
-	        	"texto"=>"Recibo enviado correctamente",
-			"icono"=>"success"
-	        ];
-	        return json_encode($alerta);
+		$envio = 1;
 
 	}else{
-        	$alerta=[
-            		"tipo"=>"simple",
-			"titulo"=>"Ocurrió un error inesperado",
-			"texto"=>"Error al enviar el recibo",
-			"icono"=>"error"
-	        ];
-       		return json_encode($alerta);
-
+        $envio = 0;
     }
     
     chmod($file_path, 0777);
 	unlink($file_path);
-	header("Location: ".APP_URL."pagosRecibo/".$datos['pago_id']."/");
+	header("Location: ".APP_URL."pagosRecibo/".$datos['pago_id']."/$envio/");
 
      //header("Location: ../presupuestos_from.php?idprof=".$idprof."&id=".$cliente_id);
    	// Envio de correo -----------------------------------

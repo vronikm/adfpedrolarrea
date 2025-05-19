@@ -12,18 +12,37 @@
 	$insAlumno = new pagosController();	
 
 	$pagoid=$insLogin->limpiarCadena($url[1]);
+	//$mensaje=$insLogin->limpiarCadena($url[2]);	
+
+	$alerta = "";
+
+	// Capturamos el valor enviado en la URL
+	$envio = $url[2] ?? ""; // <---- Asegúrate que $url esté disponible. $url[2] sería 1 o 0
+
+	if($envio !== ""){
+		if($envio == "1"){
+			$alerta = [
+				"tipo" => "simple",
+				"titulo" => "Correo enviado",
+				"texto" => "El correo fue enviado exitosamente.",
+				"icono" => "success"
+			];
+		} elseif($envio == "0"){
+			$alerta = [
+				"tipo" => "simple",
+				"titulo" => "Error de envío",
+				"texto" => "No se pudo enviar el correo. Por favor, intente nuevamente.",
+				"icono" => "error"
+			];
+		}
+	}
 
 	$datos=$insAlumno->generarReciboPendiente($pagoid);
 	
 	if($datos->rowCount()==1){
 		$datos=$datos->fetch(); 
 
-		if ($datos['transaccion_archivo']!=""){
-			$imagen = APP_URL.'app/views/imagenes/pagos/'.$datos['transaccion_archivo'];
-		}else{
-			$imagen="";
-		} 
-
+		$fecha_recibo = strrev($datos["transaccion_recibo"]);
 		$first12Chars =  strrev(substr($datos["transaccion_recibo"], 0, 12));
 		$nombre_sede  = mb_convert_encoding($datos["escuela_nombre"], 'ISO-8859-1', 'UTF-8');
 		
@@ -294,5 +313,25 @@
 	<!-- AdminLTE App -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/adminlte.min.js"></script>		
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/ajax.js" ></script>
+
+	<!-- fileinput -->
+	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/fileinput/fileinput.js"></script>
+    
+	<script>
+        // Esta función se llama cuando el botón es clickeado
+        function printPage() {
+            window.addEventListener("load", window.print());
+        }
+    </script>
+
+	<?php if($alerta): ?>
+		<script>
+		document.addEventListener("DOMContentLoaded", function() {
+			let alerta = <?php echo json_encode($alerta); ?>;
+			alertas_ajax(alerta); // Usamos tu función de alertas que ya tienes en ajax.js
+		});
+		</script>
+	<?php endif; ?>
+	
   </body>
 </html>

@@ -88,6 +88,6 @@
     // Salto de línea antes de las firmas
     $pdf->Ln(15);
    
-    $pdf->Output("IDV-Alumnos.pdf","I","T");
+    $pdf->Output("ADFPL-Alumnos.pdf","I","T");
 
     
