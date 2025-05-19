@@ -33,9 +33,9 @@ formularios_ajax.forEach(formularios => {
         }
 
         Swal.fire({
-            title: '¿Está seguro?',
-            text: "Desea realizar la acción solicitada",
-            icon: 'question',
+            // title: '¿Está seguro?',
+            text: "¿Desea realizar la acción solicitada?",
+            //icon: 'question',
             showCancelButton: true,
             confirmButtonColor: '#3e80c1',
             cancelButtonColor: '#844c4f',
@@ -127,8 +127,8 @@ function alertas_ajax(alerta) {
             toast: true,
             position: 'top-end',
             showConfirmButton: false,
-            timer: 1000,
-            timerProgressBar: false, // Muestra una barra de progreso
+            timer: 2000,
+            timerProgressBar: true, // Muestra una barra de progreso
             didClose: () => {
                 // Recargar la página cuando se cierra el mensaje
                 location.reload();
@@ -139,9 +139,24 @@ function alertas_ajax(alerta) {
             icon: 'success',
             title: alerta.titulo
         });
-    }
-
-   
+    } else if (alerta.tipo == "mensajes_toast") {
+        var Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true, // Muestra una barra de progreso
+            didClose: () => {
+                // Recargar la página cuando se cierra el mensaje
+                location.reload();
+            }
+        });
+    
+        Toast.fire({
+            icon: alerta.icono,
+            title: alerta.titulo
+        });
+    } 
         
     
         /*
@@ -209,3 +224,41 @@ btn_exit.addEventListener("click", function(e){
     });
 
 });
+
+// Botón enviar correo
+let btn_correo = document.getElementById("btn_correo");
+
+if (btn_correo) {
+    btn_correo.addEventListener("click", function(e) {
+        e.preventDefault();
+
+        Swal.fire({
+            title: '¿Enviar correo?',
+            text: "¿Está seguro de que desea enviar el recibo por correo?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, enviar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                // Mostrar loading
+                Swal.fire({
+                    title: 'Enviando...',
+                    text: 'Por favor espere un momento',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                // Leer URL desde href
+                let url=this.getAttribute("href");
+                window.location.href=url;
+            }
+        });
+    });
+}
+
