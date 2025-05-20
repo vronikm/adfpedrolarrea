@@ -12,7 +12,31 @@
 	$insAlumno = new pagosController();	
 
 	$pagoid=$insLogin->limpiarCadena($url[1]);
+	//$mensaje=$insLogin->limpiarCadena($url[2]);	
 
+	$alerta = "";
+
+	// Capturamos el valor enviado en la URL
+	$envio = $url[2] ?? ""; // <---- Asegúrate que $url esté disponible. $url[2] sería 1 o 0
+
+	if($envio !== ""){
+		if($envio == "1"){
+			$alerta = [
+				"tipo" => "simple",
+				"titulo" => "Correo enviado",
+				"texto" => "El correo fue enviado exitosamente.",
+				"icono" => "success"
+			];
+		} elseif($envio == "0"){
+			$alerta = [
+				"tipo" => "simple",
+				"titulo" => "Error de envío",
+				"texto" => "No se pudo enviar el correo. Por favor, intente nuevamente.",
+				"icono" => "error"
+			];
+		}
+	}
+	
 	$datos=$insAlumno->generarRecibo($pagoid);
 	
 	if($datos->rowCount()==1){
@@ -252,7 +276,7 @@
 										<button type="button" class="btn btn-primary float-right" style="margin-right: 5px;">
 											<i class="fas fa-download"></i> Descargar recibo
 										</button-->
-										<a href="<?php echo APP_URL.'pagosReciboEnvio/'.$pagoid.'/'; ?> " class="btn btn-success btn-sm float-right" style="margin-right: 135px;"> <i class="fas fa-credit-card"></i> Enviar recibo</a>
+										<a href="<?php echo APP_URL.'pagosReciboEnvio/'.$pagoid.'/'; ?> " class="btn btn-success btn-sm float-right" style="margin-right: 135px;" id="btn_correo"> <i class="fas fa-credit-card"></i> Enviar recibo</a>
 
 
 										<a href="<?php echo APP_URL.'pagosReciboPDF/'.$pagoid.'/'; ?> " class="btn btn-dark float-right btn-sm" style="margin-right: 10px;" target="_blank"> <i class="fas fa-print"></i> Ver recibo </a>
@@ -312,7 +336,7 @@
 	<!-- AdminLTE App -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/adminlte.min.js"></script>
 		
-	<script src="<?php echo APP_URL; ?>app/views/dist/js/ajax.js" ></script>
+	<script src="<?php echo APP_URL; ?>app/views/dist/js/ajax.js?v=1.0.5" ></script>
 
 	<!--script src="app/views/dist/js/main.js" ></script-->
 	
@@ -326,6 +350,14 @@
         }
     </script>
 	
+	<?php if($alerta): ?>
+		<script>
+		document.addEventListener("DOMContentLoaded", function() {
+			let alerta = <?php echo json_encode($alerta); ?>;
+			alertas_ajax(alerta); // Usamos tu función de alertas que ya tienes en ajax.js
+		});
+		</script>
+	<?php endif; ?>
 
   </body>
 </html>

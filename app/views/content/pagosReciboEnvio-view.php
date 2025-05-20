@@ -184,10 +184,7 @@
 	$body .= "Content-Disposition: attachment; filename=\"".$file_name."\"\r\n\r\n";
 	$body .= $file_content."\r\n\r\n";
 	$body .= "--".$uid."--";
-    
-    chmod($file_path, 0777);
-	unlink($file_path);
-	header("Location: ".APP_URL."pagosRecibo/".$datos['pago_id']."/");
+
     
 	// Enviar el correo
 	if (mail($to, $subject, $body, $headers)) {
