@@ -17,7 +17,6 @@
 			$empleado_celular			= $this->limpiarCadena($_POST['empleado_celular']);
 			$empleado_direccion			= $this->limpiarCadena($_POST['empleado_direccion']);
 			$empleado_tipopersonalid 	= $this->limpiarCadena($_POST['empleado_tipopersonalid']);
-			$empleado_especialidadid	= $this->limpiarCadena($_POST['empleado_especialidadid']);
 			$empleado_fechaingreso		= $this->limpiarCadena($_POST['empleado_fechaingreso']);
 			$empleado_genero 			= $this->limpiarCadena($_POST['empleado_genero']);
 			$empleado_sueldo			= $this->limpiarCadena($_POST['empleado_sueldo']);			
@@ -416,7 +415,6 @@
 			$empleado_celular			= $this->limpiarCadena($_POST['empleado_celular']);
 			$empleado_direccion			= $this->limpiarCadena($_POST['empleado_direccion']);
 			$empleado_tipopersonalid 	= $this->limpiarCadena($_POST['empleado_tipopersonalid']);
-			$empleado_especialidadid	= $this->limpiarCadena($_POST['empleado_especialidadid']);
 			$empleado_fechaingreso		= $this->limpiarCadena($_POST['empleado_fechaingreso']);
 			$empleado_sueldo			= $this->limpiarCadena($_POST['empleado_sueldo']);
 			$empleado_genero 			= $this->limpiarCadena($_POST['empleado_genero']);
