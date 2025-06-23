@@ -648,6 +648,8 @@
 										LEFT JOIN(
 												SELECT asignahorario_horarioid HORARIOID, count(1) TOTAL
 												FROM asistencia_asignahorario
+												INNER JOIN sujeto_alumno A ON A.alumno_id = asignahorario_alumnoid	
+												WHERE A.alumno_estado = 'A'
 												GROUP BY asignahorario_horarioid
 										)TOTAL ON TOTAL.HORARIOID = AH.horario_id
 									WHERE horario_nombre <> '' ";
@@ -717,6 +719,8 @@
 											LEFT JOIN(
 													SELECT asignahorario_horarioid HORARIOID, count(1) TOTAL
 													FROM asistencia_asignahorario
+													INNER JOIN sujeto_alumno A ON A.alumno_id = asignahorario_alumnoid	
+													WHERE A.alumno_estado = 'A'
 													GROUP BY asignahorario_horarioid
 											)TOTAL ON TOTAL.HORARIOID = AH.horario_id
 									INNER JOIN general_sede on AH.horario_sedeid = sede_id
@@ -1240,14 +1244,14 @@
 
 		public function ListaAlumnosHorario($horarioid){			
 			$tabla="";
-			$consulta_datos = "SELECT 
-										A.alumno_identificacion, 
-										CONCAT(A.alumno_primernombre, ' ',A.alumno_segundonombre) AS NOMBRES,  
-									CONCAT(A.alumno_apellidopaterno, ' ',A.alumno_apellidomaterno) AS APELLIDOS,
-										YEAR(A.alumno_fechanacimiento) AS CATEGORIA, H.*
-								FROM asistencia_asignahorario H
-										INNER JOIN sujeto_alumno A ON A.alumno_id = H.asignahorario_alumnoid
-								WHERE H.asignahorario_horarioid = $horarioid";
+			$consulta_datos = "SELECT A.alumno_identificacion, 
+									  CONCAT(A.alumno_primernombre, ' ',A.alumno_segundonombre) AS NOMBRES,  
+									  CONCAT(A.alumno_apellidopaterno, ' ',A.alumno_apellidomaterno) AS APELLIDOS,
+									  YEAR(A.alumno_fechanacimiento) AS CATEGORIA, H.*
+							   	FROM asistencia_asignahorario H
+								INNER JOIN sujeto_alumno A ON A.alumno_id = H.asignahorario_alumnoid
+								WHERE A.alumno_estado = 'A'
+									and H.asignahorario_horarioid = $horarioid";
 			
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
@@ -1326,7 +1330,7 @@
 										FROM asistencia_asistencia 
 										WHERE asistencia_aniomes = $anio$mes
 									) E ON E.asistencia_alumnoid = H.asignahorario_alumnoid								
-								WHERE H.asignahorario_horarioid = $horarioid
+								WHERE H.asignahorario_horarioid = $horarioid AND A.alumno_estado = 'A'
 								ORDER BY asistencia_dia, APELLIDOS";
 			
 			$datos = $this->ejecutarConsulta($consulta_datos);
