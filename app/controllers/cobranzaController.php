@@ -108,7 +108,7 @@
 
 		public function pensionesValormoraInactivos(){
 			$tabla="";
-			$consulta_datos = "select alumno_repreid as repre_id, sede_nombre, repre_identificacion, REPRE, repre_celular, ALUMNO,
+			$consulta_datos = "SELECT alumno_repreid as repre_id, sede_nombre, repre_identificacion, REPRE, repre_celular, ALUMNO,
                                     SUM(SALDO) + SUM(PENSION) AS TOTAL_MORA
                                      FROM(
                                         SELECT  alumno_repreid, 
@@ -116,7 +116,7 @@
                                                 CONCAT_WS(' ',repre_primernombre, repre_segundonombre, repre_apellidopaterno, repre_apellidomaterno) as REPRE,
                                                 IFNULL(P.SALDO,0) AS SALDO, 
                                                 IFNULL(PEN.TOTAL,0) AS PENSION, 
-PEN.FECHA,
+												PEN.FECHA,
                                                 P.FECHASALDOS,
                                                 FECHATRX.FECHATRX,
                                                 sede_nombre,
@@ -126,7 +126,7 @@ PEN.FECHA,
                                             inner join general_sede on sede_id = alumno_sedeid
                                             LEFT JOIN (
                                                 SELECT 
-                                                pago                                                _alumnoid, alumno_repreid as REPRESALDOS,
+                                                pago_alumnoid, alumno_repreid as REPRESALDOS,
                                                 MAX(pago_fecha) AS FECHASALDOS,
                                                 COUNT(pago_saldo) AS TOTAL, 
                                                 SUM(pago_saldo) AS SALDO
