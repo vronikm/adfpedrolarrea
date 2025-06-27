@@ -1415,8 +1415,9 @@
 									YEAR(A.alumno_fechanacimiento) AS CATEGORIA, H.*
 								FROM asistencia_asignahorario H
 										INNER JOIN sujeto_alumno A ON A.alumno_id = H.asignahorario_alumnoid
-								WHERE H.asignahorario_horarioid = $horarioid 
-								ORDER BY A.alumno_apellidopaterno");	
+								WHERE A.alumno_estado = 'A'
+									and H.asignahorario_horarioid = $horarioid 
+								ORDER BY A.alumno_apellidopaterno");
 			$datos = $this->ejecutarConsulta($consulta_datos);		
 			return $datos;
 		}
