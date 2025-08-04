@@ -1,267 +1,162 @@
 <?php
 	
 	namespace app\models;
-	use \PDO;
+
+	use PDO;
+	use PDOException;
 
 	if(file_exists(__DIR__."/../../config/server.php")){
 		require_once __DIR__."/../../config/server.php";
 	}
 
-	class mainModel{
+class mainModel
+{
+    private $server = DB_SERVER;
+    private $db     = DB_NAME;
+    private $user   = DB_USER;
+    private $pass   = DB_PASS;
 
-		private $server=DB_SERVER;
-		private $db=DB_NAME;
-		private $user=DB_USER;
-		private $pass=DB_PASS;
+    protected function conectar()
+    {
+        try {
+            $conexion = new PDO("mysql:host={$this->server};dbname={$this->db};charset=utf8", $this->user, $this->pass);
+            $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            return $conexion;
+        } catch (PDOException $e) {
+            die("Error de conexión: " . $e->getMessage());
+        }
+    }
 
+    protected function ejecutarConsulta($consulta, $parametros = [])
+    {
+        $sql = $this->conectar()->prepare($consulta);
+        $sql->execute($parametros);
+        return $sql;
+    }
 
-		/*----------  Funcion conectar a BD  ----------*/
-		protected function conectar(){
-			$conexion = new PDO("mysql:host=".$this->server.";dbname=".$this->db,$this->user,$this->pass);
-			$conexion->exec("SET CHARACTER SET utf8");
-			return $conexion;
-		}
+    public function limpiarCadena($cadena)
+    {
+        if (!isset($cadena)) return '';
 
+        // Filtra caracteres HTML peligrosos
+        $cadena = htmlspecialchars(trim($cadena), ENT_QUOTES, 'UTF-8');
 
-		/*----------  Funcion ejecutar consultas  ----------*/
-		protected function ejecutarConsulta($consulta){
-			$sql=$this->conectar()->prepare($consulta);
-			$sql->execute();
-			return $sql;
-		}
+        // Puedes aplicar expresiones para eliminar scripts, pero es mejor no depender solo de listas negras
+        $cadena = preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', '', $cadena);
 
+        return $cadena;
+    }
 
-		/*----------  Funcion limpiar cadenas  ----------*/
-		public function limpiarCadena($cadena){
-			
-			if(isset($cadena)){
+    protected function verificarDatos($filtro, $cadena)
+    {
+        return !preg_match("/^$filtro$/", $cadena);
+    }
 
-				$palabras=["<script>","</script>","<script src","<script type=","SELECT * FROM","SELECT "," SELECT ","DELETE FROM","INSERT INTO","DROP TABLE","DROP DATABASE","TRUNCATE TABLE","SHOW TABLES","SHOW DATABASES","<?php","?>","--","^","<",">","==","=",";","::"];
+    protected function guardarDatos($tabla, $datos)
+    {
+        $campos   = implode(',', array_column($datos, 'campo_nombre'));
+        $marcas   = implode(',', array_column($datos, 'campo_marcador'));
+        $query    = "INSERT INTO $tabla ($campos) VALUES ($marcas)";
+        $sql      = $this->conectar()->prepare($query);
 
-				$cadena=trim($cadena); 			//quitar espacios andes y despues de un string
-				$cadena=stripslashes($cadena);	//quitar la baar invertida del string \
-
-				foreach($palabras as $palabra){
-					$cadena=str_ireplace($palabra, "", $cadena);  //eliminar la injeccion de sql, o palabras
-				}
-
-				$cadena=trim($cadena);
-				$cadena=stripslashes($cadena);
-			}
-			
-			return $cadena;
-		}
-
-		
-		/*----------  Reducir imagen de foto  ----------*/
-		public function resizeImageGD($file, $maxWidth, $maxHeight, $outputFile) {
-			// Obtener las dimensiones originales y el tipo de imagen
-			list($originalWidth, $originalHeight, $imageType) = getimagesize($file);
-		
-			// Crear una nueva imagen desde el archivo subido según el tipo de imagen
-			switch ($imageType) {
-				case IMAGETYPE_JPEG:
-					$image = imagecreatefromjpeg($file);
-					break;
-				case IMAGETYPE_PNG:
-					$image = imagecreatefrompng($file);
-					break;
-				case IMAGETYPE_GIF:
-					$image = imagecreatefromgif($file);
-					break;
-				default:
-					return false; // Tipo de imagen no soportado
-			}
-		
-			// Calcular las nuevas dimensiones manteniendo la relación de aspecto
-			$aspectRatio = $originalWidth / $originalHeight;
-			if ($maxWidth / $maxHeight > $aspectRatio) {
-				$newWidth = round($maxHeight * $aspectRatio);
-				$newHeight = $maxHeight;
-			} else {
-				$newHeight = round($maxWidth / $aspectRatio);
-				$newWidth = $maxWidth;
-			}
-		
-			// Crear una imagen en color verdadero con las nuevas dimensiones
-			$newImage = imagecreatetruecolor($newWidth, $newHeight);
-		
-			// Redimensionar la imagen original a la nueva imagen
-			imagecopyresampled($newImage, $image, 0, 0, 0, 0, $newWidth, $newHeight, $originalWidth, $originalHeight);
-		
-			// Guardar la imagen redimensionada según el tipo de imagen
-			switch ($imageType) {
-				case IMAGETYPE_JPEG:
-					imagejpeg($newImage, $outputFile, 80); // Calidad JPEG del 0 al 100
-					break;
-				case IMAGETYPE_PNG:
-					imagepng($newImage, $outputFile, 8); // Compresión PNG del 0 al 9
-					break;
-				case IMAGETYPE_GIF:
-					imagegif($newImage, $outputFile);
-					break;
-			}
-		
-			// Liberar memoria
-			imagedestroy($image);
-			imagedestroy($newImage);
-		
-			return true;
-		}
-		
-		/*---------- Funcion verificar datos (expresion regular) ----------*/
-		protected function verificarDatos($filtro,$cadena){
-			if(preg_match("/^".$filtro."$/", $cadena)){
-				return false;
-            }else{
-                return true;
-            }
-		}
-
-
-		/*----------  Funcion para ejecutar una consulta INSERT preparada  ----------*/
-		protected function guardarDatos($tabla,$datos){
-
-			$query="INSERT INTO $tabla (";
-
-			$C=0;
-			foreach ($datos as $clave){
-				if($C>=1){ $query.=","; }
-				$query.=$clave["campo_nombre"];
-				$C++;
-			}
-			
-			$query.=") VALUES(";
-
-			$C=0;
-			foreach ($datos as $clave){
-				if($C>=1){ $query.=","; }
-				$query.=$clave["campo_marcador"];
-				$C++;
-			}
-
-			$query.=")";
-			$sql=$this->conectar()->prepare($query);
-
-			foreach ($datos as $clave){
-				$sql->bindParam($clave["campo_marcador"],$clave["campo_valor"]);
-			}
-
-			$sql->execute();
-
-			return $sql;
-		}
-
-
-		/*---------- Funcion seleccionar datos ----------*/
-        public function seleccionarDatos($tipo,$tabla,$campo,$id){
-			$tipo=$this->limpiarCadena($tipo);
-			$tabla=$this->limpiarCadena($tabla);
-			$campo=$this->limpiarCadena($campo);
-			$id=$this->limpiarCadena($id);
-
-            if($tipo=="Unico"){
-                $sql=$this->conectar()->prepare("SELECT * FROM $tabla WHERE $campo=:ID");
-                $sql->bindParam(":ID",$id);
-            }elseif($tipo=="Normal"){
-                $sql=$this->conectar()->prepare("SELECT $campo FROM $tabla");
-            }
-            $sql->execute();
-
-            return $sql;
-		}
-
-
-		/*----------  Funcion para ejecutar una consulta UPDATE preparada  ----------*/
-		protected function actualizarDatos($tabla,$datos,$condicion){
-			
-			$query="UPDATE $tabla SET ";
-
-			$C=0;
-			foreach ($datos as $clave){
-				if($C>=1){ $query.=","; }
-				$query.=$clave["campo_nombre"]."=".$clave["campo_marcador"];
-				$C++;
-			}
-
-			$query.=" WHERE ".$condicion["condicion_campo"]."=".$condicion["condicion_marcador"];
-
-			$sql=$this->conectar()->prepare($query);
-
-			foreach ($datos as $clave){
-				$sql->bindParam($clave["campo_marcador"],$clave["campo_valor"]);
-			}
-
-			$sql->bindParam($condicion["condicion_marcador"],$condicion["condicion_valor"]);
-
-			$sql->execute();
-
-			return $sql;
-		}
-
-
-		/*---------- Funcion eliminar registro ----------*/
-        protected function eliminarRegistro($tabla,$campo,$id){
-            $sql=$this->conectar()->prepare("DELETE FROM $tabla WHERE $campo=:id");
-            $sql->bindParam(":id",$id);
-            $sql->execute();
-            
-            return $sql;
+        foreach ($datos as $campo) {
+            $sql->bindParam($campo["campo_marcador"], $campo["campo_valor"]);
         }
 
+        $sql->execute();
+        return $sql;
+    }
 
-		/*---------- Paginador de tablas ----------*/
-		protected function paginadorTablas($pagina,$numeroPaginas,$url,$botones){
-	        $tabla='<nav class="pagination is-centered is-rounded" role="navigation" aria-label="pagination">';
+    public function seleccionarDatos($tipo, $tabla, $campo, $id = null)
+    {
+        $tabla = preg_replace('/[^a-zA-Z0-9_]/', '', $tabla); // evitar inyección por nombre de tabla
 
-	        if($pagina<=1){
-	            $tabla.='
-	            <a class="pagination-previous is-disabled" disabled >Anterior</a>
-	            <ul class="pagination-list">
-	            ';
-	        }else{
-	            $tabla.='
-	            <a class="pagination-previous" href="'.$url.($pagina-1).'/">Anterior</a>
-	            <ul class="pagination-list">
-	                <li><a class="pagination-link" href="'.$url.'1/">1</a></li>
-	                <li><span class="pagination-ellipsis">&hellip;</span></li>
-	            ';
-	        }
+        if ($tipo === "Unico") {
+            $sql = $this->conectar()->prepare("SELECT * FROM $tabla WHERE $campo = :ID");
+            $sql->bindParam(":ID", $id);
+        } elseif ($tipo === "Normal") {
+            $sql = $this->conectar()->prepare("SELECT $campo FROM $tabla");
+        } else {
+            throw new \Exception("Tipo de consulta no válido.");
+        }
 
+        $sql->execute();
+        return $sql;
+    }
 
-	        $ci=0;
-	        for($i=$pagina; $i<=$numeroPaginas; $i++){
+    protected function actualizarDatos($tabla, $datos, $condicion)
+    {
+        $set = [];
+        foreach ($datos as $campo) {
+            $set[] = "{$campo['campo_nombre']} = {$campo['campo_marcador']}";
+        }
 
-	            if($ci>=$botones){
-	                break;
-	            }
+        $query = "UPDATE $tabla SET " . implode(", ", $set) . " WHERE {$condicion['condicion_campo']} = {$condicion['condicion_marcador']}";
+        $sql   = $this->conectar()->prepare($query);
 
-	            if($pagina==$i){
-	                $tabla.='<li><a class="pagination-link is-current" href="'.$url.$i.'/">'.$i.'</a></li>';
-	            }else{
-	                $tabla.='<li><a class="pagination-link" href="'.$url.$i.'/">'.$i.'</a></li>';
-	            }
+        foreach ($datos as $campo) {
+            $sql->bindParam($campo['campo_marcador'], $campo['campo_valor']);
+        }
 
-	            $ci++;
-	        }
+        $sql->bindParam($condicion['condicion_marcador'], $condicion['condicion_valor']);
+        $sql->execute();
+        return $sql;
+    }
 
+    protected function eliminarRegistro($tabla, $campo, $id)
+    {
+        $sql = $this->conectar()->prepare("DELETE FROM $tabla WHERE $campo = :id");
+        $sql->bindParam(":id", $id);
+        $sql->execute();
+        return $sql;
+    }
 
-	        if($pagina==$numeroPaginas){
-	            $tabla.='
-	            </ul>
-	            <a class="pagination-next is-disabled" disabled >Siguiente</a>
-	            ';
-	        }else{
-	            $tabla.='
-	                <li><span class="pagination-ellipsis">&hellip;</span></li>
-	                <li><a class="pagination-link" href="'.$url.$numeroPaginas.'/">'.$numeroPaginas.'</a></li>
-	            </ul>
-	            <a class="pagination-next" href="'.$url.($pagina+1).'/">Siguiente</a>
-	            ';
-	        }
+    public function resizeImageGD($file, $maxWidth, $maxHeight, $outputFile)
+    {
+        [$originalWidth, $originalHeight, $imageType] = getimagesize($file);
 
-	        $tabla.='</nav>';
-	        return $tabla;
-	    }
-	    
-	}
+        switch ($imageType) {
+            case IMAGETYPE_JPEG:
+                $image = imagecreatefromjpeg($file);
+                break;
+            case IMAGETYPE_PNG:
+                $image = imagecreatefrompng($file);
+                break;
+            case IMAGETYPE_GIF:
+                $image = imagecreatefromgif($file);
+                break;
+            default:
+                return false;
+        }
+
+        $aspectRatio = $originalWidth / $originalHeight;
+        if ($maxWidth / $maxHeight > $aspectRatio) {
+            $newWidth = round($maxHeight * $aspectRatio);
+            $newHeight = $maxHeight;
+        } else {
+            $newHeight = round($maxWidth / $aspectRatio);
+            $newWidth = $maxWidth;
+        }
+
+        $newImage = imagecreatetruecolor($newWidth, $newHeight);
+        imagecopyresampled($newImage, $image, 0, 0, 0, 0, $newWidth, $newHeight, $originalWidth, $originalHeight);
+
+        switch ($imageType) {
+            case IMAGETYPE_JPEG:
+                imagejpeg($newImage, $outputFile, 80);
+                break;
+            case IMAGETYPE_PNG:
+                imagepng($newImage, $outputFile, 8);
+                break;
+            case IMAGETYPE_GIF:
+                imagegif($newImage, $outputFile);
+                break;
+        }
+
+        imagedestroy($image);
+        imagedestroy($newImage);
+
+        return true;
+    }
+
+}

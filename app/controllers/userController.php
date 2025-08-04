@@ -1079,4 +1079,111 @@
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			return $datos;
 		}	
+
+		//03-08-2025
+		public function actualizarClaveUsuarioControlador(){			
+			
+			$usuarioid = $this->limpiarCadena($_POST['usuario_id']);
+			$clave_actual = $this->limpiarCadena($_POST['usuario_clave']);
+			$clave_nueva = $this->limpiarCadena($_POST['usuario_clave_nueva']);
+			$clave_confirmar = $this->limpiarCadena($_POST['usuario_clave_confirmar']);
+
+			# Verificando campos obligatorios #
+		    if($usuarioid=="" || $clave_actual=="" || $clave_nueva=="" || $clave_confirmar==""){
+		    	$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Error",
+					"texto"=>"No has llenado los campos obligatorios",
+					"icono"=>"error"
+				];
+				return json_encode($alerta);
+		        
+		    }
+			
+			# Verificando claves iguales #
+			if($clave_nueva!=$clave_confirmar){
+				$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Error",
+					"texto"=>"Las contraseñas no coinciden, por favor verifique e intente nuevamente",
+					"icono"=>"error"
+				];
+				return json_encode($alerta);
+			}
+
+			# Verificando formato de claves #
+			if($this->verificarDatos("[a-zA-Z0-9$@.-]{7,100}",$clave_nueva) || $this->verificarDatos("[a-zA-Z0-9$@.-]{7,100}",$clave_confirmar)){
+				$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Error",
+					"texto"=>"Las contraseñas no tienen el formato solicitado (7 caracteres mínimo, sin espacios)",
+					"icono"=>"error"
+				];
+				return json_encode($alerta);
+			}
+
+			#Verificar si la clave actual es correcta #
+			$datos = $this->ejecutarConsulta("SELECT usuario_clave FROM seguridad_usuario WHERE usuario_id = '$usuarioid'");
+			if($datos->rowCount()<=0){
+				$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Error",
+					"texto"=>"No hemos encontrado el usuario en el sistema",
+					"icono"=>"error"
+				];
+				return json_encode($alerta);
+			}else{				
+				$datos = $datos->fetch();
+				if(!password_verify($clave_actual, $datos['usuario_clave'])){
+					$alerta=[
+						"tipo"=>"simple",
+						"titulo"=>"Error",
+						"texto"=>"La contraseña actual no es correcta, por favor verifique e intente nuevamente",
+						"icono"=>"error"
+					];
+					return json_encode($alerta);
+				}
+			}
+			
+			$clave_nueva=password_hash($clave_nueva,PASSWORD_BCRYPT,["cost"=>10]);
+			$usuario_datos_up= [							
+				[
+					"campo_nombre"	=> "usuario_clave",
+					"campo_marcador"=> ":Clave",
+					"campo_valor"	=> $clave_nueva					
+				],
+				[				
+					"campo_nombre"	=> "usuario_fechacambioclave",
+					"campo_marcador"=> ":FechaClave",
+					"campo_valor"	=> date("Y-m-d H:i:s")
+				]				
+			];
+			
+			$condicion=[
+				"condicion_campo"=>"usuario_id",
+				"condicion_marcador"=>":Usuarioid",
+				"condicion_valor"=>$usuarioid
+			];
+
+			if($this->actualizarDatos("seguridad_usuario",$usuario_datos_up,$condicion)){		
+				$alerta=[					
+					"tipo"=>"Toast_Success_simple",
+					"titulo"=>"Contraseña actualizada",
+					"texto"=>"la contraseña se actualizó correctamente",
+					"icono"=>"success"
+				];
+								
+			}else{			
+				$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Error",
+					"texto"=>"No hemos podido actualizar la contraseña, por favor intente nuevamente",
+					"icono"=>"error"
+				];
+			}
+
+			return json_encode($alerta);
+			
+		}
+
 	}

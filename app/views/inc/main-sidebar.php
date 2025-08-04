@@ -29,22 +29,7 @@
     <!-- Sidebar -->
     <div class="sidebar">
       <!-- Sidebar user panel (optional) -->
-      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-        <div class="image">
-        <?php
-          if(is_file("app/views/imagenes/fotos/empleado/".$_SESSION['foto'])){
-            echo '<img class="img-circle elevation-2" alt="User Image" src="'.APP_URL.'app/views/imagenes/fotos/empleado/'.$_SESSION['foto'].'">';
-          }else{
-            echo '<img class="img-circle elevation-2" alt="User Image" src="'.APP_URL.'app/views/dist/img/default.png">';
-          }
-        ?>
-
-        </div>
-        <div class="info">
-          <a href="#" class="d-block"><?php echo  $_SESSION['usuario'];?></a>
-        </div>
-      </div>
-
+     
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">               

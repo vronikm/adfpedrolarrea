@@ -159,6 +159,9 @@
 	<!-- Theme style -->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/adminlte.css">
 
+	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/sweetalert2.min.css">
+	<script src="<?php echo APP_URL; ?>app/views/dist/js/sweetalert2.all.min.js" ></script>
+
 	<style>
 		.icon-white {
 			color: white;
@@ -537,12 +540,8 @@
 	<!-- AdminLTE App -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/adminlte.js"></script>
 
-	<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-	<script src="<?php echo APP_URL; ?>app/views/dist/js/pages/dashboard.js"></script>
-
-	<script src="<?php echo APP_URL; ?>app/views/js/ajax.js" ></script>
-	<script src="<?php echo APP_URL; ?>app/views/js/main.js" ></script>	
-	<script src="<?php echo APP_URL; ?>app/views/dist/js/sweetalert2.all.min.js" ></script>
+	<script src="<?php echo APP_URL; ?>app/views/dist/js/ajax.js" ></script>
+	<script src="<?php echo APP_URL; ?>app/views/dist/js/main.js" ></script>
 	<script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
       integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"

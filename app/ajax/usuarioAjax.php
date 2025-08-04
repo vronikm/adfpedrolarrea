@@ -41,6 +41,10 @@
 		if($_POST['modulo_usuario']=="actualizarestado"){
 			echo $insUsuario->actualizarUsuarioEstadoControlador();
 		}
+
+		if($_POST['modulo_usuario']=="CAMBIAR_CLAVE"){
+			echo $insUsuario->actualizarClaveUsuarioControlador();
+		}
 		
 	}else{
 		session_destroy();

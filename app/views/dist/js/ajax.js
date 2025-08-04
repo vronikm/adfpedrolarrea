@@ -139,6 +139,19 @@ function alertas_ajax(alerta) {
             icon: 'success',
             title: alerta.titulo
         });
+    }else if (alerta.tipo == "Toast_Success_simple") {
+        var Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true, // Muestra una barra de progreso            
+        });
+    
+        Toast.fire({
+            icon: 'success',
+            title: alerta.titulo
+        });
     } else if (alerta.tipo == "mensajes_toast") {
         var Toast = Swal.mixin({
             toast: true,
