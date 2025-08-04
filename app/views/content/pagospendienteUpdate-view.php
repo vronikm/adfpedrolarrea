@@ -208,12 +208,29 @@
 													<!-- /.input group -->
 												</div>								
 											</div>
-											<div class="col-md-4">
-												<div class="form-group">
-													<label for="pago_periodo">Periodo(mes/año)</label>															
-													<input type="text" class="form-control" id="pago_periodo" name="pago_periodo" value="<?php echo $datos['transaccion_periodo']; ?>">															
-												</div>								
-											</div>
+										
+
+											<?php
+												if($datos['pago_rubroid'] == 'RPC'){
+													echo '
+														<div class="col-md-4">
+															<div class="form-group">
+															<label for="pago_campeonatoid">Campeonato</label>
+															<select id="pago_campeonatoid" class="form-control select2" name="pago_campeonatoid" disabled>																									
+																'.$insAlumno->listarCampeonatos($datos['pago_campeonatoid']).'
+															</select>	
+															</div>
+														</div>';
+												}else{
+													echo '
+														<div class="col-md-4">
+															<div class="form-group">
+																<label for="pago_periodo">Periodo(mes/año)</label>															
+																<input type="text" class="form-control" id="pago_periodo" name="pago_periodo" value="'.$datos['transaccion_periodo'].'" required>															
+															</div>								
+														</div>';
+												}
+											?>
 											
 											<div class="col-md-4">
 												<div class="form-group">

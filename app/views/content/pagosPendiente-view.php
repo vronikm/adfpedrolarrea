@@ -254,12 +254,27 @@
 													<!-- /.input group -->
 												</div>								
 											</div>
-											<div class="col-md-4">
-												<div class="form-group">
-													<label for="pago_periodo">Periodo(mes/año)</label>															
-													<input type="text" class="form-control" id="pago_periodo" name="pago_periodo" value="<?php echo $datos['pago_periodo']; ?>">															
-												</div>								
-											</div>
+											<?php
+														if($datos['pago_rubroid'] == 'RPC'){
+															echo '
+																<div class="col-md-4">
+																	<div class="form-group">
+																	<label for="pago_campeonatoid">Campeonato</label>
+																	<select id="pago_campeonatoid" class="form-control select2" name="pago_campeonatoid" disabled>																									
+																		'.$insAlumno->listarCampeonatos($datos['pago_campeonatoid']).'
+																	</select>	
+																	</div>
+																</div>';
+														}else{
+															echo '
+																<div class="col-md-4">
+																	<div class="form-group">
+																		<label for="pago_periodo">Periodo(mes/año)</label>															
+																		<input type="text" class="form-control" id="pago_periodo" name="pago_periodo" value="'.$datos['pago_periodo'].'" required>															
+																	</div>								
+																</div>';
+														}
+													?>
 											
 											<div class="col-md-4">
 												<div class="form-group">
@@ -310,7 +325,7 @@
 											<div class="col-md-10">
 												<div class="form-group">
 												<label for="pago_concepto">Detalle</label>
-												<textarea class="form-control" id="pago_concepto" name="pago_concepto" placeholder="Detalle del pago" rows="5" ><?php echo "Pago pendiente del rubro ".$datos['RUBRO']." por el valor de $".$datos['pago_saldo'] ." Dólares"; ?></textarea>
+												<textarea class="form-control" id="pago_concepto" name="pago_concepto" placeholder="Detalle del pago" rows="5" ><?php echo "Pago pendiente por el valor de $".$datos['pago_saldo'] ." Dólares"; ?></textarea>
 												</div>
 											</div>
 
@@ -330,9 +345,9 @@
 												<tr>
 													<th>No</th>
 													<th>Fecha</th>
-													<th>Periodo</th>
-													<th>Saldo</th>
-													<th>Pago</th>											
+													<th>Periodo</th>													
+													<th>Pago</th>	
+													<th>Saldo</th>										
 													<th>Recibo</th>
 													<th style="width:250px;">Opciones</th>																
 												</tr>

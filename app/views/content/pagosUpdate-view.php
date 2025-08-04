@@ -58,6 +58,9 @@
 	<!-- fileinput -->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/fileinput/fileinput.css">
     
+	<!-- Ekko Lightbox -->
+	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/ekko-lightbox/ekko-lightbox.css">
+
 	<style>
 		.errorMSG {
 		  display: none;
@@ -173,7 +176,7 @@
 								<div class="card-body">
 									<div class="tab-content">
 										<div class="active tab-pane" id="pension"> 
-											<form class="FormularioAjax" action="<?php echo APP_URL; ?>app/ajax/pagosAjax.php" method="POST" autocomplete="off" >
+										<form class="FormularioAjax" action="<?php echo APP_URL; ?>app/ajax/pagosAjax.php" method="POST" autocomplete="off" >
 											<input type="hidden" name="modulo_pagos" value="actualizar">											
 											<input type="hidden" name="pago_id" value="<?php echo $pagoid; ?>">
 																	<!-- Post -->
@@ -203,12 +206,30 @@
 															<!-- /.input group -->
 														</div>								
 													</div>
-													<div class="col-md-4">
-														<div class="form-group">
-															<label for="pago_periodo">Periodo(mes/año)</label>															
-															<input type="text" class="form-control" id="pago_periodo" name="pago_periodo" value="<?php echo $datos['pago_periodo']; ?>" required>															
-														</div>								
-													</div>
+
+													<?php
+														if($datos['pago_rubroid'] == 'RPC'){
+															echo '
+																<div class="col-md-4">
+																	<div class="form-group">
+																	<label for="pago_campeonatoid">Campeonato</label>
+																	<select id="pago_campeonatoid" class="form-control select2" name="pago_campeonatoid">																									
+																		'.$insAlumno->listarCampeonatos($datos['pago_campeonatoid']).'
+																	</select>	
+																	</div>
+																</div>';
+														}else{
+															echo '
+																<div class="col-md-4">
+																	<div class="form-group">
+																		<label for="pago_periodo">Periodo(mes/año)</label>															
+																		<input type="text" class="form-control" id="pago_periodo" name="pago_periodo" value="'.$datos['pago_periodo'].'" required>															
+																	</div>								
+																</div>';
+														}
+													?>
+													
+													
 													<div class="col-md-4">
 														<div class="form-group">
 															<label for="pago_valor">Valor</label>
@@ -317,7 +338,10 @@
 		
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/ajax.js" ></script>
 
-	<!--script src="app/views/dist/js/main.js" ></script-->
+	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/fileinput/fileinput.js"></script>    
+
+	<!-- Ekko Lightbox -->
+	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/ekko-lightbox/ekko-lightbox.min.js"></script>
     
 	<script>
 		$(function () {
@@ -399,59 +423,7 @@
 		document.addEventListener('DOMContentLoaded', function () {
 			window.stepper = new Stepper(document.querySelector('.bs-stepper'))
 		})
-
-		// DropzoneJS Demo Code Start
-		Dropzone.autoDiscover = false
-
-		// Get the template HTML and remove it from the doumenthe template HTML and remove it from the doument
-		var previewNode = document.querySelector("#template")
-		previewNode.id = ""
-		var previewTemplate = previewNode.parentNode.innerHTML
-		previewNode.parentNode.removeChild(previewNode)
-
-		var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
-			url: "/target-url", // Set the url
-			thumbnailWidth: 80,
-			thumbnailHeight: 80,
-			parallelUploads: 20,
-			previewTemplate: previewTemplate,
-			autoQueue: false, // Make sure the files aren't queued until manually added
-			previewsContainer: "#previews", // Define the container to display the previews
-			clickable: ".fileinput-button" // Define the element that should be used as click trigger to select files.
-		})
-
-		myDropzone.on("addedfile", function(file) {
-			// Hookup the start button
-			file.previewElement.querySelector(".start").onclick = function() { myDropzone.enqueueFile(file) }
-		})
-
-		// Update the total progress bar
-		myDropzone.on("totaluploadprogress", function(progress) {
-			document.querySelector("#total-progress .progress-bar").style.width = progress + "%"
-		})
-
-		myDropzone.on("sending", function(file) {
-			// Show the total progress bar when upload starts
-			document.querySelector("#total-progress").style.opacity = "1"
-			// And disable the start button
-			file.previewElement.querySelector(".start").setAttribute("disabled", "disabled")
-		})
-
-		// Hide the total progress bar when nothing's uploading anymore
-		myDropzone.on("queuecomplete", function(progress) {
-			document.querySelector("#total-progress").style.opacity = "0"
-		})
-
-		// Setup the buttons for all transfers
-		// The "add files" button doesn't need to be setup because the config
-		// `clickable` has already been specified.
-		document.querySelector("#actions .start").onclick = function() {
-			myDropzone.enqueueFiles(myDropzone.getFilesWithStatus(Dropzone.ADDED))
-		}
-		document.querySelector("#actions .cancel").onclick = function() {
-			myDropzone.removeAllFiles(true)
-		}
-		// DropzoneJS Demo Code End
+		
 	</script>
 	
 	<script>

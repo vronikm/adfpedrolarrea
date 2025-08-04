@@ -212,7 +212,7 @@
 												</tr>		
 												<tr>													
 													<th>Por Concepto de: </th>	
-													<td colspan="3"><?php echo $datos['RUBRO']." ".$datos['pago_periodo'].". ".$datos['transaccion_concepto']; ?></td>																										
+													<td colspan="3"><?php echo $datos['RUBRO']." ".$datos['TORNEO']." ".$datos['pago_periodo'].". ".$datos['transaccion_concepto']; ?></td>																										
 												</tr>	
 												<tr>													
 													<th>Forma de pago: </th>	
@@ -266,7 +266,7 @@
 									<div class="col-12">
                                         <a href="<?php echo APP_URL.'pagospendienteReciboEnvio/'.$pagoid.'/'; ?> " class="btn btn-success btn-sm float-right" style="margin-right: 135px;" id="btn_correo"> <i class="fas fa-credit-card"></i> Enviar recibo</a>                                        
 										<a href="<?php echo APP_URL.'pagospendienteReciboPDF/'.$pagoid.'/'; ?> " class="btn btn-dark float-right btn-sm" style="margin-right: 5px;" target="_blank"> <i class="fas fa-print"></i> Ver recibo</a>
-										<?php include "./app/views/inc/btn_back.php";?>
+										<button class="btn btn-dark btn-sm" onclick="cerrarVentana()">Cerrar</button>
 									</div>
 								</div>
 							</div>
@@ -322,6 +322,10 @@
         function printPage() {
             window.addEventListener("load", window.print());
         }
+
+		function cerrarVentana() {
+			window.close();
+		}
     </script>
 
 	<?php if($alerta): ?>

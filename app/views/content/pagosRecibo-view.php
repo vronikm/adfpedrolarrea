@@ -216,7 +216,7 @@
 												</tr>		
 												<tr>													
 													<th>Por Concepto de: </th>	
-													<td colspan="3"><?php echo $datos['RUBRO']." ".$datos['pago_periodo'].", ".$datos['pago_concepto']; ?></td>																										
+													<td colspan="3"><?php echo $datos['RUBRO']." ".$datos['torneo_nombre']." ".$datos['pago_periodo'].", ".$datos['pago_concepto']; ?></td>																										
 												</tr>	
 												<tr>													
 													<th>Forma de pago: </th>	
@@ -283,7 +283,7 @@
 
 										<!--button class="btn btn-dark float-right" style="margin-right: 5px;" onclick="printPage()" ><i class="fas fa-print"></i>Imprimir recibo</button-->
 										
-										<?php include "./app/views/inc/btn_back.php";?>
+										<button class="btn btn-dark btn-sm" onclick="cerrarVentana()">Cerrar</button>
 
 									</div>
 								</div>
@@ -348,6 +348,10 @@
         function printPage() {
             window.addEventListener("load", window.print());
         }
+
+		function cerrarVentana() {
+			window.close();
+		}
     </script>
 	
 	<?php if($alerta): ?>

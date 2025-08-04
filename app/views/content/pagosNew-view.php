@@ -143,6 +143,9 @@
 
 	<!-- fileinput -->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/fileinput/fileinput.css">
+
+	<!-- Ekko Lightbox -->
+	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/ekko-lightbox/ekko-lightbox.css">
     
 	<style>
 		.oculto{
@@ -267,7 +270,8 @@
 									<ul class="nav nav-pills">
 										<li class="nav-item"><a class="nav-link active" href="#pension" data-toggle="tab">Pensiones</a></li>
 										<li class="nav-item"><a class="nav-link" href="#inscripcion" data-toggle="tab">Inscripción</a></li>
-										<li class="nav-item"><a class="nav-link" href="#uniforme" data-toggle="tab">Nuevo Uniforme</a></li>
+										<li class="nav-item"><a class="nav-link" href="#torneo" data-toggle="tab">Campeonatos</a></li>
+										<li class="nav-item"><a class="nav-link" href="#uniforme" data-toggle="tab">Nuevo Uniforme</a></li>										
 										<li class="nav-item"><a class="nav-link" href="#kit" data-toggle="tab">Adicionales entrenamiento</a></li>									
 										<li class="nav-item"><a class="nav-link" href="#otros" data-toggle="tab">Otros</a></li>									
 									</ul>
@@ -275,6 +279,7 @@
 							
 								<div class="card-body">
 									<div class="tab-content">
+										<!-- /.tab-pane -->
 										<div class="active tab-pane" id="pension"> 
 											<form class="FormularioAjax" action="<?php echo APP_URL; ?>app/ajax/pagosAjax.php" method="POST" autocomplete="off" enctype="multipart/form-data" >
 											<input type="hidden" name="modulo_pagos" value="registrar">											
@@ -315,7 +320,7 @@
 												</div>
 												<div class="col-md-4">
 													<div class="form-group">
-														<label for="pago_valor">Valor</label>
+														<label for="pago_valor">Pago</label>
 														<input type="text" class="pull-right form-control" style="text-align:right;" id="pago_valor" name="pago_valor" placeholder="0.00" pattern="^\d+(\.\d{1,2})?$" <?php echo ' value="'.$rubro_valor.'" '.$disabled; ?>  required>
 													</div>
 												</div>
@@ -404,13 +409,14 @@
 												<table id="example1" class="table table-bordered table-striped table-sm">
 													<thead>
 														<tr>
-															<th>No</th>
+															<th>No</th>															
+															<th>Fecha registro</th>
 															<th>Mes/Año</th>
-															<th>Valor</th>
+															<th>Pago</th>
 															<th>Saldo</th>	
 															<th>Recibo</th>													
 															<th>Estado</th>															
-															<th style="width:300px;">Opciones</th>																
+															<th style="width:280px;">Opciones</th>																
 														</tr>
 													</thead>
 													<tbody>
@@ -421,7 +427,8 @@
 												</table>
 											</div>
 											
-										</div>
+										</div>											
+
 										<!-- /.tab-pane -->
 										<div class="tab-pane" id="inscripcion">
 											<form class="FormularioAjax" action="<?php echo APP_URL; ?>app/ajax/pagosAjax.php" method="POST" autocomplete="off" enctype="multipart/form-data" >
@@ -463,7 +470,7 @@
 													
 													<div class="col-md-4">
 														<div class="form-group">
-															<label for="pago_valor">Valor inscripción</label>
+															<label for="pago_valor">Pago inscripción</label>
 															<input type="text" class="pull-right form-control" style="text-align:right;" id="pago_valor" name="pago_valor" placeholder="0.00" <?php echo ' value="'.$rubro_inscripcion.'" '.$disabled; ?>  required>
 														</div>
 													</div>
@@ -553,13 +560,14 @@
 												<table id="example1" class="table table-bordered table-striped table-sm">
 													<thead>
 														<tr>
-															<th>No</th>
+															<th>No</th>															
+															<th>Fecha registro</th>
 															<th>Mes/Año</th>
-															<th>Valor</th>
-															<th>Saldo</th>														
-															<th>Estado</th>
-															<th>Recibo</th>
-															<th style="width:300px;">Opciones</th>																
+															<th>Pago</th>
+															<th>Saldo</th>	
+															<th>Recibo</th>													
+															<th>Estado</th>															
+															<th style="width:280px;">Opciones</th>																	
 														</tr>
 													</thead>
 													<tbody>
@@ -570,8 +578,139 @@
 												</table>
 											</div>
 										</div>
+										
 										<!-- /.tab-pane -->
+										<div class="tab-pane" id="torneo"> 
+											<form class="FormularioAjax" action="<?php echo APP_URL; ?>app/ajax/pagosAjax.php" method="POST" autocomplete="off" enctype="multipart/form-data" >
+											<input type="hidden" name="modulo_pagos" value="registrarcampeonato">											
+											<input type="hidden" name="pago_alumnoid" value="<?php echo $datos['alumno_id']; ?>">
+											<input type="hidden" name="pago_rubro" value="campeonato">
+																	<!-- Post -->
+											<div class="row">
+												<div class="col-md-4">
+													<div class="form-group campo">
+														<label for="pago_fecha">Fecha de pago campeonato</label>
+														<div class="input-group">
+															<div class="input-group-prepend">
+																<span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+															</div>
+															<input type="date" class="form-control" id="pago_fecha" name="pago_fecha" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask value="<?php echo $fechahoy; ?>" required>
+															
+														</div>
+														<!-- /.input group -->
+													</div>
+												</div>
+												<div class="col-md-4">
+													<div class="form-group">
+														<label for="pago_fecharegistro">Fecha de registro campeonato</label>
+														<div class="input-group">
+															<div class="input-group-prepend">
+																<span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+															</div>
+															<input type="date" class="form-control" id="pago_fecharegistro" name="pago_fecharegistro" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask value="<?php echo $fechahoy; ?>" required>
+														</div>
+														<!-- /.input group -->
+													</div>								
+												</div>
+												<div class="col-md-4">
+													<div class="form-group">
+													<label for="pago_campeonatoid">Campeonato</label>
+													<select id="pago_campeonatoid" class="form-control select2" name="pago_campeonatoid" <?php echo $disabled; ?>>																									
+														<?php echo $insAlumno->listarCampeonatos(); ?>
+													</select>	
+													</div>
+												</div>
+												<div class="col-md-4">
+													<div class="form-group">
+														<label for="pago_valor">Pago campeonato</label>
+														<input type="text" class="pull-right form-control" style="text-align:right;" id="pago_valor" name="pago_valor" placeholder="0.00" pattern="^\d+(\.\d{1,2})?$" value="" required>
+													</div>
+												</div>
 
+												<div class="col-md-4">
+													<div class="form-group">
+														<label for="pago_saldo">Saldo campeonato</label>
+														<input type="text" class="form-control" style="text-align:right;" id="pago_saldo" name="pago_saldo" placeholder="0.00" value="0.00"; >
+													</div>
+												</div>
+												
+												<div class="col-md-4">
+													<div class="form-group">
+													<label for="pago_formapagoid">Forma de pago campeonato</label>
+													<select class="form-control select2" id="pago_formapagoid" name="pago_formapagoid">																									
+														<?php echo $insAlumno->listarOptionPago(); ?>
+													</select>	
+													</div>
+												</div>
+												<div class="container-fluid">
+													<div class="row mb-2">
+														<div class="col-md-2">
+															<div class="form-group">
+																<label for="pago_archivo">Imagen Pago</label>		
+																<div class="input-group">											
+																	<div class="fileinput fileinput-new" data-provides="fileinput">
+																	<div class="fileinput-new thumbnail" style="width: 130px; height: 158px;" data-trigger="fileinput"><img src="" id="miImagen"></div>
+																			<div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 130px; max-height: 158px"></div>
+																		<div>
+																			<span class="bton bton-white bton-file">
+																				<span class="fileinput-new">Subir Pago</span>
+																				<span class="fileinput-exists">Cambiar</span>
+																				<input type="file" name="pago_archivo" id="pago_archivo">
+																			</span>
+																			<a href="#" class="bton bton-orange fileinput-exists" data-dismiss="fileinput">X</a>
+																		</div>
+																	</div>
+																</div>		
+															</div>
+														<!-- /.form-group -->	
+														</div>
+														<div class="col-md-10">
+															<div class="col-md-12">
+																<div class="form-group">
+																<label for="pago_concepto">Detalle campeonato</label>
+																<textarea class="form-control" id="pago_concepto" name="pago_concepto" placeholder="Detalle del pago" rows="3"></textarea>
+																</div>
+															</div>															
+														</div>														
+													</div>
+												</div>
+											</div>		
+																					
+											<!-- /.post -->
+											<div class="card-footer">						
+												<button type="submit" class="btn btn-success btn-sm">Guardar</button>
+												<button type="reset" class="btn btn-dark btn-sm">Limpiar</button>						
+											</div>
+											</form>
+
+											<div class="tab-custom-content">
+												<p class="lead mb-0">Pagos realizados de campeonatos</p>
+											</div>
+											<div class="tab-content" id="custom-content-above-tabContent">
+												<table id="example1" class="table table-bordered table-striped table-sm">
+													<thead>
+														<tr>
+															<th>No</th>															
+															<th>Fecha registro</th>		
+															<th>Campeonato</th>													
+															<th>Pago</th>
+															<th>Saldo</th>
+															<th>Recibo</th>													
+															<th>Estado</th>															
+															<th style="width:280px;">Opciones</th>																
+														</tr>
+													</thead>
+													<tbody>
+														<?php 
+															echo $insAlumno->listarPagosRubro($alumno,'RPC'); 
+														?>								
+													</tbody>
+												</table>
+											</div>
+											
+										</div>
+
+										<!-- /.tab-pane -->
 										<div class="tab-pane" id="uniforme">
 											<form class="FormularioAjax" action="<?php echo APP_URL; ?>app/ajax/pagosAjax.php" method="POST" autocomplete="off" enctype="multipart/form-data" >
 											<input type="hidden" name="modulo_pagos" value="registraruniforme">											
@@ -621,7 +760,7 @@
 													
 													<div class="col-md-4">
 														<div class="form-group">
-															<label for="pago_valor">Valor uniforme</label>
+															<label for="pago_valor">Pago uniforme</label>
 															<input type="text" class="pull-right form-control" style="text-align:right;" id="pago_valor" name="pago_valor" placeholder="0.00" required>
 														</div>
 													</div>
@@ -685,12 +824,14 @@
 													<thead>
 														<tr>
 															<th>No</th>
-															<th>Mes/Año</th>
-															<th>Valor</th>
-															<th>Saldo</th>														
-															<th>Estado</th>
+															<th>Fecha registro</th>
+															<th>Periodo</th>
+															<th>Talla</th>
+															<th>Pago</th>
+															<th>Saldo</th>															
 															<th>Recibo</th>
-															<th style="width:300px;">Opciones</th>																
+															<th>Estado</th>
+															<th style="width:280px;">Opciones</th>																
 														</tr>
 													</thead>
 													<tbody>
@@ -701,9 +842,10 @@
 												</table>
 											</div>											
 										</div>
+
 										<!-- /.tab-pane -->										
 										<div class="tab-pane" id="kit">
-												<form class="FormularioAjax" action="<?php echo APP_URL; ?>app/ajax/pagosAjax.php" method="POST" autocomplete="off" enctype="multipart/form-data" >
+											<form class="FormularioAjax" action="<?php echo APP_URL; ?>app/ajax/pagosAjax.php" method="POST" autocomplete="off" enctype="multipart/form-data" >
 											<input type="hidden" name="modulo_pagos" value="registrar">											
 											<input type="hidden" name="pago_alumnoid" value="<?php echo $datos['alumno_id']; ?>">
 											<input type="hidden" name="pago_rubro" value="kit">
@@ -742,7 +884,7 @@
 													
 													<div class="col-md-4">
 														<div class="form-group">
-															<label for="pago_valor">Valor accesorio entrenamiento</label>
+															<label for="pago_valor">Pago accesorio entrenamiento</label>
 															<input type="text" class="pull-right form-control" style="text-align:right;" id="pago_valor" name="pago_valor" placeholder="0.00" required>
 														</div>
 													</div>
@@ -806,11 +948,12 @@
 													<thead>
 														<tr>
 															<th>No</th>
-															<th>Mes/Año</th>
-															<th>Valor</th>
+															<th>Fecha registro</th>		
+															<th>Periodo</th>													
+															<th>Pago</th>
 															<th>Saldo</th>														
-															<th>Estado</th>
 															<th>Recibo</th>
+															<th>Estado</th>
 															<th style="width:300px;">Opciones</th>																
 														</tr>
 													</thead>
@@ -822,8 +965,8 @@
 												</table>
 											</div>	
 										</div>
-										<!-- /.tab-pane -->
-										
+
+										<!-- /.tab-pane -->										
 										<div class="tab-pane" id="otros">
 											<form class="FormularioAjax" action="<?php echo APP_URL; ?>app/ajax/pagosAjax.php" method="POST" autocomplete="off" enctype="multipart/form-data" >
 											<input type="hidden" name="modulo_pagos" value="registrar">											
@@ -864,7 +1007,7 @@
 													
 													<div class="col-md-4">
 														<div class="form-group">
-															<label for="pago_valor">Valor Otros</label>
+															<label for="pago_valor">Pago Otros</label>
 															<input type="text" class="pull-right form-control" style="text-align:right;" id="pago_valor" name="pago_valor" placeholder="0.00" required>
 														</div>
 													</div>
@@ -929,11 +1072,12 @@
 													<thead>
 														<tr>
 															<th>No</th>
-															<th>Mes/Año</th>
-															<th>Valor</th>
+															<th>Fecha registro</th>
+															<th>Periodo</th>
+															<th>Pago</th>
 															<th>Saldo</th>														
-															<th>Estado</th>															
 															<th>Recibo</th>
+															<th>Estado</th>		
 															<th style="width:300px;">Opciones</th>																
 														</tr>
 													</thead>
@@ -945,7 +1089,7 @@
 												</table>
 											</div>											
 										</div>
-										<!-- /.tab-pane -->										
+																			
 									</div>
 									<!-- /.tab-content -->
 								</div><!-- /.card-body -->
@@ -995,7 +1139,9 @@
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/adminlte.min.js"></script>		
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/ajax.js" ></script>	
 	<!-- fileinput -->
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/fileinput/fileinput.js"></script>    
+	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/fileinput/fileinput.js"></script>  
+	
+	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/ekko-lightbox/ekko-lightbox.min.js"></script>
 		
 	<script>
 		$(document).ready(function () {
@@ -1020,5 +1166,105 @@
 			});
 		});		
 	</script>
+
+	<script>	
+		$(function () {
+			$(document).on('click', '[data-toggle="lightbox"]', function(event) {
+			event.preventDefault();
+			$(this).ekkoLightbox({
+				alwaysShowClose: true
+			});
+			});
+
+			$('.filter-container').filterizr({gutterPixels: 3});
+			$('.btn[data-filter]').on('click', function() {
+			$('.btn[data-filter]').removeClass('active');
+			$(this).addClass('active');
+			});
+		})
+	</script>
+
+	<script>
+		$(function () {
+			//Initialize Select2 Elements
+			$('.select2').select2()
+
+			//Initialize Select2 Elements
+			$('.select2bs4').select2({
+			theme: 'bootstrap4'
+			})
+
+			//Datemask dd/mm/yyyy
+			$('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+			//Datemask2 mm/dd/yyyy
+			$('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
+			//Money Euro
+			$('[data-mask]').inputmask()
+
+			//Date picker
+			$('#reservationdate').datetimepicker({
+				format: 'L'
+			});
+
+			//Date and time picker
+			$('#reservationdatetime').datetimepicker({ icons: { time: 'far fa-clock' } });
+
+			//Date range picker
+			$('#reservation').daterangepicker()
+			//Date range picker with time picker
+			$('#reservationtime').daterangepicker({
+			timePicker: true,
+			timePickerIncrement: 30,
+			locale: {
+				format: 'MM/DD/YYYY hh:mm A'
+			}
+			})
+			//Date range as a button
+			$('#daterange-btn').daterangepicker(
+			{
+				ranges   : {
+				'Today'       : [moment(), moment()],
+				'Yesterday'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+				'Last 7 Days' : [moment().subtract(6, 'days'), moment()],
+				'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+				'This Month'  : [moment().startOf('month'), moment().endOf('month')],
+				'Last Month'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+				},
+				startDate: moment().subtract(29, 'days'),
+				endDate  : moment()
+			},
+			function (start, end) {
+				$('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+			}
+			)
+
+			//Timepicker
+			$('#timepicker').datetimepicker({
+			format: 'LT'
+			})
+
+			//Bootstrap Duallistbox
+			$('.duallistbox').bootstrapDualListbox()
+
+			//Colorpicker
+			$('.my-colorpicker1').colorpicker()
+			//color picker with addon
+			$('.my-colorpicker2').colorpicker()
+
+			$('.my-colorpicker2').on('colorpickerChange', function(event) {
+			$('.my-colorpicker2 .fa-square').css('color', event.color.toString());
+			})
+
+			$("input[data-bootstrap-switch]").each(function(){
+			$(this).bootstrapSwitch('state', $(this).prop('checked'));
+			})
+
+		})
+		// BS-Stepper Init
+		document.addEventListener('DOMContentLoaded', function () {
+			window.stepper = new Stepper(document.querySelector('.bs-stepper'))
+		})		
+	</script>
+	
   </body>
 </html>
