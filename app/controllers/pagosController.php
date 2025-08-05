@@ -1477,19 +1477,25 @@
 				$estado = ' Justificado';
 				$class = 'class="text-primary"';
 			}
+
+			if ($rows['transaccion_archivo']!=""){
+					$imagen = APP_URL.'app/views/imagenes/pagos/'.$rows['transaccion_archivo'];
+			}else{
+				$imagen = APP_URL.'app/views/dist/img/sinpago.jpg';
+			}
 				
 			$tabla.='
 				<tr '.$class.'>
 					<td>'.$rows['fila_numero'].'</td>
 					<td>'.$rows['transaccion_fecha'].'</td>
 					<td>'.$rows['transaccion_periodo'].'</td>
-					<td>'.$rows['transaccion_valorcalculado'].'</td>					
-					<td>'.$rows['transaccion_valor'].'</td>			
+					<td><a href="'.$imagen.'" data-toggle="lightbox" data-title="Pago" data-gallery="gallery">'.$rows['transaccion_valor'].'</a></td>				
+					<td>'.$rows['transaccion_valorcalculado'].'</td>	
 					<td>'.$rows['transaccion_recibo'].'</td>	
 					<td>
 						<form class="FormularioAjax" action="'.APP_URL.'app/ajax/pagosAjax.php" method="POST" autocomplete="off" >
 							<input type="hidden" name="modulo_pagos" value="eliminarpendiente">
-							<input type="hidden" name="transaccion_id" value="'.$rows['transaccion_id'].'">		
+							<input type="hidden" name="transaccion_id" value="'.$rows['transaccion_id'].'">	
 							<input type="hidden" name="transaccion_pagoid" value="'.$rows['transaccion_pagoid'].'">						
 							<button type="submit" class="btn float-right btn-danger btn-sm" style="margin-right: 5px;">Eliminar</button>
 						</form>							
