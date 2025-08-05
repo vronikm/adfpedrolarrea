@@ -12,7 +12,11 @@
 	}
 	
 	
-	$fechahoy = date('Y-m-d');	
+	if(isset($_POST['fecha'])){
+		$fechahoy =  $insAlumno->limpiarCadena($_POST['fecha']);		
+	} ELSE{
+		$fechahoy = date('Y-m-d');		
+	}	
 ?>
 
 <!DOCTYPE html>
@@ -41,11 +45,6 @@
   <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
 
-		<!-- Preloader -->
-		<!--?php require_once "app/views/inc/preloader.php"; ?-->
-		<!-- /.Preloader -->
-
-      	<!-- Navbar -->	
 		<nav class="main-header navbar navbar-expand navbar-white navbar-light">
 			<!-- Left navbar links -->
 			<ul class="navbar-nav">
@@ -53,21 +52,40 @@
 					<a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
 				</li>
 				<form action="<?php echo APP_URL."asistenciaAlumno/$horario_id" ?>" method="POST" autocomplete="off" enctype="multipart/form-data" >
-				<div class="container-fluid">
-				<?php 
+				<div class="container-fluid">					
+					<div class="col-xm-6">		
+						<li class="nav-item d-sm-inline-block">
+							<div class="card-comment">											
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+									</div>
+									<?php 
+										if($_SESSION['rol']!= 1 && $_SESSION['rol']!= 2){
+											echo '<input class="form-control" value="'.$fechahoy.'" disabled>';
+											echo '<input type="hidden" name="fecha" value="'.$fechahoy.'">';
+										}else{
+											echo '<input type="date" class="form-control" id="fecha" name="fecha" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask value="'.$fechahoy.'" required>
+											  <span class="input-group-append">
+												<button type="submit" class="btn btn-info btn-flat">Generar lista</button>
+											</span>
+											';
+										}
+									?>							
+								</div>								
+							</div>				
+						</li>
+					</div>
 					
-						$fechahoy = date('Y-m-d');	
-											echo "La fecha de hoy es: ".$fechahoy;
-									
-										?>	
+					
 				</div>
+					
 				</form>	
 				
 			</ul>
 
 			 <!-- Right navbar links -->
 		</nav>
-	
     	<!--?php require_once "app/views/inc/navbar.php"; ?-->
       	<!-- /.navbar -->
 
@@ -98,10 +116,12 @@
 								</tr>
 							</thead>
 							<tbody>
-								<?php 
-																				
+								<?php 								
+									if(isset($_POST['fecha'])){												
 										echo $insAlumno->ListadoAlumnos($horarioSede["horario_id"],$fechahoy);		
-																		
+									}else{
+										echo $insAlumno->ListadoAlumnos($horarioSede["horario_id"], date('Y-m-d'));		
+									}										
 								?>								
 							</tbody>	
 						</table>	
@@ -195,6 +215,45 @@
 			window.close();
 		}
     </script>
+
+	<script>
+		// NUEVO: Evento para Toma de Asistencia
+		$(document).on('click', '.btn-asistencia', function() {
+			var estado = $(this).data('estado');
+			var alumno_id = $(this).data('alumnoid');
+			var fecha = $(this).data('fecha');
+			var boton = $(this);
+
+			$.ajax({
+				type: 'POST',
+				url: '<?php echo APP_URL; ?>app/ajax/asistenciaAjax.php',
+				data: {
+					modulo_asistencia: 'asistencia',
+					estado: estado,
+					fecha: fecha,
+					alumno_id: alumno_id
+				},
+				beforeSend: function() {
+					boton.prop('disabled', true);
+				},
+				success: function(response) {
+					// Puedes mostrar un toast, cambiar color, etc.
+					$('.btn-asistencia[data-alumnoid="' + alumno_id + '"]').removeClass('btn-info').addClass('btn-dark'); // Reset buttons
+					boton.removeClass('btn-dark').addClass('btn-info'); // Highlight selected
+
+					// Si quieres mostrar un mensaje de éxito:
+					// alert("Asistencia guardada!");
+				},
+				error: function() {
+					alert('Error al registrar asistencia.');
+				},
+				complete: function() {
+					boton.prop('disabled', false);
+				}
+			});
+		});
+		
+	</script>
 
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/ajax.js" ></script>
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/main.js" ></script>
