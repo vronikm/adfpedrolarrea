@@ -1331,7 +1331,7 @@
 										WHERE asistencia_aniomes = $anio$mes
 									) E ON E.asistencia_alumnoid = H.asignahorario_alumnoid								
 								WHERE H.asignahorario_horarioid = $horarioid AND A.alumno_estado = 'A'
-								ORDER BY asistencia_dia, APELLIDOS";
+								ORDER BY APELLIDOS";
 			
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
