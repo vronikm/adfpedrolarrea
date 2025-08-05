@@ -1337,63 +1337,36 @@
 			$datos = $datos->fetchAll();
 			foreach($datos as $rows){
 				$btn_j = $btn_f = $btn_a = $btn_p = 'btn-dark';
-			switch ($rows['asistencia_dia']) {
-				case 'J':
-					$btn_j = 'btn-info';
-					break;
-				case 'F':
-					$btn_f = 'btn-info';
-					break;
-				case 'A':
-					$btn_a = 'btn-info';
-					break;
-				case 'P':
-					$btn_p = 'btn-info';
-					break;
-				default:
-					$btn_j = $btn_f = $btn_a = $btn_p = 'btn-dark';
-					$rows['asistencia_dia'] = 'NR';
-					break;
-			}	
+				switch ($rows['asistencia_dia']) {
+					case 'J':
+						$btn_j = 'btn-info';
+						break;
+					case 'F':
+						$btn_f = 'btn-info';
+						break;
+					case 'A':
+						$btn_a = 'btn-info';
+						break;
+					case 'P':
+						$btn_p = 'btn-info';
+						break;
+					default:
+						$btn_j = $btn_f = $btn_a = $btn_p = 'btn-dark';
+						$rows['asistencia_dia'] = 'NR';
+						break;
+				}	
 				
-				$tabla.='					
-					<tr>
-						<form class="FormularioAjax" action="'.APP_URL.'app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" data-recargar-directo>
-						<td>'.$rows['CATEGORIA'].'</td>
-						<td><input type="hidden" name="asignahorario_alumnoid" value="'.$rows['asignahorario_alumnoid'].'">'.$rows['APELLIDOS'].' '.$rows['NOMBRES'].'</td>
-											
-						<td style="width: 220px;">							
-							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" data-recargar-directo>
-								<input type="hidden" name="modulo_asistencia" value="asistencia">
-								<input type="hidden" name="estado" value="J">
-								<input type="hidden" name="fecha" value="'.$fecha_formateada.'">
-								<input type="hidden" name="alumno_id" value="'.$rows['alumno_id'].'">						
-								<button type="submit" class="btn float-right '.$btn_j.' btn-xs" style="margin-right: 5px;"">Justificado</button>
-							</form>
-							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" data-recargar-directo>
-								<input type="hidden" name="modulo_asistencia" value="asistencia">
-								<input type="hidden" name="estado" value="F">
-								<input type="hidden" name="fecha" value="'.$fecha_formateada.'">
-								<input type="hidden" name="alumno_id" value="'.$rows['alumno_id'].'">						
-								<button type="submit" class="btn float-right '.$btn_f.' btn-xs" style="margin-right: 5px;"">Falta</button>
-							</form>
-							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" data-recargar-directo>
-								<input type="hidden" name="modulo_asistencia" value="asistencia">	
-								<input type="hidden" name="estado" value="A">
-								<input type="hidden" name="fecha" value="'.$fecha_formateada.'">
-								<input type="hidden" name="alumno_id" value="'.$rows['alumno_id'].'">						
-								<button type="submit" class="btn float-right '.$btn_a.' btn-xs" style="margin-right: 5px;"">Atraso</button>
-							</form>
-							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" data-recargar-directo>
-								<input type="hidden" name="modulo_asistencia" value="asistencia">	
-								<input type="hidden" name="estado" value="P">
-								<input type="hidden" name="fecha" value="'.$fecha_formateada.'">
-								<input type="hidden" name="alumno_id" value="'.$rows['alumno_id'].'">						
-								<button type="submit" class="btn float-right '.$btn_p.' btn-xs" style="margin-right: 5px;"">Presente</button>
-							</form>
-						</td>						
-					</tr>
-					';
+				$tabla .= '					
+							<tr>
+								<td>'.$rows['CATEGORIA'].'</td>
+								<td>'.$rows['APELLIDOS'].' '.$rows['NOMBRES'].'</td>
+								<td style="width: 220px;">
+									<button type="button" class="btn '.$btn_p.' btn-xs btn-asistencia" data-estado="P" data-alumnoid="'.$rows['alumno_id'].'" data-fecha="'.$fecha_formateada.'">Presente</button>
+									<button type="button" class="btn '.$btn_a.' btn-xs btn-asistencia" data-estado="A" data-alumnoid="'.$rows['alumno_id'].'" data-fecha="'.$fecha_formateada.'">Atraso</button>
+									<button type="button" class="btn '.$btn_f.' btn-xs btn-asistencia" data-estado="F" data-alumnoid="'.$rows['alumno_id'].'" data-fecha="'.$fecha_formateada.'">Falta</button>
+									<button type="button" class="btn '.$btn_j.' btn-xs btn-asistencia" data-estado="J" data-alumnoid="'.$rows['alumno_id'].'" data-fecha="'.$fecha_formateada.'">Justificado</button>								
+								</td>
+							</tr>';
 			}
 			return $tabla;			
 		}
