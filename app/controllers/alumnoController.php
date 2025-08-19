@@ -781,26 +781,6 @@
 			return $datos;
 		}
 
-		public function listarOptionParentesco($cemer_parentesco){
-			$option="";
-
-			$consulta_datos="SELECT C.catalogo_valor, C.catalogo_descripcion 
-								FROM general_tabla_catalogo C
-								INNER JOIN general_tabla T on T.tabla_id = C.catalogo_tablaid
-								WHERE T.tabla_nombre = 'parentesco'";	
-					
-			$datos = $this->ejecutarConsulta($consulta_datos);
-			$datos = $datos->fetchAll();
-			foreach($datos as $rows){
-				if($cemer_parentesco == $rows['catalogo_valor']){
-					$option.='<option value='.$rows['catalogo_valor'].' selected="selected">'.$rows['catalogo_descripcion'].'</option>';	
-				}else{
-					$option.='<option value='.$rows['catalogo_valor'].'>'.$rows['catalogo_descripcion'].'</option>';	
-				}
-			}
-			return $option;
-		}
-
 		/*----------  Controlador eliminar alumno  ----------*/
 		public function actualizarEstadoAlumnoControlador(){
 
@@ -1922,11 +1902,11 @@
 			$consulta_repre = "SELECT repre_identificacion IDENTIFICACION, 
 									concat(repre_primernombre, ' ', repre_segundonombre, ' ', repre_apellidopaterno, ' ', repre_apellidomaterno) AS REPRESENTANTE,
 									catalogo_descripcion PARENTESCO, repre_direccion, repre_correo, repre_celular
-									FROM sujeto_alumno, alumno_representante, general_tabla, general_tabla_catalogo
-									WHERE alumno_repreid = repre_id
-										and tabla_id = catalogo_tablaid
-										and repre_parentesco = catalogo_valor
-										and alumno_id =  ".$alumnoid;			
+									FROM alumno_representante
+									LEFT JOIN sujeto_alumno on alumno_repreid = repre_id
+									LEFT JOIN general_tabla_catalogo ON repre_parentesco = catalogo_valor
+									LEFT JOIN general_tabla ON tabla_id = catalogo_tablaid        
+									WHERE alumno_id =  ".$alumnoid;			
 			$datos = $this->ejecutarConsulta($consulta_repre);		
 			return $datos;
 		}
@@ -2010,8 +1990,8 @@
 			return $option;
 		}
 		
-		public function listarCatalogoParentesco(){
-			$option="";
+		public function listarCatalogoParentesco($cemer_parentesco){
+			$option ='<option value=0> Seleccione una opción</option>';
 
 			$consulta_datos="SELECT C.catalogo_valor, C.catalogo_descripcion 
 								FROM general_tabla_catalogo C
@@ -2021,7 +2001,11 @@
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
 			foreach($datos as $rows){
-				$option.='<option value='.$rows['catalogo_valor'].'>'.$rows['catalogo_descripcion'].'</option>';	
+				if($cemer_parentesco == $rows['catalogo_valor']){
+					$option.='<option value='.$rows['catalogo_valor'].' selected="selected">'.$rows['catalogo_descripcion'].'</option>';
+				}else{
+					$option.='<option value='.$rows['catalogo_valor'].'>'.$rows['catalogo_descripcion'].'</option>';	
+				}	
 			}
 			return $option;
 		}		

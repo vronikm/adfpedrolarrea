@@ -6,6 +6,7 @@
 	$insAlumno = new alumnoController();
 	
 	$repreid=$insAlumno->limpiarCadena($url[1]);
+	$cemer_parentesco='';
 ?>
 
 <!DOCTYPE html>
@@ -376,7 +377,7 @@
 												<div class="form-group">
 													<label for="cemer_parentesco">Parentesco</label>
 													<select class="form-control select2" style="width: 100%;" id="cemer_parentesco" name="cemer_parentesco">
-														<?php echo $insAlumno->listarCatalogoParentesco(); ?>
+														<?php echo $insAlumno->listarCatalogoParentesco($cemer_parentesco); ?>
 													</select>
 												</div> 
 											</div>
