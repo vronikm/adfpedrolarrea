@@ -596,12 +596,12 @@
 
 					$this->guardarDatos("asistencia_asignahorario",$asignacion_horario_reg);
 				}else{
-					return json_encode($alerta=[
-					"tipo"=>"simple",
-					"titulo"=>"Ocurrió un error",
-					"texto"=>"No ha asignado un horario de entrenamiento",
-					"icono"=>"error"
-					])	;
+					$alerta=[
+						"tipo"=>"simple",
+						"titulo"=>"Ocurrió un error",
+						"texto"=>"No ha asignado un horario de entrenamiento",
+						"icono"=>"error"
+					];
 				}
 
 			}else{				
