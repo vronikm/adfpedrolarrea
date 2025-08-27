@@ -579,7 +579,7 @@
 				/*---------------Actulizar horario de entrenamiento---------------------*/
 				$horario_id = $this->limpiarCadena($_POST['horarioid']);
 				
-				if($horario_id!="" || $alumnoid!=""){
+				if($horario_id!="" && $alumnoid!=""){
 
 					$asignacion_horario_reg = [
 						[
