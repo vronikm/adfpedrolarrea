@@ -603,6 +603,7 @@
 						"icono"=>"error"
 					];
 				}
+				return json_encode($alerta);
 
 			}else{				
 				if(is_file($img_dir.$foto)){
