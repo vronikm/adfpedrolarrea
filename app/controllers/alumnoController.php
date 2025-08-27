@@ -8,7 +8,7 @@
 		/*----------  Controlador registrar alumno  ----------*/		
 		public function registrarAlumnoControlador(){						
 			/*---------------Variables para el registro del tab del alumno----------------*/
-			$alumno_repreid 			= $this->limpiarCadena($_POST['alumno_repreid']);
+			$alumno_repreid 			= intval($_POST['alumno_repreid'] ?? 0);
 			$alumno_identificacion 		= $this->limpiarCadena($_POST['alumno_identificacion']);
 			$alumno_apellidopaterno 	= $this->limpiarCadena($_POST['alumno_apellido1']);
 			$alumno_apellidomaterno 	= $this->limpiarCadena($_POST['alumno_apellido2']);

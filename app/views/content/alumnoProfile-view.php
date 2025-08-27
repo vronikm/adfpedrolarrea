@@ -51,7 +51,15 @@
 		$repre_direccion	  = $representante['repre_direccion'];
 		$repre_correo		  = $representante['repre_correo'];
 		$repre_celular	  	  = $representante['repre_celular'];
+	}else{	
+		$repre_identificacion = "No registrado";
+		$repre_nombre 		  = "No registrado";
+		$repre_parentesco	  = "No registrado";
+		$repre_direccion	  = "No registrado";
+		$repre_correo		  = "No registrado";
+		$repre_celular	  	  = "No registrado";
 	}
+
 
 	$datosmedic=$insAlumno->seleccionarDatos("Unico","alumno_infomedic","infomedic_alumnoid",$alumnoid);
 	if($datosmedic->rowCount()==1){
