@@ -5,18 +5,22 @@
 	$alumnosActivosSedeJipiro=$insDashboard->obtenerAlumnosActivos(1);
 	$alumnosActivosSedeCantera=$insDashboard->obtenerAlumnosActivos(2);
 	$alumnosActivosSedeForest=$insDashboard->obtenerAlumnosActivos(3);
+	$alumnosActivosSedeColArq=$insDashboard->obtenerAlumnosActivos(4);
 
 	$alumnosInactivosSedeJipiro=$insDashboard->obtenerAlumnosInactivos(1);
 	$alumnosInactivosSedeCantera=$insDashboard->obtenerAlumnosInactivos(2);
 	$alumnosInactivosSedeForest=$insDashboard->obtenerAlumnosInactivos(3);
+	$alumnosInactivosSedeColArq=$insDashboard->obtenerAlumnosInactivos(4);
 
 	$pagosCanceladoSedeJipiro=$insDashboard->obtenerPagosCancelados(1);	
 	$pagosCanceladoSedeCantera=$insDashboard->obtenerPagosCancelados(2);	
 	$pagosCanceladoSedeForest=$insDashboard->obtenerPagosCancelados(3);
+	$pagosCanceladoSedeColArq=$insDashboard->obtenerPagosCancelados(4);
 
 	$pagosPendienteSedeJipiro=$insDashboard->obtenerPagosPendientes(1);
 	$pagosPendienteSedeCantera=$insDashboard->obtenerPagosPendientes(2);
 	$pagosPendienteSedeForest=$insDashboard->obtenerPagosPendientes(3);
+	$pagosPendienteSedeColArq=$insDashboard->obtenerPagosPendientes(4);
 
 	$representantes=$insDashboard->obtenerRepresentantes();
 	$alumnosActivos=$insDashboard->totalAlumnosActivos();
@@ -43,6 +47,13 @@
 		$totalActivosSedeForest= 0;
 	}
 
+	if($alumnosActivosSedeColArq->rowCount()>0){
+		$alumnosActivosSedeColArq=$alumnosActivosSedeColArq->fetch();
+		$totalActivosSedeColArq=$alumnosActivosSedeColArq["totalActivos"];
+	}else{
+		$totalActivosSedeColArq= 0;
+	}
+
 	if($alumnosInactivosSedeJipiro->rowCount()>0){
 		$alumnosInactivosSedeJipiro=$alumnosInactivosSedeJipiro->fetch();
 		$totalInactivosSedeJipiro=$alumnosInactivosSedeJipiro["totalInactivos"];
@@ -62,6 +73,13 @@
 		$totalInactivosSedeForest=$alumnosInactivosSedeForest["totalInactivos"];
 	}else{
 		$totalInactivosSedeForest= 0;
+	}
+
+	if($alumnosInactivosSedeColArq->rowCount()>0){
+		$alumnosInactivosSedeColArq=$alumnosInactivosSedeColArq->fetch();
+		$totalInactivosSedeColArq=$alumnosInactivosSedeColArq["totalInactivos"];
+	}else{
+		$totalInactivosSedeColArq= 0;
 	}
 
 	if($pagosCanceladoSedeJipiro->rowCount()>0){
@@ -85,6 +103,13 @@
 		$totalCanceladoSedeForest= 0;
 	}
 	
+	if($pagosCanceladoSedeColArq->rowCount()>0){
+		$pagosCanceladoSedeColArq=$pagosCanceladoSedeColArq->fetch();
+		$totalCanceladoSedeColArq=$pagosCanceladoSedeColArq["totalCancelados"];
+	}else{
+		$totalCanceladoSedeColArq= 0;
+	}
+
 	if($pagosPendienteSedeJipiro->rowCount()>0){
 		$pagosPendienteSedeJipiro=$pagosPendienteSedeJipiro->fetch();
 		$totalPendienteSedeJipiro=$pagosPendienteSedeJipiro["totalPendientes"];
@@ -104,6 +129,13 @@
 		$totalPendienteSedeForest=$pagosPendienteSedeForest["totalPendientes"];
 	}else{
 		$totalPendienteSedeForest= 0;
+	}
+
+	if($pagosPendienteSedeColArq->rowCount()>0){
+		$pagosPendienteSedeColArq=$pagosPendienteSedeColArq->fetch();
+		$totalPendienteSedeColArq=$pagosPendienteSedeColArq["totalPendientes"];
+	}else{
+		$totalPendienteSedeColArq= 0;
 	}
 
 	if($representantes->rowCount()>0){
@@ -127,8 +159,8 @@
 		$totalAlumnosInactivos= 0;
 	}
 
-	$totalCancelados = $totalCanceladoSedeJipiro + $totalCanceladoSedeCantera + $totalCanceladoSedeForest;
-	$totalPendientes = $totalPendienteSedeJipiro + $totalPendienteSedeCantera + $totalPendienteSedeForest;
+	$totalCancelados = $totalCanceladoSedeJipiro + $totalCanceladoSedeCantera + $totalCanceladoSedeForest + $totalCanceladoSedeColArq;
+	$totalPendientes = $totalPendienteSedeJipiro + $totalPendienteSedeCantera + $totalPendienteSedeForest + $totalPendienteSedeColArq;
 ?>
 
 <!DOCTYPE html>
@@ -205,8 +237,8 @@
 		<section class="content">
 			<div class="container-fluid">
 			<!-- Small boxes (Stat box) -->
-				<div class="card card-default">
-					<div class="card-header">
+				<div class="card card-default" style="padding: 0.5rem;">
+					<div class="card-header" style="padding: 0.1rem 0.5rem;">
 						<h3 class="card-title">JIPIRO</h3>
 						<div class="card-tools">
 							<button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -215,18 +247,18 @@
 						</div>
 					</div>
 
-					<div class="card-body">
+					<div class="card-body" style="padding: 0.5rem;">
 						<div class="row">
 							<!-- Alumnos activos -->
 							<div class="col-md-3 mb-3">
 								<a href="<?php echo APP_URL; ?>dashboardAlumnos/1/A/" class="text-decoration-none">
 									<div class="info-box d-flex shadow-sm rounded border">
-										<span class="info-box-icon bg-primary text-white d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
-										<i class="bi bi-people-fill fs-2"></i>
+										<span class="info-box-icon bg-primary text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+										<i class="bi bi-people-fill fs-5"></i>
 										</span>
 										<div class="info-box-content ms-2">
-											<span class="info-box-text h6 text-muted">Alumnos activos</span>
-											<span class="info-box-number h3 text-dark"><?php echo $totalActivosSedeJipiro; ?></span>
+											<span class="info-box-text h7 text-muted">Alumnos activos</span>
+											<span class="info-box-number h5 text-dark"><?php echo $totalActivosSedeJipiro; ?></span>
 										</div>
 									</div>
 								</a>
@@ -235,12 +267,12 @@
 							<div class="col-md-3 mb-3">
 								<a href="<?php echo APP_URL; ?>reportePagos/1" class="text-decoration-none">
 									<div class="info-box d-flex shadow-sm rounded border">
-										<span class="info-box-icon bg-success text-white d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
-										<i class="bi bi-check2-circle fs-2"></i>
+										<span class="info-box-icon bg-success text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+										<i class="bi bi-check2-circle fs-5"></i>
 										</span>
 										<div class="info-box-content ms-2">
-											<span class="info-box-text h6 text-muted">Pagos Receptados</span>
-											<span class="info-box-number h3 text-dark"><?php echo $totalCanceladoSedeJipiro; ?></span>
+											<span class="info-box-text h7 text-muted">Pagos Receptados</span>
+											<span class="info-box-number h5 text-dark"><?php echo $totalCanceladoSedeJipiro; ?></span>
 										</div>
 									</div>
 								</a>
@@ -250,12 +282,12 @@
 							<div class="col-md-3 mb-3">
 								<a href="<?php echo APP_URL; ?>dashboardAlumnos/1/I/" class="text-decoration-none">
 									<div class="info-box d-flex shadow-sm rounded border">
-										<span class="info-box-icon bg-secondary text-white d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
-											<i class="bi bi-person-x-fill fs-2"></i>
+										<span class="info-box-icon bg-secondary text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+											<i class="bi bi-person-x-fill fs-5"></i>
 										</span>
 										<div class="info-box-content ms-2">
-											<span class="info-box-text h6 text-muted">Alumnos inactivos</span>
-											<span class="info-box-number h3 text-dark"><?php echo $totalInactivosSedeJipiro; ?></span>
+											<span class="info-box-text h7 text-muted">Alumnos inactivos</span>
+											<span class="info-box-number h5 text-dark"><?php echo $totalInactivosSedeJipiro; ?></span>
 										</div>
 									</div>
 								</a>
@@ -265,12 +297,12 @@
 							<div class="col-md-3 mb-3">
 								<a href="<?php echo APP_URL; ?>reportePendientes/1" class="text-decoration-none">
 									<div class="info-box d-flex shadow-sm rounded border">
-										<span class="info-box-icon bg-danger text-white d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
-										<i class="bi bi-exclamation-triangle-fill fs-2"></i>
+										<span class="info-box-icon bg-danger text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+										<i class="bi bi-exclamation-triangle-fill fs-5"></i>
 										</span>
 										<div class="info-box-content ms-2">
-											<span class="info-box-text h6 text-muted">Alumnos con mora</span>
-											<span class="info-box-number h3 text-dark"><?php echo $totalPendienteSedeJipiro; ?></span>
+											<span class="info-box-text h7 text-muted">Alumnos con mora</span>
+											<span class="info-box-number h5 text-dark"><?php echo $totalPendienteSedeJipiro; ?></span>
 										</div>
 									</div>
 								</a>
@@ -279,8 +311,8 @@
 						<!-- ./col -->
 					</div>
 				</div>				
-				<div class="card card-default">
-					<div class="card-header">
+				<div class="card card-default" style="padding: 0.5rem;">
+					<div class="card-header" style="padding: 0.1rem 0.5rem;">
 						<h3 class="card-title">LA CANTERA</h3>
 						<div class="card-tools">
 							<button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -289,18 +321,18 @@
 						</div>
 					</div>
 
-					<div class="card-body">
+					<div class="card-body" style="padding: 0.5rem;">
 						<div class="row">
 							<!-- Alumnos activos -->
 							<div class="col-md-3 mb-3">
 								<a href="<?php echo APP_URL; ?>dashboardAlumnos/2/A/" class="text-decoration-none">
 									<div class="info-box d-flex shadow-sm rounded border">
-										<span class="info-box-icon bg-primary text-white d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
-										<i class="bi bi-people-fill fs-2"></i>
+										<span class="info-box-icon bg-primary text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+										<i class="bi bi-people-fill fs-5"></i>
 										</span>
 										<div class="info-box-content ms-2">
-											<span class="info-box-text h6 text-muted">Alumnos activos</span>
-											<span class="info-box-number h3 text-dark"><?php echo $totalActivosSedeCantera; ?></span>
+											<span class="info-box-text h7 text-muted">Alumnos activos</span>
+											<span class="info-box-number h5 text-dark"><?php echo $totalActivosSedeCantera; ?></span>
 										</div>
 									</div>
 								</a>
@@ -309,12 +341,12 @@
 							<div class="col-md-3 mb-3">
 								<a href="<?php echo APP_URL; ?>reportePagos/2" class="text-decoration-none">
 									<div class="info-box d-flex shadow-sm rounded border">
-										<span class="info-box-icon bg-success text-white d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
-										<i class="bi bi-check2-circle fs-2"></i>
+										<span class="info-box-icon bg-success text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+										<i class="bi bi-check2-circle fs-5"></i>
 										</span>
 										<div class="info-box-content ms-2">
-											<span class="info-box-text h6 text-muted">Pagos Receptados</span>
-											<span class="info-box-number h3 text-dark"><?php echo $totalCanceladoSedeCantera; ?></span>
+											<span class="info-box-text h7 text-muted">Pagos Receptados</span>
+											<span class="info-box-number h5 text-dark"><?php echo $totalCanceladoSedeCantera; ?></span>
 										</div>
 									</div>
 								</a>
@@ -324,12 +356,12 @@
 							<div class="col-md-3 mb-3">
 								<a href="<?php echo APP_URL; ?>dashboardAlumnos/2/I/" class="text-decoration-none">
 									<div class="info-box d-flex shadow-sm rounded border">
-										<span class="info-box-icon bg-secondary text-white d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
-											<i class="bi bi-person-x-fill fs-2"></i>
+										<span class="info-box-icon bg-secondary text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+											<i class="bi bi-person-x-fill fs-5"></i>
 										</span>
 										<div class="info-box-content ms-2">
-											<span class="info-box-text h6 text-muted">Alumnos inactivos</span>
-											<span class="info-box-number h3 text-dark"><?php echo $totalInactivosSedeCantera; ?></span>
+											<span class="info-box-text h7 text-muted">Alumnos inactivos</span>
+											<span class="info-box-number h5 text-dark"><?php echo $totalInactivosSedeCantera; ?></span>
 										</div>
 									</div>
 								</a>
@@ -339,12 +371,12 @@
 							<div class="col-md-3 mb-3">
 								<a href="<?php echo APP_URL; ?>reportePendientes/2" class="text-decoration-none">
 									<div class="info-box d-flex shadow-sm rounded border">
-										<span class="info-box-icon bg-danger h6 text-white d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
-										<i class="bi bi-exclamation-triangle-fill fs-2"></i>
+										<span class="info-box-icon bg-danger h6 text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+										<i class="bi bi-exclamation-triangle-fill fs-5"></i>
 										</span>
 										<div class="info-box-content ms-2">
-											<span class="info-box-text h6 text-muted">Alumnos con mora</span>
-											<span class="info-box-number h3 text-dark"><?php echo $totalPendienteSedeCantera; ?></span>
+											<span class="info-box-text h7 text-muted">Alumnos con mora</span>
+											<span class="info-box-number h5 text-dark"><?php echo $totalPendienteSedeCantera; ?></span>
 										</div>
 									</div>
 								</a>
@@ -353,8 +385,8 @@
 						<!-- ./col -->
 					</div>
 				</div>				
-				<div class="card card-default">
-					<div class="card-header">
+				<div class="card card-default" style="padding: 0.5rem;">
+					<div class="card-header" style="padding: 0.1rem 0.5rem;">
 						<h3 class="card-title">FOREST</h3>
 						<div class="card-tools">
 							<button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -362,18 +394,18 @@
 							</button>
 						</div>
 					</div>
-					<div class="card-body">
+					<div class="card-body" style="padding: 0.5rem;">
 						<div class="row">
 							<!-- Alumnos activos -->
 							<div class="col-md-3 mb-3">
 								<a href="<?php echo APP_URL; ?>dashboardAlumnos/3/A/" class="text-decoration-none">
 									<div class="info-box d-flex shadow-sm rounded border">
-										<span class="info-box-icon bg-primary text-white d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
-										<i class="bi bi-people-fill fs-2"></i>
+										<span class="info-box-icon bg-primary text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+										<i class="bi bi-people-fill fs-5"></i>
 										</span>
 										<div class="info-box-content ms-2">
-											<span class="info-box-text h6 text-muted">Alumnos activos</span>
-											<span class="info-box-number h3 text-dark"><?php echo $totalActivosSedeForest; ?></span>
+											<span class="info-box-text h7 text-muted">Alumnos activos</span>
+											<span class="info-box-number h5 text-dark"><?php echo $totalActivosSedeForest; ?></span>
 										</div>
 									</div>
 								</a>
@@ -382,12 +414,12 @@
 							<div class="col-md-3 mb-3">
 								<a href="<?php echo APP_URL; ?>reportePagos/3" class="text-decoration-none">
 									<div class="info-box d-flex shadow-sm rounded border">
-										<span class="info-box-icon bg-success text-white d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
-										<i class="bi bi-check2-circle fs-2"></i>
+										<span class="info-box-icon bg-success text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+										<i class="bi bi-check2-circle fs-5"></i>
 										</span>
 										<div class="info-box-content ms-2">
-											<span class="info-box-text h6 text-muted">Pagos Receptados</span>
-											<span class="info-box-number h3 text-dark"><?php echo $totalCanceladoSedeForest; ?></span>
+											<span class="info-box-text h7 text-muted">Pagos Receptados</span>
+											<span class="info-box-number h5 text-dark"><?php echo $totalCanceladoSedeForest; ?></span>
 										</div>
 									</div>
 								</a>
@@ -397,12 +429,12 @@
 							<div class="col-md-3 mb-3">
 								<a href="<?php echo APP_URL; ?>dashboardAlumnos/3/I/" class="text-decoration-none">
 									<div class="info-box d-flex shadow-sm rounded border">
-										<span class="info-box-icon bg-secondary text-white d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
-											<i class="bi bi-person-x-fill fs-2"></i>
+										<span class="info-box-icon bg-secondary text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+											<i class="bi bi-person-x-fill fs-5"></i>
 										</span>
 										<div class="info-box-content ms-2">
-											<span class="info-box-text h6 text-muted">Alumnos inactivos</span>
-											<span class="info-box-number h3 text-dark"><?php echo $totalInactivosSedeForest; ?></span>
+											<span class="info-box-text h7 text-muted">Alumnos inactivos</span>
+											<span class="info-box-number h5 text-dark"><?php echo $totalInactivosSedeForest; ?></span>
 										</div>
 									</div>
 								</a>
@@ -412,12 +444,12 @@
 							<div class="col-md-3 mb-3">
 								<a href="<?php echo APP_URL; ?>reportePendientes/3" class="text-decoration-none">
 									<div class="info-box d-flex shadow-sm rounded border">
-										<span class="info-box-icon bg-danger text-white d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
-										<i class="bi bi-exclamation-triangle-fill fs-2"></i>
+										<span class="info-box-icon bg-danger text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+										<i class="bi bi-exclamation-triangle-fill fs-5"></i>
 										</span>
 										<div class="info-box-content ms-2">
-											<span class="info-box-text h6 text-muted">Alumnos con mora</span>
-											<span class="info-box-number h3 text-dark"><?php echo $totalPendienteSedeForest; ?></span>
+											<span class="info-box-text h7 text-muted">Alumnos con mora</span>
+											<span class="info-box-number h5 text-dark"><?php echo $totalPendienteSedeForest; ?></span>
 										</div>
 									</div>
 								</a>
@@ -426,8 +458,81 @@
 						<!-- ./col -->
 					</div>	
 				</div>
-				<div class="card card-default">
-					<div class="card-header">
+				<div class="card card-default" style="padding: 0.5rem;">
+					<div class="card-header" style="padding: 0.1rem 0.5rem;">
+						<h3 class="card-title">COLEGIO ARQUITECTOS</h3>
+						<div class="card-tools">
+							<button type="button" class="btn btn-tool" data-card-widget="collapse">
+								<i class="fas fa-minus"></i>
+							</button>
+						</div>
+					</div>
+					<div class="card-body" style="padding: 0.5rem;">
+						<div class="row">
+							<!-- Alumnos activos -->
+							<div class="col-md-3 mb-3">
+								<a href="<?php echo APP_URL; ?>dashboardAlumnos/4/A/" class="text-decoration-none">
+									<div class="info-box d-flex shadow-sm rounded border">
+										<span class="info-box-icon bg-primary text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+										<i class="bi bi-people-fill fs-5"></i>
+										</span>
+										<div class="info-box-content ms-2">
+											<span class="info-box-text h7 text-muted">Alumnos activos</span>
+											<span class="info-box-number h5 text-dark"><?php echo $totalActivosSedeColArq; ?></span>
+										</div>
+									</div>
+								</a>
+							</div>
+
+							<div class="col-md-3 mb-3">
+								<a href="<?php echo APP_URL; ?>reportePagos/4" class="text-decoration-none">
+									<div class="info-box d-flex shadow-sm rounded border">
+										<span class="info-box-icon bg-success text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+										<i class="bi bi-check2-circle fs-5"></i>
+										</span>
+										<div class="info-box-content ms-2">
+											<span class="info-box-text h7 text-muted">Pagos Receptados</span>
+											<span class="info-box-number h5 text-dark"><?php echo $totalCanceladoSedeColArq; ?></span>
+										</div>
+									</div>
+								</a>
+							</div>
+
+							<!-- Alumnos inactivos -->
+							<div class="col-md-3 mb-3">
+								<a href="<?php echo APP_URL; ?>dashboardAlumnos/4/I/" class="text-decoration-none">
+									<div class="info-box d-flex shadow-sm rounded border">
+										<span class="info-box-icon bg-secondary text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+											<i class="bi bi-person-x-fill fs-5"></i>
+										</span>
+										<div class="info-box-content ms-2">
+											<span class="info-box-text h7 text-muted">Alumnos inactivos</span>
+											<span class="info-box-number h5 text-dark"><?php echo $totalInactivosSedeColArq; ?></span>
+										</div>
+									</div>
+								</a>
+							</div>
+
+							<!-- Alumnos con mora -->
+							<div class="col-md-3 mb-3">
+								<a href="<?php echo APP_URL; ?>reportePendientes/4" class="text-decoration-none">
+									<div class="info-box d-flex shadow-sm rounded border">
+										<span class="info-box-icon bg-danger text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+										<i class="bi bi-exclamation-triangle-fill fs-5"></i>
+										</span>
+										<div class="info-box-content ms-2">
+											<span class="info-box-text h7 text-muted">Alumnos con mora</span>
+											<span class="info-box-number h5 text-dark"><?php echo $totalPendienteSedeColArq; ?></span>
+										</div>
+									</div>
+								</a>
+							</div>
+						</div>
+						<!-- ./col -->
+					</div>	
+				</div>
+				<div class="card card-default" style="padding: 0.5rem;">
+					<div class="card-header" style="padding: 0.1rem 0.5rem;">
 						<h3 class="card-title">CONSOLIDADO</h3>
 						<div class="card-tools">
 							<button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -435,18 +540,18 @@
 							</button>
 						</div>
 					</div>
-					<div class="card-body">
+					<div class="card-body" style="padding: 0.5rem;">
 						<div class="row">
 							<!-- Representantes activos -->
 							<div class="col-md-3 mb-3">
 								<a href="<?php echo APP_URL; ?>representanteList/" class="text-decoration-none">
 									<div class="info-box d-flex shadow-sm rounded border">
-										<span class="info-box-icon bg-warning text-white d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
-										<i class="bi bi-people-fill fs-2"></i>
+										<span class="info-box-icon bg-warning text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+										<i class="bi bi-people-fill fs-5"></i>
 										</span>
 										<div class="info-box-content ms-2">
-											<span class="info-box-text h6 text-muted">Representantes</span>
-											<span class="info-box-number h3 text-dark"><?php echo $totalRepresentantes; ?></span>
+											<span class="info-box-text h7 text-muted">Representantes</span>
+											<span class="info-box-number h5 text-dark"><?php echo $totalRepresentantes; ?></span>
 										</div>
 									</div>
 								</a>
@@ -456,12 +561,12 @@
 							<div class="col-md-3 mb-3 align-items-center">
 								<a href="#" class="text-decoration-none">
 									<div class="info-box d-flex shadow-sm rounded border">
-										<span class="info-box-icon bg-warning text-white d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
-										<i class="bi bi-people-fill fs-2"></i>
+										<span class="info-box-icon bg-warning text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+										<i class="bi bi-people-fill fs-5"></i>
 										</span>
 										<div class="info-box-content ms-2">
-											<span class="info-box-text h6 text-muted">Alumnos activos</span>
-											<span class="info-box-number h3 text-dark"><?php echo $totalAlumnosActivos; ?></span>
+											<span class="info-box-text h7 text-muted">Alumnos activos</span>
+											<span class="info-box-number h5 text-dark"><?php echo $totalAlumnosActivos; ?></span>
 										</div>
 									</div>
 								</a>
@@ -471,12 +576,12 @@
 							<div class="col-md-3 mb-3 align-items-center">
 								<a href="#" class="text-decoration-none">
 									<div class="info-box d-flex shadow-sm rounded border">
-										<span class="info-box-icon bg-warning text-white d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
-										<i class="bi bi-people-fill fs-2"></i>
+										<span class="info-box-icon bg-warning text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+										<i class="bi bi-people-fill fs-5"></i>
 										</span>
 										<div class="info-box-content ms-2">
-											<span class="info-box-text h6 text-muted">Alumnos Inactivos</span>
-											<span class="info-box-number h3 text-dark"><?php echo $totalAlumnosInactivos; ?></span>
+											<span class="info-box-text h7 text-muted">Alumnos Inactivos</span>
+											<span class="info-box-number h5 text-dark"><?php echo $totalAlumnosInactivos; ?></span>
 										</div>
 									</div>
 								</a>
@@ -485,12 +590,12 @@
 							<div class="col-md-3 mb-3 align-items-center">
 								<a href="#" class="text-decoration-none">
 									<div class="info-box d-flex shadow-sm rounded border">
-										<span class="info-box-icon bg-warning text-white d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
-										<i class="bi bi-people-fill fs-2"></i>
+										<span class="info-box-icon bg-warning text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+										<i class="bi bi-people-fill fs-5"></i>
 										</span>
 										<div class="info-box-content ms-2">
-											<span class="info-box-text h6 text-muted">Alumnos con mora</span>
-											<span class="info-box-number h3 text-dark"><?php echo $totalPendientes; ?></span>
+											<span class="info-box-text h7 text-muted">Alumnos con mora</span>
+											<span class="info-box-number h5 text-dark"><?php echo $totalPendientes; ?></span>
 										</div>
 									</div>
 								</a>
