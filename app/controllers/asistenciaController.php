@@ -377,7 +377,7 @@
 		}
 
 		public function informacionSede($sedeid){		
-			$consulta_datos="SELECT * FROM general_sede WHERE sede_id  = $sedeid";
+			$consulta_datos="SELECT *, escuela_nombre FROM general_sede inner join general_escuela on escuela_id = sede_escuelaid WHERE sede_id  = $sedeid";
 			$datos = $this->ejecutarConsulta($consulta_datos);		
 			return $datos;
 		}
@@ -694,8 +694,8 @@
 						<td>'.$estado.'</td>
 						<td>'.$rows['ALUMNOS'].'</td>
 						<td>							
-							<a href="'.APP_URL.'asistenciaHorarioJugador/'.$rows['horario_id'].'/'.$horario_sedeid.'/" target="_blank" class="btn float-right btn-warning btn-xs" style="margin-right: 5px;">Asignar alumnos</a>
-							<a href="'.APP_URL.'asistenciaHorarioLista/'.$rows['horario_id'].'/" target="_blank" class="btn float-right btn-ver btn-xs" style="margin-right: 5px;">Ver lista</a>
+							<a href="'.APP_URL.'asistenciaHorarioJugador/'.$rows['horario_id'].'/'.$horario_sedeid.'/" class="btn float-right btn-warning btn-xs" style="margin-right: 5px;">Asignar alumnos</a>
+							<a href="'.APP_URL.'asistenciaHorarioLista/'.$rows['horario_id'].'/" class="btn float-right btn-ver btn-xs" style="margin-right: 5px;">Ver lista</a>
 						</td>
 						<td>
 							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" >
@@ -704,8 +704,8 @@
 								<button type="submit" class="btn float-right btn-danger btn-xs" style="margin-right: 5px;">Eliminar</button>
 							</form>	
 
-							<a href="'.APP_URL.'asistenciaHorario/'.$rows['horario_id'].'/" target="_blank" class="btn float-right btn-actualizar btn-xs" style="margin-right: 5px;">Editar</a>
-							<a href="'.APP_URL.'asistenciaVerHorario/'.$rows['horario_id'].'/" target="_blank" class="btn float-right btn-ver btn-xs" style="margin-right: 5px;">Ver</a>
+							<a href="'.APP_URL.'asistenciaHorario/'.$rows['horario_id'].'/" class="btn float-right btn-actualizar btn-xs" style="margin-right: 5px;">Editar</a>
+							<a href="'.APP_URL.'asistenciaVerHorario/'.$rows['horario_id'].'/" class="btn float-right btn-ver btn-xs" style="margin-right: 5px;">Ver</a>
 						</td>
 					</tr>';	
 			}
@@ -1119,38 +1119,18 @@
 		}
 
 		//-------------------------------------------------Asignar alumnos--------------------------------------
-		public function listarAlumnos($horario_id, $identificacion, $apellidopaterno, $primernombre, $anio, $sede){	
-			if($identificacion!=""){
-				$identificacion .= '%'; 
-			}
-			if($primernombre!=""){
-				$primernombre .= '%';
-			} 
-			if($apellidopaterno!=""){
-				$apellidopaterno .= '%';
-			} 			
-
+		public function listarAlumnos($horario_id, $sede){	
+						// Preparar condiciones dinámicas
 			$tabla="";
-			$consulta_datos="SELECT S.sede_nombre, A.* FROM sujeto_alumno A
-								INNER JOIN general_sede S ON S.sede_id = A.alumno_sedeid
-								WHERE (A.alumno_primernombre LIKE '".$primernombre."' 
-								OR A.alumno_identificacion LIKE '".$identificacion."' 
-								OR A.alumno_apellidopaterno LIKE '".$apellidopaterno."') ";			
-			if($anio!=""){
-				$consulta_datos .= " and YEAR(alumno_fechanacimiento) = '".$anio."'"; 
-			}
+			$condiciones = [];
+			
+			$condiciones[] = "A.alumno_estado = 'A' AND A.alumno_sedeid='".$sede."' AND A.alumno_id NOT IN (SELECT asignahorario_alumnoid FROM asistencia_asignahorario)";
 
-
-
-			if($identificacion=="" && $primernombre=="" && $apellidopaterno==""){
-				$consulta_datos="SELECT S.sede_nombre, A.* FROM sujeto_alumno A
-								INNER JOIN general_sede S ON S.sede_id = A.alumno_sedeid WHERE YEAR(A.alumno_fechanacimiento) = '".$anio."'";
-			}	
-
-			$consulta_datos .= " AND A.alumno_estado = 'A' AND A.alumno_sedeid='".$sede."'";
-
-			$consulta_datos .= " AND A.alumno_id NOT IN (SELECT asignahorario_alumnoid FROM asistencia_asignahorario)";
-
+			$consulta_datos = "SELECT S.sede_nombre, A.* FROM sujeto_alumno A
+							   INNER JOIN general_sede S ON S.sede_id = A.alumno_sedeid
+							   WHERE " . implode(" AND ", $condiciones);
+			
+			// Ejecutar consulta
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
 
@@ -1174,8 +1154,17 @@
 			return $tabla;			
 		}
 
-		public function buscarHorario($horario_id){
-			$consulta_datos="SELECT * FROM asistencia_horario WHERE horario_id = ".$horario_id;	
+		public function buscarHorario($horario_id){			
+			$consulta_datos="SELECT AH.horario_id, CONCAT(HORA.hora_inicio, ' - ', HORA.hora_fin, ' - ', AH.horario_detalle) AS HORARIO
+								FROM asistencia_horario AH
+									INNER JOIN( 
+										SELECT detalle_horarioid, detalle_horaid, H.hora_inicio, H.hora_fin
+										FROM asistencia_horario_detalle D
+										INNER JOIN asistencia_hora H on H.hora_id = D.detalle_horaid
+										GROUP BY detalle_horarioid, detalle_horaid, H.hora_inicio, H.hora_fin
+									)HORA ON HORA.detalle_horarioid = AH.horario_id
+
+								WHERE AH.horario_estado = 'A' AND AH.horario_id = ".$horario_id;
 
 			$datos = $this->ejecutarConsulta($consulta_datos);		
 			return $datos;
@@ -1371,10 +1360,11 @@
 			return $tabla;			
 		}
 		public function BuscarHorarioSede($horario_id){
-			$consulta_datos="SELECT S.sede_nombre, H.* 
-								FROM asistencia_horario H
-        							INNER JOIN general_sede S ON S.sede_id = H.horario_sedeid
-							WHERE H.horario_estado = 'A' AND H.horario_id = ".$horario_id;	
+			$consulta_datos="SELECT S.sede_nombre, escuela_nombre, H.* 
+					FROM asistencia_horario H
+						INNER JOIN general_sede S ON S.sede_id = H.horario_sedeid
+						INNER JOIN general_escuela C ON S.sede_escuelaid = escuela_id
+				WHERE H.horario_estado = 'A' AND H.horario_id = ".$horario_id;
 
 			$datos = $this->ejecutarConsulta($consulta_datos);		
 			return $datos;
