@@ -7,15 +7,15 @@ use PHPMailer\PHPMailer\PHPMailer;
 
 $mail = new PHPMailer();
 $mail->isSMTP();
-$mail->Host = 'mail.digifutbol.com';
+$mail->Host = 'mail.digitech.com.ec';
 $mail->SMTPAuth = true;
-$mail->Username = 'noreply@digifutbol.com';
-$mail->Password = 'TU_PASSWORD';
-$mail->SMTPSecure = 'tls';
-$mail->Port = 587;
+$mail->Username = 'info@digifutbol.com';
+$mail->Password = 'Fu7b0l#2520';
+$mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+$mail->Port = 465;
 
-$mail->setFrom('noreply@digifutbol.com', 'Prueba DigiFutbol');
-$mail->addAddress('tucorreo@yahoo.com'); // prueba directo al problema
+$mail->setFrom('info@digifutbol.com', 'Prueba DigiFutbol');
+$mail->addAddress('veromqec@yahoo.com'); // prueba directo al problema
 $mail->Subject = "🚀 Prueba SMTP DigiFutbol";
 $mail->Body = "Si recibes este correo, Yahoo está aceptando los mensajes.";
 
