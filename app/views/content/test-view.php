@@ -1,7 +1,7 @@
 <?php
-require 'app/lib/PHPMailer/src/Exception.php';
-require 'app/lib/PHPMailer/src/PHPMailer.php';
-require 'app/lib/PHPMailer/src/SMTP.php';
+require_once __DIR__ . '/../../lib/PHPMailer/src/Exception.php';
+require_once __DIR__ . '/../../lib/PHPMailer/src/PHPMailer.php';
+require_once __DIR__ . '/../../lib/PHPMailer/src/SMTP.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 
@@ -15,12 +15,12 @@ $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
 $mail->Port = 465;
 
 $mail->setFrom('info@digifutbol.com', 'Prueba DigiFutbol');
-$mail->addAddress('veromqec@yahoo.com'); // prueba directo al problema
+$mail->addAddress('test-b7x7ot7ed@srv1.mail-tester.com'); // prueba directo al problema
 $mail->Subject = "🚀 Prueba SMTP DigiFutbol";
 $mail->Body = "Si recibes este correo, Yahoo está aceptando los mensajes.";
 
 if ($mail->send()) {
-    echo "Correo enviado con éxito.";
+    echo "Correo enviado con éxito absoluto.";
 } else {
     echo "Error: " . $mail->ErrorInfo;
 }
