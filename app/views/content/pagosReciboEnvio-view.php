@@ -205,9 +205,9 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require 'app/lib/PHPMailer/src/Exception.php';
-require 'app/lib/PHPMailer/src/PHPMailer.php';
-require 'app/lib/PHPMailer/src/SMTP.php';
+require_once __DIR__ . '/../../lib/PHPMailer/src/Exception.php';
+require_once __DIR__ . '/../../lib/PHPMailer/src/PHPMailer.php';
+require_once __DIR__ . '/../../lib/PHPMailer/src/SMTP.php';
 
 $envio = 0;
 
@@ -226,7 +226,7 @@ try {
 
     // Remitente y destinatarios
     $mail->setFrom('noreply@digifutbol.com', 'DigiFutbol');
-    $mail->addAddress($correo_destinatario);        // $to → tu variable de destinatario
+    $mail->addAddress($to);        // $to → tu variable de destinatario
     if (!empty($correo_copia)) {
         $mail->addCC($correo_copia);                // Copia si aplica
     }
