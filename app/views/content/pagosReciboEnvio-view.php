@@ -185,7 +185,7 @@
 	$body .= $file_content."\r\n\r\n";
 	$body .= "--".$uid."--";
 
-/*    
+    
 	// Enviar el correo
 	if (mail($to, $subject, $body, $headers)) {
 		$envio = 1;
@@ -200,53 +200,3 @@
 
      //header("Location: ../presupuestos_from.php?idprof=".$idprof."&id=".$cliente_id);
    	// Envio de correo -----------------------------------
-*/
-
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
-require_once __DIR__ . '/../../lib/PHPMailer/src/Exception.php';
-require_once __DIR__ . '/../../lib/PHPMailer/src/PHPMailer.php';
-require_once __DIR__ . '/../../lib/PHPMailer/src/SMTP.php';
-
-$envio = 0;
-
-try {
-    // Instancia PHPMailer
-    $mail = new PHPMailer(true);
-
-    // Configuración SMTP
-    $mail->isSMTP();
-    $mail->Host       = 'mail.digitech.com.ec';     // Host del SMTP (pregunta a tu hosting)
-    $mail->SMTPAuth   = true;
-    $mail->Username   = 'info@digifutbol.com';   // Correo remitente configurado
-    $mail->Password   = 'Fu7b0l#2520';              // Contraseña del correo
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS; // o PHPMailer::ENCRYPTION_SMTPS si tu hosting usa SSL
-    $mail->Port       = 465;                        // 465 si es SSL
-
-    // Remitente y destinatarios
-    $mail->setFrom('noreply@digifutbol.com', 'DigiFutbol');
-    $mail->addAddress($to);        // $to → tu variable de destinatario
-    if (!empty($correo_copia)) {
-        $mail->addCC($correo_copia);                // Copia si aplica
-    }
-
-    // Asunto y cuerpo
-    $mail->Subject = $subject;                      // Usa tu variable actual
-    $mail->Body    = $body;                         // Puede ser HTML o texto plano
-    $mail->isHTML(true);
-
-    // Adjuntar PDF generado
-    $rutaPDF = "app/views/dist/pdf/" . $datos['pago_recibo'] . ".pdf";
-    if (file_exists($rutaPDF)) {
-        $mail->addAttachment($rutaPDF);
-    }
-
-    // Enviar correo
-    if ($mail->send()) {
-        $envio = 1;
-    }
-} catch (Exception $e) {
-    $envio = 0;
-    error_log("Error enviando correo: {$mail->ErrorInfo}");
-}
