@@ -6,21 +6,25 @@
 	$alumnosActivosSedeCantera=$insDashboard->obtenerAlumnosActivos(2);
 	$alumnosActivosSedeForest=$insDashboard->obtenerAlumnosActivos(3);
 	$alumnosActivosSedeColArq=$insDashboard->obtenerAlumnosActivos(4);
+	$alumnosActivosSedeMalacatos=$insDashboard->obtenerAlumnosActivos(5);
 
 	$alumnosInactivosSedeJipiro=$insDashboard->obtenerAlumnosInactivos(1);
 	$alumnosInactivosSedeCantera=$insDashboard->obtenerAlumnosInactivos(2);
 	$alumnosInactivosSedeForest=$insDashboard->obtenerAlumnosInactivos(3);
 	$alumnosInactivosSedeColArq=$insDashboard->obtenerAlumnosInactivos(4);
+	$alumnosInactivosSedeMalacatos=$insDashboard->obtenerAlumnosInactivos(5);
 
 	$pagosCanceladoSedeJipiro=$insDashboard->obtenerPagosCancelados(1);	
 	$pagosCanceladoSedeCantera=$insDashboard->obtenerPagosCancelados(2);	
 	$pagosCanceladoSedeForest=$insDashboard->obtenerPagosCancelados(3);
 	$pagosCanceladoSedeColArq=$insDashboard->obtenerPagosCancelados(4);
+	$pagosCanceladoSedeMalacatos=$insDashboard->obtenerPagosCancelados(5);
 
 	$pagosPendienteSedeJipiro=$insDashboard->obtenerPagosPendientes(1);
 	$pagosPendienteSedeCantera=$insDashboard->obtenerPagosPendientes(2);
 	$pagosPendienteSedeForest=$insDashboard->obtenerPagosPendientes(3);
 	$pagosPendienteSedeColArq=$insDashboard->obtenerPagosPendientes(4);
+	$pagosPendienteSedeMalacatos=$insDashboard->obtenerPagosPendientes(5);
 
 	$representantes=$insDashboard->obtenerRepresentantes();
 	$alumnosActivos=$insDashboard->totalAlumnosActivos();
@@ -53,6 +57,13 @@
 	}else{
 		$totalActivosSedeColArq= 0;
 	}
+	
+	if($alumnosActivosSedeMalacatos->rowCount()>0){
+		$alumnosActivosSedeMalacatos=$alumnosActivosSedeMalacatos->fetch();
+		$totalActivosSedeMalacatos=$alumnosActivosSedeMalacatos["totalActivos"];
+	}else{
+		$totalActivosSedeMalacatos= 0;
+	}
 
 	if($alumnosInactivosSedeJipiro->rowCount()>0){
 		$alumnosInactivosSedeJipiro=$alumnosInactivosSedeJipiro->fetch();
@@ -82,6 +93,14 @@
 		$totalInactivosSedeColArq= 0;
 	}
 
+	if($alumnosInactivosSedeMalacatos->rowCount()>0){
+		$alumnosInactivosSedeMalacatos=$alumnosInactivosSedeMalacatos->fetch();
+		$totalInactivosSedeMalacatos=$alumnosInactivosSedeMalacatos["totalInactivos"];
+	}else{
+		$totalInactivosSedeMalacatos= 0;
+	}
+
+
 	if($pagosCanceladoSedeJipiro->rowCount()>0){
 		$pagosCanceladoSedeJipiro=$pagosCanceladoSedeJipiro->fetch();
 		$totalCanceladoSedeJipiro=$pagosCanceladoSedeJipiro["totalCancelados"];
@@ -108,6 +127,13 @@
 		$totalCanceladoSedeColArq=$pagosCanceladoSedeColArq["totalCancelados"];
 	}else{
 		$totalCanceladoSedeColArq= 0;
+	}
+
+	if($pagosCanceladoSedeMalacatos->rowCount()>0){
+		$pagosCanceladoSedeMalacatos=$pagosCanceladoSedeMalacatos->fetch();
+		$totalCanceladoSedeMalacatos=$pagosCanceladoSedeMalacatos["totalCancelados"];
+	}else{
+		$totalCanceladoSedeMalacatos= 0;
 	}
 
 	if($pagosPendienteSedeJipiro->rowCount()>0){
@@ -138,6 +164,13 @@
 		$totalPendienteSedeColArq= 0;
 	}
 
+	if($pagosPendienteSedeMalacatos->rowCount()>0){
+		$pagosPendienteSedeMalacatos=$pagosPendienteSedeMalacatos->fetch();
+		$totalPendienteSedeMalacatos=$pagosPendienteSedeMalacatos["totalPendientes"];
+	}else{
+		$totalPendienteSedeMalacatos= 0;
+	}
+
 	if($representantes->rowCount()>0){
 		$representantes=$representantes->fetch();
 		$totalRepresentantes=$representantes["totalRepresentantes"];
@@ -159,8 +192,8 @@
 		$totalAlumnosInactivos= 0;
 	}
 
-	$totalCancelados = $totalCanceladoSedeJipiro + $totalCanceladoSedeCantera + $totalCanceladoSedeForest + $totalCanceladoSedeColArq;
-	$totalPendientes = $totalPendienteSedeJipiro + $totalPendienteSedeCantera + $totalPendienteSedeForest + $totalPendienteSedeColArq;
+	$totalCancelados = $totalCanceladoSedeJipiro + $totalCanceladoSedeCantera + $totalCanceladoSedeForest + $totalCanceladoSedeColArq + $totalCanceladoSedeMalacatos;
+	$totalPendientes = $totalPendienteSedeJipiro + $totalPendienteSedeCantera + $totalPendienteSedeForest + $totalPendienteSedeColArq + $totalPendienteSedeMalacatos;
 ?>
 
 <!DOCTYPE html>
@@ -523,6 +556,79 @@
 										<div class="info-box-content ms-2">
 											<span class="info-box-text h7 text-muted">Alumnos con mora</span>
 											<span class="info-box-number h5 text-dark"><?php echo $totalPendienteSedeColArq; ?></span>
+										</div>
+									</div>
+								</a>
+							</div>
+						</div>
+						<!-- ./col -->
+					</div>	
+				</div>
+				<div class="card card-default" style="padding: 0.5rem;">
+					<div class="card-header" style="padding: 0.1rem 0.5rem;">
+						<h3 class="card-title">MALACATOS</h3>
+						<div class="card-tools">
+							<button type="button" class="btn btn-tool" data-card-widget="collapse">
+								<i class="fas fa-minus"></i>
+							</button>
+						</div>
+					</div>
+					<div class="card-body" style="padding: 0.5rem;">
+						<div class="row">
+							<!-- Alumnos activos -->
+							<div class="col-md-3 mb-3">
+								<a href="<?php echo APP_URL; ?>dashboardAlumnos/4/A/" class="text-decoration-none">
+									<div class="info-box d-flex shadow-sm rounded border">
+										<span class="info-box-icon bg-primary text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+										<i class="bi bi-people-fill fs-5"></i>
+										</span>
+										<div class="info-box-content ms-2">
+											<span class="info-box-text h7 text-muted">Alumnos activos</span>
+											<span class="info-box-number h5 text-dark"><?php echo $totalActivosSedeMalacatos; ?></span>
+										</div>
+									</div>
+								</a>
+							</div>
+
+							<div class="col-md-3 mb-3">
+								<a href="<?php echo APP_URL; ?>reportePagos/4" class="text-decoration-none">
+									<div class="info-box d-flex shadow-sm rounded border">
+										<span class="info-box-icon bg-success text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+										<i class="bi bi-check2-circle fs-5"></i>
+										</span>
+										<div class="info-box-content ms-2">
+											<span class="info-box-text h7 text-muted">Pagos Receptados</span>
+											<span class="info-box-number h5 text-dark"><?php echo $totalCanceladoSedeMalacatos; ?></span>
+										</div>
+									</div>
+								</a>
+							</div>
+
+							<!-- Alumnos inactivos -->
+							<div class="col-md-3 mb-3">
+								<a href="<?php echo APP_URL; ?>dashboardAlumnos/4/I/" class="text-decoration-none">
+									<div class="info-box d-flex shadow-sm rounded border">
+										<span class="info-box-icon bg-secondary text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+											<i class="bi bi-person-x-fill fs-5"></i>
+										</span>
+										<div class="info-box-content ms-2">
+											<span class="info-box-text h7 text-muted">Alumnos inactivos</span>
+											<span class="info-box-number h5 text-dark"><?php echo $totalInactivosSedeMalacatos; ?></span>
+										</div>
+									</div>
+								</a>
+							</div>
+
+							<!-- Alumnos con mora -->
+							<div class="col-md-3 mb-3">
+								<a href="<?php echo APP_URL; ?>reportePendientes/4" class="text-decoration-none">
+									<div class="info-box d-flex shadow-sm rounded border">
+										<span class="info-box-icon bg-danger text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+										<i class="bi bi-exclamation-triangle-fill fs-5"></i>
+										</span>
+										<div class="info-box-content ms-2">
+											<span class="info-box-text h7 text-muted">Alumnos con mora</span>
+											<span class="info-box-number h5 text-dark"><?php echo $totalPendienteSedeMalacatos; ?></span>
 										</div>
 									</div>
 								</a>
