@@ -577,7 +577,7 @@
 						<div class="row">
 							<!-- Alumnos activos -->
 							<div class="col-md-3 mb-3">
-								<a href="<?php echo APP_URL; ?>dashboardAlumnos/4/A/" class="text-decoration-none">
+								<a href="<?php echo APP_URL; ?>dashboardAlumnos/5/A/" class="text-decoration-none">
 									<div class="info-box d-flex shadow-sm rounded border">
 										<span class="info-box-icon bg-primary text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
 										<i class="bi bi-people-fill fs-5"></i>
@@ -591,7 +591,7 @@
 							</div>
 
 							<div class="col-md-3 mb-3">
-								<a href="<?php echo APP_URL; ?>reportePagos/4" class="text-decoration-none">
+								<a href="<?php echo APP_URL; ?>reportePagos/5" class="text-decoration-none">
 									<div class="info-box d-flex shadow-sm rounded border">
 										<span class="info-box-icon bg-success text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
 										<i class="bi bi-check2-circle fs-5"></i>
@@ -606,7 +606,7 @@
 
 							<!-- Alumnos inactivos -->
 							<div class="col-md-3 mb-3">
-								<a href="<?php echo APP_URL; ?>dashboardAlumnos/4/I/" class="text-decoration-none">
+								<a href="<?php echo APP_URL; ?>dashboardAlumnos/5/I/" class="text-decoration-none">
 									<div class="info-box d-flex shadow-sm rounded border">
 										<span class="info-box-icon bg-secondary text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
 											<i class="bi bi-person-x-fill fs-5"></i>
@@ -621,7 +621,7 @@
 
 							<!-- Alumnos con mora -->
 							<div class="col-md-3 mb-3">
-								<a href="<?php echo APP_URL; ?>reportePendientes/4" class="text-decoration-none">
+								<a href="<?php echo APP_URL; ?>reportePendientes/5" class="text-decoration-none">
 									<div class="info-box d-flex shadow-sm rounded border">
 										<span class="info-box-icon bg-danger text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
 										<i class="bi bi-exclamation-triangle-fill fs-5"></i>
