@@ -21,7 +21,7 @@
 				session_set_cookie_params([
 					'lifetime' => 3600,
 					'path' => '/',
-					'domain' => 'idvloja.digitech.com.ec',
+					'domain' => 'adfpedrolarrea.digifutbol.com',
 					'secure' => true,
 					'httponly' => true,
 					'samesite' => 'Strict'
@@ -109,7 +109,7 @@
 			/* ----------  5. Redirección según rol ---------- */
 			$destino = match ($_SESSION['rol']) {
 				4       => APP_URL . 'representanteList/',
-				1, 2, 6 => APP_URL . 'dashboard/',
+				1, 2, 6 => APP_URL . 'dashboardGerencial/', //'dashboard/',
 				default => APP_URL . 'empleadoEntrada/',
 			};
 

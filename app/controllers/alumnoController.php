@@ -817,6 +817,11 @@
 					"campo_nombre"=>"alumno_estado",
 					"campo_marcador"=>":Estado",
 					"campo_valor"=> $estadoA
+				],
+				[
+					"campo_nombre"=>"alumno_fechamodificacion",
+					"campo_marcador"=>":FechaModificacion",
+					"campo_valor"=> date('Y-m-d H:i:s')
 				]
 			];
 			$condicion=[
@@ -872,6 +877,11 @@
 					"campo_nombre"=>"alumno_estado",
 					"campo_marcador"=>":Estado",
 					"campo_valor"=> $estadoA
+				],
+				[
+					"campo_nombre"=>"alumno_fechamodificacion",
+					"campo_marcador"=>":FechaModificacion",
+					"campo_valor"=> date('Y-m-d H:i:s')
 				]
 			];
 			$condicion=[
@@ -1055,13 +1065,17 @@
 					"campo_nombre"=>"alumno_hermanos",
 					"campo_marcador"=>":Hermanos",
 					"campo_valor"=>$alumno_hermanos
-				],			
-				[
-					"campo_nombre"=>"alumno_numcamiseta",
-					"campo_marcador"=>":Camiseta",
-					"campo_valor"=>$alumno_numcamiseta
-				]
-			];
+				],[
+                "campo_nombre"=>"alumno_numcamiseta",
+                "campo_marcador"=>":Camiseta",
+                "campo_valor"=>$alumno_numcamiseta
+            ],
+            [
+                "campo_nombre"=>"alumno_fechamodificacion",
+                "campo_marcador"=>":FechaModificacion",
+                "campo_valor"=> date('Y-m-d H:i:s')
+            ]
+        ];
 
 			# Directorio de fotos #
 			$codigorand=rand(0,100);

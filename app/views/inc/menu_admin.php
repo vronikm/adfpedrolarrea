@@ -1,8 +1,22 @@
- <li class="nav-item">
-                <a href="<?php echo APP_URL."dashboard/" ?>" class="nav-link <?php if ($url[0]=='dashboard') echo 'active'; else echo ''; ?>">
+ <li class="nav-item <?php if ($url[0]=='dashboard' || $url[0]=='dashboardGerencial') echo 'menu-open'; else echo ''; ?>">
+                <a href="#" class="nav-link <?php if ($url[0]=='dashboard' || $url[0]=='dashboardGerencial') echo 'active'; else echo ''; ?>">
                   <i class="nav-icon fas fa-tachometer-alt"></i>
-                  <p>Dashboard</p>
+                  <p>Dashboard<i class="fas fa-angle-left right"></i></p>
                 </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="<?php echo APP_URL."dashboardGerencial/" ?>" class="nav-link <?php if ($url[0]=='dashboardGerencial') echo 'active'; else echo ''; ?>">
+                      <i class="nav-icon far fa-circle text-info"></i>
+                      <p>Dashboard Gerencial</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="<?php echo APP_URL."dashboard/" ?>" class="nav-link <?php if ($url[0]=='dashboard') echo 'active'; else echo ''; ?>">
+                      <i class="nav-icon far fa-circle text-info"></i>
+                      <p>Dashboard Operativo</p>
+                    </a>
+                  </li>                  
+                </ul>
               </li>
 
               <li class="nav-item">
