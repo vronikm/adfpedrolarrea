@@ -535,7 +535,7 @@
 				<div class="panel">
 					<div class="panel-title">Ingresos vs Retiros de alumnos</div>
 					<div class="panel-sub">por mes · último año</div>
-					<canvas id="chartMovimiento"></canvas>
+				<canvas id="chartMovimientoDetalle"></canvas>
 				</div>
 
 				<div class="panel">
@@ -802,6 +802,68 @@ new Chart(document.getElementById('chartMovimiento'), {
 		}
 	}
 });
+
+/* ============================================================
+   CHART 3b · Ingresos vs Retiros de alumnos detallado (barras)
+   Alinea correctamente datasets que tienen diferentes cantidades de puntos
+   ============================================================ */
+if(document.getElementById('chartMovimientoDetalle')) {
+	// Crear un mapa de retirados por mes para fácil lookup
+	const retiroMap = dataRetirados.reduce((map, r) => {
+		const key = r.mes;
+		map[key] = r.cantidad;
+		return map;
+	}, {});
+	
+	// Completar retirados con ceros donde faltan
+	const datosAlineados = dataMovimiento.map(ing => ({
+		mes: ing.mes,
+		ingresos: parseInt(ing.cantidad),
+		retiros: parseInt(retiroMap[ing.mes] || 0)
+	}));
+	
+	new Chart(document.getElementById('chartMovimientoDetalle'), {
+		type: 'bar',
+		data: {
+			labels: datosAlineados.map(d => d.mes),
+			datasets: [
+				{
+					label: 'Ingresos',
+					data:  datosAlineados.map(d => d.ingresos),
+					backgroundColor: VERDE,
+					borderColor: VERDE,
+					borderWidth: 1,
+					borderRadius: 4,
+					borderSkipped: false,
+				},
+				{
+					label: 'Retiros',
+					data:  datosAlineados.map(d => d.retiros),
+					backgroundColor: ROJO,
+					borderColor: ROJO,
+					borderWidth: 1,
+					borderRadius: 4,
+					borderSkipped: false,
+				}
+			]
+		},
+		options: {
+			...baseOpts(),
+			indexAxis: 'y',
+			plugins: {
+				legend: {
+					display: true,
+					labels: { color: '#9ca3af', boxWidth: 12, font: { size: 11 } }
+				},
+				tooltip: { backgroundColor: '#1a1e28' }
+			},
+			scales: {
+				x: { grid: { color: GRID }, ticks: { color: '#6b7280' } },
+				y: { grid: { display: false }, ticks: { color: '#6b7280' } }
+			}
+		}
+	});
+}
 
 /* ============================================================
    CHART 4 · Asistencia empleados (barras horizontales)
