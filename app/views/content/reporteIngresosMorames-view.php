@@ -62,7 +62,7 @@
     <link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/adminlte.css">
     <style>
       /* KPI cards */
-      .kpi-card            { border-left: 4px solid; }
+      .kpi-card            { border-left: 4px solid; position: relative; overflow: hidden; }
       .kpi-azul            { border-color: #3498db; }
       .kpi-rojo            { border-color: #e74c3c; }
       .kpi-verde           { border-color: #2ecc71; }
@@ -71,6 +71,10 @@
       .kpi-gris            { border-color: #95a5a6; }
       .kpi-card .kpi-valor { font-size: 1.6rem; font-weight: 700; line-height: 1.2; }
       .kpi-card .kpi-label { font-size: 0.78rem; color: #888; text-transform: uppercase; letter-spacing: .5px; }
+      .kpi-card .kpi-icon  {
+        position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+        font-size: 3.2rem; opacity: 0.08; pointer-events: none;
+      }
 
       /* Badges de situación */
       .badge-sit           { font-size: 0.8rem; padding: 3px 9px; border-radius: 12px; font-weight: 600; white-space: nowrap; }
@@ -206,6 +210,7 @@
                   <div class="card-body py-3 px-3">
                     <div class="kpi-label">Total registros</div>
                     <div class="kpi-valor text-primary"><?php echo $totalRegistros; ?></div>
+                    <i class="fas fa-list-alt kpi-icon text-primary"></i>
                   </div>
                 </div>
               </div>
@@ -214,6 +219,7 @@
                   <div class="card-body py-3 px-3">
                     <div class="kpi-label">En mora</div>
                     <div class="kpi-valor text-danger"><?php echo $countMora; ?></div>
+                    <i class="fas fa-exclamation-triangle kpi-icon text-danger"></i>
                   </div>
                 </div>
               </div>
@@ -222,6 +228,7 @@
                   <div class="card-body py-3 px-3">
                     <div class="kpi-label">Al día</div>
                     <div class="kpi-valor text-success"><?php echo $countAlDia; ?></div>
+                    <i class="fas fa-check-circle kpi-icon text-success"></i>
                   </div>
                 </div>
               </div>
@@ -230,22 +237,25 @@
                   <div class="card-body py-3 px-3">
                     <div class="kpi-label">Sin registro pagos</div>
                     <div class="kpi-valor text-warning"><?php echo $countSinReg; ?></div>
+                    <i class="fas fa-user-clock kpi-icon text-warning"></i>
                   </div>
                 </div>
               </div>
               <div class="col-6 col-md-4 col-lg mb-2">
                 <div class="card kpi-card kpi-amarillo h-100 mb-0">
                   <div class="card-body py-3 px-3">
-                    <div class="kpi-label">Total valor pagos ($)</div>
+                    <div class="kpi-label">Total valor pagos</div>
                     <div class="kpi-valor" style="color:#b8860b;">$<?php echo number_format($totalValor, 2); ?></div>
+                    <i class="fas fa-money-bill-wave kpi-icon" style="color:#b8860b;"></i>
                   </div>
                 </div>
               </div>
               <div class="col-6 col-md-4 col-lg mb-2">
                 <div class="card kpi-card kpi-gris h-100 mb-0">
                   <div class="card-body py-3 px-3">
-                    <div class="kpi-label">Total saldo pendiente ($)</div>
+                    <div class="kpi-label">Total saldo pendiente</div>
                     <div class="kpi-valor text-secondary">$<?php echo number_format($totalSaldo, 2); ?></div>
+                    <i class="fas fa-hourglass-half kpi-icon text-secondary"></i>
                   </div>
                 </div>
               </div>
@@ -258,6 +268,12 @@
                   <i class="fas fa-table mr-1"></i> Detalle de alumnos con pagos y mora
                 </h3>
                 <div class="card-tools d-flex align-items-center" style="gap:6px;">
+                  
+                  <!-- Leyenda semáforo -->
+                  <span class="badge-sit sit-mora"><i class="fas fa-circle mr-1"></i> En mora</span>
+                  <span class="badge-sit sit-aldia" style="margin-left:4px;"><i class="fas fa-circle mr-1"></i> Al día</span>
+                  <span class="badge-sit sit-sinreg" style="margin-left:4px;"><i class="fas fa-circle mr-1"></i> Sin registro de pagos</span>
+            
                   <button onclick="exportarTablaAExcel('tablaDatos','<?php echo $nombreArchivo; ?>')"
                           class="boton-icono"
                           style="background-image: url('<?php echo APP_URL; ?>app/views/imagenes/iconos/Excel.png');"
@@ -348,7 +364,6 @@
               <span class="badge-sit sit-aldia" style="margin-left:4px;"><i class="fas fa-circle mr-1"></i> Al día</span>
               <span class="badge-sit sit-sinreg" style="margin-left:4px;"><i class="fas fa-circle mr-1"></i> Sin registro de pagos</span>
             </div>
-
             <?php endif; ?>
 
           </div>

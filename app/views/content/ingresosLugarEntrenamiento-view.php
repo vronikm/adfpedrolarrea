@@ -56,7 +56,7 @@
     <link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
     <link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/adminlte.css">
     <style>
-      .kpi-card           { border-left: 4px solid; }
+      .kpi-card           { border-left: 4px solid; position: relative; overflow: hidden; }
       .kpi-azul           { border-color: #3498db; }
       .kpi-rojo           { border-color: #e74c3c; }
       .kpi-naranja        { border-color: #e67e22; }
@@ -64,6 +64,10 @@
       .kpi-amarillo       { border-color: #f1c40f; }
       .kpi-card .kpi-valor{ font-size: 1.6rem; font-weight: 700; line-height: 1.2; }
       .kpi-card .kpi-label{ font-size: 0.78rem; color: #888; text-transform: uppercase; letter-spacing: .5px; }
+      .kpi-card .kpi-icon {
+        position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+        font-size: 3.2rem; opacity: 0.08; pointer-events: none;
+      }
       .badge-pct          { font-size: 0.85rem; padding: 3px 8px; border-radius: 12px; font-weight: 600; }
       .pct-verde          { background: #d4edda; color: #155724; }
       .pct-amarillo       { background: #fff3cd; color: #856404; }
@@ -191,6 +195,7 @@
                   <div class="card-body py-3 px-3">
                     <div class="kpi-label">Alumnos entrenando</div>
                     <div class="kpi-valor text-primary"><?php echo $totalAlumnos; ?></div>
+                    <i class="fas fa-running kpi-icon text-primary"></i>
                   </div>
                 </div>
               </div>
@@ -199,6 +204,7 @@
                   <div class="card-body py-3 px-3">
                     <div class="kpi-label">Adeudan el período</div>
                     <div class="kpi-valor text-danger"><?php echo $totalAlumnosAd; ?></div>
+                    <i class="fas fa-exclamation-circle kpi-icon text-danger"></i>
                   </div>
                 </div>
               </div>
@@ -207,6 +213,7 @@
                   <div class="card-body py-3 px-3">
                     <div class="kpi-label">Sin registro pagos</div>
                     <div class="kpi-valor text-warning"><?php echo $totalAlSinPagos; ?></div>
+                    <i class="fas fa-user-clock kpi-icon text-warning"></i>
                   </div>
                 </div>
               </div>
@@ -215,6 +222,7 @@
                   <div class="card-body py-3 px-3">
                     <div class="kpi-label">Total pensiones est.</div>
                     <div class="kpi-valor text-success">$<?php echo number_format($totalPensiones, 2); ?></div>
+                    <i class="fas fa-file-invoice-dollar kpi-icon text-success"></i>
                   </div>
                 </div>
               </div>
@@ -227,6 +235,7 @@
                       <?php $badgeTotal = $pctTotal >= 80 ? 'pct-verde' : ($pctTotal >= 50 ? 'pct-amarillo' : 'pct-rojo'); ?>
                       <span class="badge-pct <?php echo $badgeTotal; ?>"><?php echo number_format($pctTotal, 1); ?>% recaudado</span>
                     </div>
+                    <i class="fas fa-hand-holding-usd kpi-icon" style="color:#b8860b;"></i>
                   </div>
                 </div>
               </div>
@@ -237,6 +246,11 @@
               <div class="card-header">
                 <h3 class="card-title"><i class="fas fa-table mr-1"></i> Detalle por lugar de entrenamiento</h3>
                 <div class="card-tools d-flex align-items-center" style="gap:6px;">
+                  
+                <!-- Leyenda semáforo -->
+                  <span class="badge-pct pct-verde"><i class="fas fa-circle mr-1"></i> ≥ 80% recaudado</span>
+                  <span class="badge-pct pct-amarillo"><i class="fas fa-circle mr-1"></i> 50–79%</span>
+                  <span class="badge-pct pct-rojo"><i class="fas fa-circle mr-1"></i> &lt; 50%</span>
                   <button onclick="exportarTablaAExcel('tablaDatos','<?php echo $nombreArchivo; ?>')"
                           class="boton-icono"
                           style="background-image: url('<?php echo APP_URL; ?>app/views/imagenes/iconos/Excel.png');"
@@ -302,14 +316,6 @@
                 </div>
               </div>
             </div>
-
-            <!-- Leyenda semáforo -->
-            <div class="mb-3" style="display:flex; gap:12px;">
-              <span class="badge-pct pct-verde"><i class="fas fa-circle mr-1"></i> ≥ 80% recaudado</span>
-              <span class="badge-pct pct-amarillo"><i class="fas fa-circle mr-1"></i> 50–79%</span>
-              <span class="badge-pct pct-rojo"><i class="fas fa-circle mr-1"></i> &lt; 50%</span>
-            </div>
-
             <?php endif; ?>
 
           </div>
