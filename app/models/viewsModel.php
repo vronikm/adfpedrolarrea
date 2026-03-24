@@ -24,7 +24,8 @@
 						  ,"reporteAsistencia", "buscarAsistencia", "horarioListaPDF","representanteFLPD"
 						  ,"formularioLPPDF","empleadoEntrada", "userMenu", "permisoList", "permisoNew"
 						  ,"empleadoAsistencias","agenda","empleadoAsistenciasDetalle","cobranzaPensionInactivos"
-						  ,"dashboardAlumnos","reportePensionAlumno","reportePagosReceptados","dashboardGerencial"];
+						  ,"dashboardAlumnos","reportePensionAlumno","reportePagosReceptados","dashboardGerencial"
+						  ,"estadisticas","ingresosLugarEntrenamiento","reporteIngresosMorames"];
 
 			if(in_array($vista, $listaBlanca)){
 				if(is_file("./app/views/content/".$vista."-view.php")){

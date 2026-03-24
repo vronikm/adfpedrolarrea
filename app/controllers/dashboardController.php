@@ -88,7 +88,106 @@
 			return $pagosPendientes;
 		}
 
-		public function dashboardAlumnos($sedeid, $estado){
+		public function ingresosLugarEntr(){
+		// Fechas dinámicas
+		$fecha_inicio = date('Y-m-01'); // Primer día del mes actual
+		$fecha_fin = date('Y-m-t');     // Último día del mes actual
+		$consulta_datos="SELECT sede_nombre, lugar_nombre, ALUMNOS_ENTRENAN, PENSIONES_ESTIMADAS as TOTALPENSIONES, IFNULL(PA.VALOR_PAGADO,0) + IFNULL(Abonos.VALOR_PAGADO,0) as TOTALRECAUDADO, IFNULL(NP.Total,0) as ALUMNOS_ADEUDAN, IFNULL(SR.SinRegistro,0) as ALUMNOS_SINREGPAGOS
+							FROM(select sede_id, sede_nombre, lugar_id ,lugar_nombre, count(1) as ALUMNOS_ENTRENAN, sum(IFNULL(descuento_valor,sede_pension)) as PENSIONES_ESTIMADAS
+									from(
+											SELECT distinct detalle_lugarid, asignahorario_alumnoid
+											from asistencia_asignahorario
+													inner join asistencia_horario_detalle on detalle_horarioid = asignahorario_horarioid
+													inner join sujeto_alumno on alumno_id = asignahorario_alumnoid
+											where alumno_estado = 'A' and alumno_fechaingreso <= ' ".$fecha_fin."'
+									)l
+											inner join asistencia_lugar on lugar_id = l.detalle_lugarid
+											inner join general_sede on lugar_sedeid = sede_id
+											left join alumno_pago_descuento d on d.descuento_alumnoid = l.asignahorario_alumnoid and descuento_estado = 'S' and descuento_fecha <= ' ".$fecha_fin."'
+									group by sede_id, sede_nombre, lugar_id ,lugar_nombre
+
+									union
+
+									select SLE.sede_id, SLE.sede_nombre, 0,'SIN LUGAR DE ENTRENAMIENTO' lugar_nombre, count(1) as ALUMNOS_ENTRENAN, sum(SLE.pension_estimada) PENSIONES_ESTIMADAS
+											FROM(select sede_id, sede_nombre, 0,'SIN LUGAR DE ENTRENAMIENTO' lugar_nombre, IFNULL(descuento_valor,s.sede_pension) pension_estimada
+															from sujeto_alumno a
+															left join alumno_pago_descuento d on d.descuento_alumnoid = a.alumno_id and descuento_estado = 'S' and descuento_fecha <= ' ".$fecha_fin."'
+															left join general_sede s on s.sede_id = a.alumno_sedeid
+															where a.alumno_id not in (select asignahorario_alumnoid from asistencia_asignahorario)
+															and a.alumno_estado = 'A' and a.alumno_fechaingreso <= ' ".$fecha_fin."') SLE
+											group by SLE.sede_id, SLE.sede_nombre
+							)Base
+
+							left join(select Pagos.sedeid, Pagos.lugarid, sum(IFNULL(Pagos.VALOR_PAGADO,0)) VALOR_PAGADO, count(1) Numero
+															from(select ((P.pago_saldo + P.pago_valor) - (IFNULL(PT.transaccion_valorcalculado, P.pago_saldo)))
+																			as VALOR_PAGADO, IFNULL(h.detalle_lugarid,0)  AS lugarid, A.alumno_sedeid as sedeid
+																			from alumno_pago P
+																			inner JOIN sujeto_alumno A on A.alumno_id = P.pago_alumnoid
+																			LEFT JOIN(SELECT transaccion_pagoid, MIN(transaccion_id) IDT
+																									FROM alumno_pago_transaccion
+																									WHERE transaccion_estado = 'C'
+																												GROUP BY transaccion_pagoid)T ON T.transaccion_pagoid = P.pago_id
+																			LEFT JOIN alumno_pago_transaccion PT ON PT.transaccion_id  = T.IDT
+																			left join(SELECT distinct detalle_lugarid, asignahorario_alumnoid
+																											from asistencia_asignahorario
+																											left join asistencia_horario_detalle on detalle_horarioid = asignahorario_horarioid)h on h.asignahorario_alumnoid = P.pago_alumnoid
+																											where P.pago_rubroid = 'RPE'
+																															and P.pago_estado not in ('E','J')
+																															and P.pago_fecha BETWEEN ' ".$fecha_inicio." ' and ' ".$fecha_fin."') Pagos
+															group by Pagos.sedeid, Pagos.lugarid)PA on PA.sedeid = Base.sede_id AND PA.lugarid = Base.lugar_id
+
+							left join (select A.alumno_sedeid as sedeid, IFNULL(h.detalle_lugarid,0) AS lugarid, sum(IFNULL(T.transaccion_valor,0)) as VALOR_PAGADO, Count(1) as Numero
+															from alumno_pago_transaccion T
+															inner join alumno_pago P on P.pago_id = T.transaccion_pagoid and P.pago_rubroid = 'RPE'
+															inner join sujeto_alumno A on A.alumno_id = P.pago_alumnoid
+															left join(SELECT distinct detalle_lugarid, asignahorario_alumnoid
+																							from asistencia_asignahorario
+																							left join asistencia_horario_detalle on detalle_horarioid = asignahorario_horarioid
+																			)h on h.asignahorario_alumnoid = P.pago_alumnoid
+															where transaccion_estado in ('C')
+															and transaccion_fecha BETWEEN ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
+															and pago_fecha BETWEEN ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
+															group by sedeid, lugarid
+											)Abonos on Abonos.sedeid = Base.sede_id AND Abonos.lugarid = Base.lugar_id
+
+							left join(select A.alumno_sedeid as sedeid, IFNULL(h.detalle_lugarid,0)  AS lugarid, count(1) as Total
+											from(select P.pago_alumnoid, max(P.pago_fecha) fecha
+															from alumno_pago P
+															where P.pago_rubroid = 'RPE' and P.pago_estado <> 'E'
+															GROUP BY P.pago_alumnoid
+															having  max(P.pago_fecha) < ' ".$fecha_inicio." '
+												)b
+											inner join sujeto_alumno A on A.alumno_id = b.pago_alumnoid
+											left join(SELECT distinct detalle_lugarid, asignahorario_alumnoid
+															from asistencia_asignahorario
+															left join asistencia_horario_detalle on detalle_horarioid = asignahorario_horarioid
+													)h on h.asignahorario_alumnoid = A.alumno_id
+											where A.alumno_estado = 'A'
+											group by sedeid, lugarid
+									)NP on NP.sedeid = Base.sede_id AND NP.lugarid = Base.lugar_id
+
+
+							left join (select alumno_sedeid as sedeid, IFNULL(le.detalle_lugarid,0)  AS lugarid, count(1) as SinRegistro
+											from sujeto_alumno a
+											left join(SELECT distinct detalle_lugarid, asignahorario_alumnoid
+															from asistencia_asignahorario
+															left join asistencia_horario_detalle on detalle_horarioid = asignahorario_horarioid
+													)le on le.asignahorario_alumnoid = alumno_id
+											where a.alumno_id not in (SELECT distinct alumno_id AlumnoId
+																			FROM sujeto_alumno
+																			LEFT JOIN alumno_pago P ON P.pago_alumnoid = alumno_id
+																			WHERE P.pago_rubroid = 'RPE' AND pago_estado != 'E' AND alumno_estado = 'A')
+													and alumno_estado = 'A'
+											group by sedeid, lugarid
+										)SR on SR.sedeid = Base.sede_id AND SR.lugarid = Base.lugar_id
+
+					order by Base.sede_id";
+
+		$datos = $this->ejecutarConsulta($consulta_datos);
+		return $datos;
+	}
+
+	public function dashboardAlumnos($sedeid, $estado){
 			$tabla="";
 			$consulta_datos="SELECT * FROM sujeto_alumno WHERE alumno_sedeid = $sedeid AND alumno_estado = '".$estado."'";
 			
