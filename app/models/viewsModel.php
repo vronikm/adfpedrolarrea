@@ -25,7 +25,8 @@
 						  ,"formularioLPPDF","empleadoEntrada", "userMenu", "permisoList", "permisoNew"
 						  ,"empleadoAsistencias","agenda","empleadoAsistenciasDetalle","cobranzaPensionInactivos"
 						  ,"dashboardAlumnos","reportePensionAlumno","reportePagosReceptados","dashboardGerencial"
-						  ,"estadisticas","ingresosLugarEntrenamiento","reporteIngresosMorames"];
+						  ,"estadisticas","ingresosLugarEntrenamiento","reporteIngresosMorames"
+						  ,"cumpleaniosList","cumpleaniosTarjeta"];
 
 			if(in_array($vista, $listaBlanca)){
 				if(is_file("./app/views/content/".$vista."-view.php")){

@@ -61,6 +61,13 @@
   </li>
 
   <li class="nav-item">
+    <a href="<?php echo APP_URL."cumpleaniosList/" ?>" class="nav-link <?php if ($url[0]=='cumpleaniosList' || $url[0]=='cumpleaniosTarjeta') echo 'active'; else echo ''; ?>">
+      <i class="nav-icon fas fa-birthday-cake" style="color:#ffe001;"></i>
+      <p>Cumpleaños</p>
+    </a>
+  </li>
+
+  <li class="nav-item">
     <a href="<?php echo APP_URL."pagosList/" ?>" class="nav-link <?php if ($url[0]=='pagosList') echo 'active'; else echo ''; ?>">
       <i class="nav-icon far fa-money-bill-alt text-info"></i>
       <p>Pagos</p>
