@@ -623,9 +623,9 @@
 
 		/*----------  Matriz de alumnos con opciones Ver, Actualizar, Eliminar  ----------*/
 		public function listarAlumnos($identificacion, $apellidopaterno, $primernombre, $ano, $sede){
-			$estado = "";
 			$texto = "";
 			$boton = "";
+			$fotoDefault = APP_URL.'app/views/imagenes/fotos/alumno/alumno.png';
 
 			if($identificacion!=""){
 				$identificacion .= '%'; 
@@ -670,22 +670,30 @@
 			$datos = $datos->fetchAll();
 			foreach($datos as $rows){
 				if($rows['alumno_estado']=='A'){
-					$estado = "Activo";
 					$texto = "Inactivar";
 					$boton = "btn-secondary";
 				}else{
-					$estado = "Inactivo";
 					$texto = "Activar";
 					$boton = "btn-info";
 				}
 
+				$fotoAlumno = $fotoDefault;
+				$nombreFoto = trim((string)$rows['alumno_imagen']);
+				$rutaFotoFisica = __DIR__."/../views/imagenes/fotos/alumno/".$nombreFoto;
+				if($nombreFoto != "" && is_file($rutaFotoFisica)){
+					$fotoAlumno = APP_URL.'app/views/imagenes/fotos/alumno/'.$nombreFoto;
+				}
+
 				$tabla.='
 					<tr>
+						<td class="text-center">
+							<img src="'.$fotoAlumno.'" alt="Foto alumno" style="width:48px;height:48px;object-fit:cover;border-radius:50%;border:1px solid #dee2e6;" onerror="this.onerror=null;this.src=\''.$fotoDefault.'\';">
+						</td>
 						<td>'.$rows['alumno_identificacion'].'</td>
 						<td>'.$rows['alumno_numcamiseta'].'</td>
 						<td>'.$rows['alumno_primernombre'].' '.$rows['alumno_segundonombre'].'</td>
 						<td>'.$rows['alumno_apellidopaterno'].' '.$rows['alumno_apellidomaterno'].'</td>
-						<td>'.$rows['alumno_fechanacimiento'].'</td>
+						<td>'.$rows['alumno_fechanacimiento'].'</td>						
 						<td>
 							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/alumnoAjax.php" method="POST" autocomplete="off" >
 								<input type="hidden" name="modulo_alumno" value="eliminar">
@@ -705,6 +713,78 @@
 					</tr>';	
 			}
 			return $tabla;			
+		}
+
+		/*----------  Matriz modulo imagenes de alumnos  ----------*/
+		public function listarImagenesAlumnos($identificacion, $apellidopaterno, $primernombre, $ano, $sede){
+			$fotoDefault = APP_URL.'app/views/imagenes/fotos/alumno/alumno.png';
+
+			if($identificacion!=""){
+				$identificacion .= '%';
+			}
+			if($primernombre!=""){
+				$primernombre .= '%';
+			}
+			if($apellidopaterno!=""){
+				$apellidopaterno .= '%';
+			}
+
+			$tabla="";
+			$consulta_datos="SELECT * FROM sujeto_alumno 
+								WHERE (alumno_primernombre LIKE '".$primernombre."' 
+								OR alumno_identificacion LIKE '".$identificacion."' 
+								OR alumno_apellidopaterno LIKE '".$apellidopaterno."') ";
+			if($ano!=""){
+				$consulta_datos .= " and YEAR(alumno_fechanacimiento) = '".$ano."'";
+			}
+
+			if($identificacion=="" && $primernombre=="" && $apellidopaterno==""){
+				$consulta_datos="SELECT * FROM sujeto_alumno WHERE YEAR(alumno_fechanacimiento) = '".$ano."'";
+			}
+
+			if($identificacion=="" && $primernombre=="" && $apellidopaterno=="" && $ano == ""){
+				$consulta_datos = "SELECT * FROM sujeto_alumno WHERE alumno_primernombre <> '' ";
+			}
+
+			if($sede!=""){
+				if($sede == 0){
+					$consulta_datos .= " and alumno_sedeid <> '".$sede."'";
+				}else{
+					$consulta_datos .= " and alumno_sedeid = '".$sede."'";
+				}
+			}else{
+				$consulta_datos = "SELECT * FROM sujeto_alumno WHERE alumno_primernombre = ''";
+			}
+
+			$consulta_datos .= " AND alumno_estado = 'A' ORDER BY alumno_apellidopaterno, alumno_apellidomaterno, alumno_primernombre";
+
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){
+				$fotoAlumno = $fotoDefault;
+				$nombreFoto = trim((string)$rows['alumno_imagen']);
+				$rutaFotoFisica = __DIR__."/../views/imagenes/fotos/alumno/".$nombreFoto;
+				if($nombreFoto != "" && is_file($rutaFotoFisica)){
+					$fotoAlumno = APP_URL.'app/views/imagenes/fotos/alumno/'.$nombreFoto;
+				}
+
+				$nombreCompleto = trim($rows['alumno_primernombre'].' '.$rows['alumno_segundonombre'].' '.$rows['alumno_apellidopaterno'].' '.$rows['alumno_apellidomaterno']);
+
+				$tabla.='
+					<tr>
+						<td class="text-center">
+							<img src="'.$fotoAlumno.'" alt="Foto alumno" style="width:56px;height:56px;object-fit:cover;border-radius:8px;border:1px solid #dee2e6;" onerror="this.onerror=null;this.src=\''.$fotoDefault.'\';">
+						</td>
+						<td>'.$nombreCompleto.'</td>
+						<td>'.$rows['alumno_fechanacimiento'].'</td>
+						<td>
+							<a href="'.$fotoAlumno.'" target="_blank" class="btn float-right btn-ver btn-xs" style="margin-right: 5px;">Ver</a>
+							<a href="'.APP_URL.'imagenesUpdate/'.$rows['alumno_id'].'/" target="_blank" class="btn float-right btn-actualizar btn-xs" style="margin-right: 5px;">Actualizar</a>
+							<a href="'.APP_URL.'cumpleaniosTarjeta/'.$rows['alumno_id'].'/" target="_blank" class="btn float-right btn-warning btn-xs" style="margin-right: 5px;">Tarjeta</a>
+						</td>
+					</tr>';
+			}
+			return $tabla;
 		}
 
 		/*----------  Obtener el tipo de documento guardado  ----------*/
@@ -1665,6 +1745,154 @@
 					"icono"=>"success"
 				];
 			}
+			return json_encode($alerta);
+		}
+
+		/*----------  Controlador actualizar imagen del alumno (solo foto) ----------*/
+		public function actualizarImagenAlumnoControlador(){
+			$alumno_id = $this->limpiarCadena($_POST['alumno_id'] ?? '');
+
+			if($alumno_id==""){
+				$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Ocurrio un error",
+					"texto"=>"No se ha identificado el alumno a actualizar",
+					"icono"=>"error"
+				];
+				return json_encode($alerta);
+			}
+
+			$datos = $this->ejecutarConsulta("SELECT * FROM sujeto_alumno WHERE alumno_id='$alumno_id'");
+			if($datos->rowCount()<=0){
+				$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Ocurrio un error",
+					"texto"=>"No hemos encontrado el alumno en el sistema",
+					"icono"=>"error"
+				];
+				return json_encode($alerta);
+			}
+
+			$datos = $datos->fetch();
+			$img_dir = __DIR__."/../views/imagenes/fotos/alumno/";
+
+			if(!isset($_FILES['alumno_foto']) || $_FILES['alumno_foto']['name']=="" || $_FILES['alumno_foto']['size']<=0){
+				$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Ocurrio un error",
+					"texto"=>"No ha seleccionado una foto para el alumno",
+					"icono"=>"error"
+				];
+				return json_encode($alerta);
+			}
+
+			if(!file_exists($img_dir)){
+				if(!mkdir($img_dir,0777)){
+					$alerta=[
+						"tipo"=>"simple",
+						"titulo"=>"Ocurrio un error",
+						"texto"=>"No fue posible crear el directorio de fotos",
+						"icono"=>"error"
+					];
+					return json_encode($alerta);
+				}
+			}
+
+			$mime = mime_content_type($_FILES['alumno_foto']['tmp_name']);
+			if($mime!="image/jpeg" && $mime!="image/png"){
+				$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Ocurrio un error",
+					"texto"=>"La imagen seleccionada tiene un formato no permitido",
+					"icono"=>"error"
+				];
+				return json_encode($alerta);
+			}
+
+			if(($_FILES['alumno_foto']['size']/1024)>4000){
+				$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Ocurrio un error",
+					"texto"=>"La imagen seleccionada supera el peso permitido de 4MB",
+					"icono"=>"error"
+				];
+				return json_encode($alerta);
+			}
+
+			$foto = str_ireplace(" ","_",trim((string)$datos['alumno_identificacion']));
+			$foto = $foto."_".rand(0,100);
+
+			switch($mime){
+				case 'image/jpeg':
+					$foto .= ".jpg";
+				break;
+				case 'image/png':
+					$foto .= ".png";
+				break;
+			}
+
+			$maxWidth = 800;
+			$maxHeight = 600;
+
+			chmod($img_dir,0777);
+			$inputFile = $_FILES['alumno_foto']['tmp_name'];
+			$outputFile = $img_dir.$foto;
+
+			if(!$this->resizeImageGD($inputFile, $maxWidth, $maxHeight, $outputFile)){
+				$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Ocurrio un error",
+					"texto"=>"No podemos subir la imagen al sistema en este momento",
+					"icono"=>"error"
+				];
+				return json_encode($alerta);
+			}
+
+			if(
+				is_file($img_dir.$datos['alumno_imagen']) &&
+				$datos['alumno_imagen']!="" &&
+				$datos['alumno_imagen']!=$foto &&
+				$datos['alumno_imagen']!="alumno.png"
+			){
+				chmod($img_dir.$datos['alumno_imagen'], 0777);
+				unlink($img_dir.$datos['alumno_imagen']);
+			}
+
+			$alumno_datos_up=[
+				[
+					"campo_nombre"=>"alumno_imagen",
+					"campo_marcador"=>":Foto",
+					"campo_valor"=>$foto
+				],
+				[
+					"campo_nombre"=>"alumno_fechamodificacion",
+					"campo_marcador"=>":FechaModificacion",
+					"campo_valor"=>date("Y-m-d H:i:s")
+				]
+			];
+
+			$condicion=[
+				"condicion_campo"=>"alumno_id",
+				"condicion_marcador"=>":Alumnoid",
+				"condicion_valor"=>$alumno_id
+			];
+
+			if($this->actualizarDatos("sujeto_alumno",$alumno_datos_up,$condicion)){
+				$alerta=[
+					"tipo"=>"recargar",
+					"titulo"=>"Foto actualizada",
+					"texto"=>"La foto del alumno ".$datos['alumno_primernombre']." ".$datos['alumno_apellidopaterno']." se actualizo correctamente",
+					"icono"=>"success"
+				];
+			}else{
+				$alerta=[
+					"tipo"=>"recargar",
+					"titulo"=>"Foto actualizada",
+					"texto"=>"No fue posible actualizar algunos datos del alumno, pero la foto se cargo correctamente",
+					"icono"=>"warning"
+				];
+			}
+
 			return json_encode($alerta);
 		}
 

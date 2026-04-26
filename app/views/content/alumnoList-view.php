@@ -1,6 +1,7 @@
 <?php
 	use app\controllers\alumnoController;
 	$insAlumno = new alumnoController();	
+	$rolid = isset($_SESSION['rol']) ? (int)$_SESSION['rol'] : 0;
 
 	if(isset($_POST['alumno_sedeid'])){
 		$alumno_sedeid = $insAlumno->limpiarCadena($_POST['alumno_sedeid']);		
@@ -188,12 +189,13 @@
 						<table id="example1" class="table table-bordered table-striped table-sm">
 							<thead>
 								<tr>
+									<th>Imagen</th>
 									<th>Identificación</th>
 									<th data-orderable="true"># de camiseta</th>
 									<th>Nombres</th>
 									<th>Apellidos</th>
 									<th>Año</th>									
-									<th style="width: 220px;">Opciones</<th>
+									<th style="width: 220px;">Opciones</th>
 								</tr>
 							</thead>
 							<tbody>

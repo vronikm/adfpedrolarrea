@@ -12,6 +12,9 @@
             <a href=<?php echo APP_URL."alumnoList/";?> class="nav-link ">Buscar alumno</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
+            <a href=<?php echo APP_URL."imagenesList/";?> class="nav-link ">Imagenes</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
             <a href=<?php echo APP_URL."alumnoList/";?> class="nav-link ">Registrar pago</a>
         </li>    
     </ul>

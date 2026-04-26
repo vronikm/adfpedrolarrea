@@ -5,7 +5,7 @@
 		/*---------- Modelo obtener vista ----------*/
 		protected function obtenerVistasModelo($vista){
 			$listaBlanca=["dashboard","userNew","userList","userUpdate","userSearch","userPhoto"
-						  ,"logOut","roList","escuelaNew","alumnoList","alumnoNew","alumnoUpdate"
+						  ,"logOut","roList","escuelaNew","alumnoList","imagenesList","imagenesUpdate","alumnoNew","alumnoUpdate"
 						  ,"pagos","userProfile","escuelaNew","sedeList","sedeNew","sedeProfile"
 						  ,"sedeUpdate","pagosList","pagosNew","alumnoProfile","pagosUpdate"
 						  ,"dashboard","pagosPendiente","pagospendienteUpdate","pagosRecibo"
