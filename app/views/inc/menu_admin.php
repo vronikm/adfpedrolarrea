@@ -15,8 +15,15 @@
         <i class="nav-icon far fa-circle text-info"></i>
         <p>Dashboard Operativo</p>
       </a>
-    </li>                  
+    </li>
   </ul>
+</li>
+
+<li class="nav-item">
+  <a href="<?php echo APP_URL."inscripcionEnlace/" ?>" class="nav-link <?php if ($url[0]=='inscripcionEnlace') echo 'active'; else echo ''; ?>">
+    <i class="nav-icon fab fa-whatsapp" style="color:#25D366;"></i>
+    <p>Inscripción Online</p>
+  </a>
 </li>
 
   <li class="nav-item <?php if ($url[0]=='estadisticas' || $url[0]=='ingresosLugarEntrenamiento') echo 'menu-open'; else echo ''; ?>">
