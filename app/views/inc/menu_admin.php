@@ -26,6 +26,13 @@
   </a>
 </li>
 
+<li class="nav-item">
+  <a href="<?php echo APP_URL."consentimientoList/" ?>" class="nav-link <?php if ($url[0]=='consentimientoList') echo 'active'; else echo ''; ?>">
+    <i class="nav-icon fas fa-user-shield text-warning"></i>
+    <p>Consentimientos LOPDP</p>
+  </a>
+</li>
+
   <li class="nav-item <?php if ($url[0]=='estadisticas' || $url[0]=='ingresosLugarEntrenamiento') echo 'menu-open'; else echo ''; ?>">
     <a href="#" class="nav-link <?php if ($url[0]=='estadisticas' || $url[0]=='ingresosLugarEntrenamiento') echo 'active'; else echo ''; ?>">
       <i class="nav-icon fas fa-chart-bar"></i>
