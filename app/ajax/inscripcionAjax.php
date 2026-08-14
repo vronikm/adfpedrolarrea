@@ -21,10 +21,27 @@
 
 	if(isset($_POST['modulo_inscripcion'])){
 
-		$insInscripcion = new inscripcionController();
+		/* Cualquier fallo se responde como JSON. Un 500 con HTML de error
+		   llega al navegador como "No se pudo generar el enlace", que no
+		   dice nada de la causa real. */
+		try{
 
-		if($_POST['modulo_inscripcion']=="generar_enlace"){
-			echo $insInscripcion->generarEnlaceControlador();
+			$insInscripcion = new inscripcionController();
+
+			if($_POST['modulo_inscripcion']=="generar_enlace"){
+				echo $insInscripcion->generarEnlaceControlador();
+			}
+
+		}catch(\Throwable $e){
+
+			error_log("[inscripcionEnlace] ".$e->getMessage()." en ".$e->getFile().":".$e->getLine());
+
+			echo json_encode([
+				"tipo"   => "simple",
+				"titulo" => "Error del servidor",
+				"texto"  => "No se pudo generar el enlace: ".$e->getMessage(),
+				"icono"  => "error"
+			], JSON_UNESCAPED_UNICODE);
 		}
 
 	}else{

@@ -12,6 +12,23 @@ class inscripcionController extends mainModel
      */
     public function generarEnlaceControlador()
     {
+        /* Al desplegar es fácil subir el código y dejar el config viejo. Sin
+           esta comprobación, TOKEN_SECRET indefinido tumbaba la petición con
+           un 500 y el usuario solo veía "No se pudo generar el enlace". */
+        $faltante = TokenHelper::configFaltante();
+
+        if (count($faltante) > 0) {
+            error_log("[inscripcionEnlace] Faltan constantes en config/app.php: " . implode(', ', $faltante));
+
+            return json_encode([
+                'tipo'   => 'simple',
+                'titulo' => 'Configuración incompleta',
+                'texto'  => 'Falta definir en config/app.php: ' . implode(', ', $faltante)
+                          . '. Avise al administrador del sistema.',
+                'icono'  => 'error'
+            ], JSON_UNESCAPED_UNICODE);
+        }
+
         $sede_id = intval($this->limpiarCadena($_POST['sede_id'] ?? '0'));
         $horas   = intval($this->limpiarCadena($_POST['horas_vigencia'] ?? '72'));
 
