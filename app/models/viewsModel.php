@@ -26,7 +26,8 @@
 						  ,"empleadoAsistencias","agenda","empleadoAsistenciasDetalle","cobranzaPensionInactivos"
 						  ,"dashboardAlumnos","reportePensionAlumno","reportePagosReceptados","dashboardGerencial"
 						  ,"estadisticas","ingresosLugarEntrenamiento","reporteIngresosMorames"
-						  ,"cumpleaniosList","cumpleaniosTarjeta","inscripcionEnlace","consentimientoList"];
+						  ,"cumpleaniosList","cumpleaniosTarjeta","inscripcionEnlace","consentimientoList"
+						  ,"inscripcionPendientes"];
 
 			if(in_array($vista, $listaBlanca)){
 				if(is_file("./app/views/content/".$vista."-view.php")){

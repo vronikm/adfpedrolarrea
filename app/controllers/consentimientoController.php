@@ -124,16 +124,11 @@
 			}
 
 			// El alumno debe existir y estar dentro del alcance del usuario
-			$alumno = $this->ejecutarConsulta(
-				"SELECT alumno_id, alumno_repreid FROM sujeto_alumno WHERE alumno_id = :id",
-				[':id' => $alumnoid]
-			);
+			$fila = $this->alumnoEnAlcance($alumnoid);
 
-			if ($alumno->rowCount() !== 1) {
-				return $this->alerta('No encontrado', 'El alumno indicado no existe.', 'error');
+			if ($fila === null) {
+				return $this->alerta('No encontrado', 'El alumno indicado no existe o no pertenece a sus sedes.', 'error');
 			}
-
-			$fila = $alumno->fetch(PDO::FETCH_ASSOC);
 
 			try {
 				$this->ejecutarConsulta(
@@ -165,10 +160,43 @@
 		}
 
 		/**
+		 * Alumno con su representante, solo si el usuario en sesión puede verlo.
+		 * Los roles administrativos (1 y 2) alcanzan a todos; el resto queda
+		 * limitado a las sedes que tiene asignadas, igual que el listado.
+		 */
+		private function alumnoEnAlcance($alumnoid) {
+
+			$consulta   = "SELECT alumno_id, alumno_repreid FROM sujeto_alumno WHERE alumno_id = :id";
+			$parametros = [':id' => intval($alumnoid)];
+
+			$rolid = $_SESSION['rol'] ?? null;
+
+			if ($rolid != 1 && $rolid != 2) {
+				$consulta .= " AND alumno_sedeid IN (
+									SELECT US.usuariosede_sedeid
+									  FROM seguridad_usuario_sede US
+									  INNER JOIN seguridad_usuario U ON U.usuario_id = US.usuariosede_usuarioid
+									 WHERE U.usuario_usuario = :usuario)";
+				$parametros[':usuario'] = $_SESSION['usuario'] ?? '';
+			}
+
+			$alumno = $this->ejecutarConsulta($consulta, $parametros);
+
+			return ($alumno->rowCount() === 1) ? $alumno->fetch(PDO::FETCH_ASSOC) : null;
+		}
+
+		/**
 		 * Historial de un alumno en HTML, para el modal de la vista.
 		 */
 		public function historialHTMLControlador() {
-			$alumnoid  = intval($this->limpiarCadena($_POST['alumno_id'] ?? '0'));
+			$alumnoid = intval($this->limpiarCadena($_POST['alumno_id'] ?? '0'));
+
+			/* Sin este filtro, cambiar el alumno_id del POST deja leer los
+			   consentimientos (y la IP del representante) de cualquier sede. */
+			if ($this->alumnoEnAlcance($alumnoid) === null) {
+				return '<p class="text-muted mb-0">No tiene acceso a la información de este alumno.</p>';
+			}
+
 			$historial = $this->historialAlumno($alumnoid);
 
 			if (count($historial) === 0) {
