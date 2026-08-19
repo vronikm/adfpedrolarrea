@@ -4,6 +4,81 @@
 
 	class dashboardController extends mainModel{
 
+		/*----------  Resumen operativo de todas las sedes  ----------*/
+		public function obtenerResumenSedes(){
+			$consulta = "SELECT
+					S.sede_id,
+					S.sede_nombre,
+					COALESCE(AA.total_activos, 0) AS total_activos,
+					COALESCE(AI.total_inactivos, 0) AS total_inactivos,
+					COALESCE(PC.total_cancelados, 0) AS total_cancelados,
+					COALESCE(PP.total_pendientes, 0) AS total_pendientes
+				FROM general_sede S
+				LEFT JOIN (
+					SELECT alumno_sedeid, COUNT(*) AS total_activos
+					FROM sujeto_alumno
+					WHERE alumno_estado = 'A'
+					GROUP BY alumno_sedeid
+				) AA ON AA.alumno_sedeid = S.sede_id
+				LEFT JOIN (
+					SELECT alumno_sedeid, COUNT(*) AS total_inactivos
+					FROM sujeto_alumno
+					WHERE alumno_estado = 'I'
+					GROUP BY alumno_sedeid
+				) AI ON AI.alumno_sedeid = S.sede_id
+				LEFT JOIN (
+					SELECT sede_id, SUM(total) AS total_cancelados
+					FROM (
+						SELECT A.alumno_sedeid AS sede_id, COUNT(*) AS total
+						FROM alumno_pago P
+						INNER JOIN sujeto_alumno A ON A.alumno_id = P.pago_alumnoid
+						WHERE P.pago_estado <> 'E'
+						GROUP BY A.alumno_sedeid
+						UNION ALL
+						SELECT A.alumno_sedeid AS sede_id, COUNT(*) AS total
+						FROM alumno_pago P
+						INNER JOIN alumno_pago_transaccion T ON T.transaccion_pagoid = P.pago_id
+						INNER JOIN sujeto_alumno A ON A.alumno_id = P.pago_alumnoid
+						WHERE T.transaccion_estado <> 'E'
+						GROUP BY A.alumno_sedeid
+					) pagos
+					GROUP BY sede_id
+				) PC ON PC.sede_id = S.sede_id
+				LEFT JOIN (
+					SELECT A.alumno_sedeid AS sede_id, COUNT(*) AS total_pendientes
+					FROM sujeto_alumno A
+					LEFT JOIN (
+						SELECT pago_alumnoid, SUM(pago_saldo) AS saldo
+						FROM alumno_pago
+						WHERE pago_estado = 'P' AND pago_saldo > 0
+						GROUP BY pago_alumnoid
+					) P ON P.pago_alumnoid = A.alumno_id
+					LEFT JOIN (
+						SELECT
+							B.pago_alumnoid,
+							CASE WHEN B.fecha > CURDATE() THEN 0 ELSE
+								GREATEST(0, TIMESTAMPDIFF(MONTH, B.fecha, CURDATE()) + (DAY(CURDATE()) < DAY(B.fecha)))
+								* COALESCE(B.descuento_valor, B.sede_pension)
+							END AS total
+						FROM (
+							SELECT MAX(P.pago_fecha) AS fecha, P.pago_alumnoid,
+								MAX(D.descuento_valor) AS descuento_valor, MAX(S.sede_pension) AS sede_pension
+							FROM sujeto_alumno A2
+							LEFT JOIN alumno_pago P ON P.pago_alumnoid = A2.alumno_id
+							LEFT JOIN alumno_pago_descuento D ON D.descuento_alumnoid = A2.alumno_id AND D.descuento_estado = 'S'
+							LEFT JOIN general_sede S ON S.sede_id = A2.alumno_sedeid
+							WHERE P.pago_rubroid = 'RPE' AND A2.alumno_estado <> 'I'
+							GROUP BY P.pago_alumnoid
+						) B
+					) PEN ON PEN.pago_alumnoid = A.alumno_id
+					WHERE A.alumno_estado <> 'E' AND (COALESCE(PEN.total, 0) > 0 OR COALESCE(P.saldo, 0) > 0)
+					GROUP BY A.alumno_sedeid
+				) PP ON PP.sede_id = S.sede_id
+				ORDER BY S.sede_nombre ASC";
+
+			return $this->ejecutarConsulta($consulta);
+		}
+
 		/*----------  Obtener total alumnos activos  ----------*/
 		public function obtenerAlumnosActivos($sedeid){
 			$alumnosActivos=$this->ejecutarConsulta("SELECT count(*) totalActivos FROM sujeto_alumno WHERE alumno_estado='A' and alumno_sedeid = $sedeid");
@@ -226,4 +301,3 @@
 		}
 	}
 
-		
