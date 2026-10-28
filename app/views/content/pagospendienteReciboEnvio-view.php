@@ -2,6 +2,7 @@
 	use app\controllers\pagosController;
 	include 'app/lib/barcode.php';	
 	include 'app/lib/fpdf.php';
+	include 'app/lib/pdfImagen.php';
 
 	$generator = new barcode_generator();
     	$symbology="qr";
@@ -30,17 +31,21 @@
 		 $filename .= $datos["transaccion_recibo"].".jpeg";
 
 	}else{
-		include "<?php echo APP_URL; ?>/app/views/inc/error_alert.php";
+		include "./app/views/inc/error_alert.php";
+		exit();
 	}
 
 	$sede=$insAlumno->informacionSede($datos["alumno_sedeid"]);
 	if($sede->rowCount()==1){
 		$sede=$sede->fetch(); 
+    }else{
+		$sede=["sede_nombre"=>"", "sede_foto"=>"", "sede_direccion"=>"", "sede_telefono"=>"", "sede_email"=>""];
     }
 
 	$data="Recibo ".$datos["transaccion_recibo"]. "\n".$datos["transaccion_fecha"]. " | ".$recibo_hora."\n".$nombre_sede."\n".$sede["sede_telefono"]."\n".$sede["sede_email"];
 	
 		$image = $generator->render_image($symbology, $data, $optionsQR);
+    	if(!is_dir(dirname($filename))){ mkdir(dirname($filename), 0775, true); }
     	imagejpeg($image, $filename);
     	imagedestroy($image);
 
@@ -56,7 +61,7 @@
 	// logo : 80 de largo por 55 de alto
         //,,ancho,
 
-        $pdf->Image(APP_URL.'app/views/imagenes/fotos/sedes/'.$sede['sede_foto'], 34, 10, 47, 40);
+        pdfImagenLocal($pdf, 'app/views/imagenes/fotos/sedes/'.$sede['sede_foto'], 34, 10, 47, 40, 'app/views/imagenes/fotos/sedes/default_sede.jpg');
 
         $pdf->SetLineWidth(0.1); $pdf->Rect(10, 10, 190, 40, "D"); $x=15; $y=13;       		
 
@@ -129,10 +134,10 @@
 
         $pdf->SetXY( 120, 112); $pdf->SetFont( "Arial", "B", 8 ); $pdf->Cell( 65, 8, "FIRMA AUTORIZADA", 0, 0, 'C');    
 
-		$pdf->Image(APP_URL.$filename, 165, 89, 23, 23);
-		$pdf->Image(APP_URL.'app/views/imagenes/rubricas/RubricaADFPL.jpg', 115, 92, 40, 18);
+		pdfImagenLocal($pdf, $filename, 165, 89, 23, 23);
+		pdfImagenLocal($pdf, 'app/views/imagenes/rubricas/RubricaADFPL.jpg', 115, 92, 40, 18);
         
-        unlink($filename);
+        if(is_file($filename)){ unlink($filename); }
 
 	//echo "$fecha";		
 	//$pdf->Output("recibos/recibo-".$num.".pdf","F","T");

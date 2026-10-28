@@ -4,6 +4,7 @@
 
     include 'app/lib/barcode.php';
     include 'app/lib/fpdf.php';
+    include 'app/lib/pdfImagen.php';
 
     $generator = new barcode_generator();
     $symbology="qr";
@@ -57,6 +58,7 @@
     $data="Horario ".$horario_nombre. " | "."\nIDV Loja\n".$sede["sede_telefono"]."\n".$sede["sede_email"];
 
     $image = $generator->render_image($symbology, $data, $optionsQR);
+    if(!is_dir(dirname($filename))){ mkdir(dirname($filename), 0775, true); }
     imagejpeg($image, $filename);
     imagedestroy($image);
 
@@ -145,9 +147,9 @@
     $pdf->SetXY( 167, 93 ); $pdf->SetFont( "Arial", "", 8 ); $pdf->Cell( 20, 0, mb_convert_encoding($ProfesorPDF['Viernes']?? '', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
 
 
-    $pdf->Image(APP_URL.$filename, 171, 100, 23, 23);
+    pdfImagenLocal($pdf, $filename, 171, 100, 23, 23);
       
-    unlink($filename);
+    if(is_file($filename)){ unlink($filename); }
    
     $pdf->Output("$horario_id.pdf","I","T");
     

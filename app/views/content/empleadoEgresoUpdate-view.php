@@ -25,7 +25,7 @@
 		$egreso_fechasistema	= $datosEgreso['egreso_fechasistema'];
 
 	}else{
-		include "<?php echo APP_URL; ?>/app/views/inc/error_alert.php";
+		include "./app/views/inc/error_alert.php";
 	}
 ?>
 

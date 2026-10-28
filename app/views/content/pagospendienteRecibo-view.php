@@ -55,7 +55,7 @@
 		$recibo_hora = $pairs[4].":".$pairs[2].":".$pairs[0];
 		
 	}else{
-		include "<?php echo APP_URL; ?>/app/views/inc/error_alert.php";
+		include "./app/views/inc/error_alert.php";
 	}
 
 	$sede=$insAlumno->informacionSede($datos["alumno_sedeid"]);

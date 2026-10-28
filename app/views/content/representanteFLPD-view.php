@@ -19,7 +19,7 @@
 		$datos=$datos->fetch();
 		$repre_sedeid = $datos['SEDE'];	
 	}else{
-		include "<?php echo APP_URL; ?>/app/views/inc/error_alert.php";
+		include "./app/views/inc/error_alert.php";
 	}
 
 	$sede=$insFormulario->informacionSede($repre_sedeid);

@@ -4,6 +4,7 @@
 
     include 'app/lib/barcode.php';
     include 'app/lib/fpdf.php';
+    include 'app/lib/pdfImagen.php';
 
     $generator = new barcode_generator();
     $symbology="qr";
@@ -38,6 +39,7 @@
 
     $data="alumno.jpg";
     $image = $generator->render_image($symbology, $data, $optionsQR);
+    if(!is_dir(dirname($filename))){ mkdir(dirname($filename), 0775, true); }
     imagejpeg($image, $filename);
     imagedestroy($image);
 
@@ -47,7 +49,7 @@
     $pdf->SetMargins(0,0,0);	    
  	   
     $pdf->AddPage();
-    $pdf->Image(APP_URL.'app/views/imagenes/fotos/sedes/'.$sede['sede_foto'], 24, 10, 44, 26);
+    pdfImagenLocal($pdf, 'app/views/imagenes/fotos/sedes/'.$sede['sede_foto'], 24, 10, 44, 26, 'app/views/imagenes/fotos/sedes/default_sede.jpg');
     $pdf->SetLineWidth(0.1); $pdf->Rect(10, 10, 190, 40, "D"); $x=15; $y=13;  
     $pdf->SetXY( $x, $y ); $pdf->SetFont( "Arial", "B", 12 ); $pdf->Cell( 240, 10, mb_convert_encoding("ACADEMIA DE FÚTBOL PEDRO LARREA",'UTF-8'), 0, 0, 'C'); $y+=5;
     $pdf->SetXY( $x, $y); $pdf->SetFont( "Arial", "", 10 ); $pdf->Cell(240, 12, mb_convert_encoding("Dirección: ".$sede["sede_direccion"], 'ISO-8859-1', 'UTF-8'), 0, 0, 'C'); $y+=5;
@@ -111,5 +113,5 @@
     $pdf->Cell(90, 10, '_________________________', 0, 0, 'C');
     $pdf->Cell(90, 10, '_________________________', 0, 1, 'C');
 
-    unlink($filename);
+    if(is_file($filename)){ unlink($filename); }
     $pdf->Output($datos['equipo_nombre'].".pdf","I","T");
